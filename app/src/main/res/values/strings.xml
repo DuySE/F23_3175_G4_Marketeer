@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">F23_3175_G4_Marketeer</string>
+    <!--Will update with database items in the future!-->
+    <string-array name="items_name">
+        <item>Very Happy</item>
+        <item>Happy</item>
+        <item>Sad</item>
+        <item>Neutral</item>
+    </string-array>
+
+    <string-array name="items_price">
+        <item>$50</item>
+        <item>$75</item>
+        <item>$100</item>
+        <item>$150</item>
+    </string-array>
 </resources>
