@@ -14,4 +14,13 @@
         <item>$100</item>
         <item>$150</item>
     </string-array>
+
+    <string name="txtAddProduct">Add a new product</string>
+    <string name="txtAddAnImage">Add an image</string>
+    <string name="txtNewImg">New Image</string>
+    <string name="txtGalleryImg">Choose from Gallery</string>
+    <string name="txtProductName">Product Name</string>
+    <string name="txtPrice">Price (in CAD)</string>
+    <string name="txtAddNewProduct">Add Product</string>
+    <string name="txtImgViewNewProduct">Img to be added to create new product</string>
 </resources>
