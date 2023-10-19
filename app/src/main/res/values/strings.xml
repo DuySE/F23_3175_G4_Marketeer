@@ -23,9 +23,13 @@
     <string name="txtPrice">Price (in CAD)</string>
     <string name="txtAddNewProduct">Add Product</string>
     <string name="txtImgViewNewProduct">Img to be added to create new product</string>
-    <string name="textViewLogin">Marketeer //maybe place logo here</string>
+    <string name="textViewLoginTitle">Marketeer //maybe place logo here</string>
     <string name="editTextPassword">Enter Password</string>
     <string name="btnLogin">Login</string>
     <string name="txtViewPlaceholder">username: admin\npassword: admin\n(remove this text view in future)</string>
     <string name="editTextUsername">Enter Username</string>
+    <string name="btnRegister">Register</string>
+    <string name="textViewRegister">Enter new account information</string>
+    <string name="btnCreateAccount">Create Account</string>
+    <string name="textViewRegisterTitle">Marketeer</string>
 </resources>
