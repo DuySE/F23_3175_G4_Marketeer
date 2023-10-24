@@ -30,24 +30,24 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_chat);
+        layout = findViewById(R.id.layout_chat);
         btnSend = findViewById(R.id.btnSend);
         messageArea = findViewById(R.id.messageArea);
         scrollView = findViewById(R.id.scrView);
 
         Firebase.setAndroidContext(this);
-        reference1 = new Firebase("https://chat-b11e1.firebaseio.com/" + UserDetail.username + "_" + UserDetail.chat);
-        reference2 = new Firebase("https://chat-b11e1.firebaseio.com/" + UserDetail.chat + "_" + UserDetail.username);
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = messageArea.getText().toString();
-                if (!message.equals("")) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("message", message);
-                    map.put("user", UserDetail.username);
-                    reference1.push().setValue(map);
-                    reference2.push().setValue(map);
-                }
+        reference1 = new Firebase("https://chat-b11e1.firebaseio.com/messages/" +
+                UserDetail.username + "_" + UserDetail.receiver);
+        reference2 = new Firebase("https://chat-b11e1.firebaseio.com/messages/" +
+                UserDetail.receiver + "_" + UserDetail.username);
+        btnSend.setOnClickListener(view -> {
+            String message = messageArea.getText().toString();
+            if (!message.equals("")) {
+                Map<String, String> map = new HashMap<>();
+                map.put("message", message);
+                map.put("user", UserDetail.username);
+                reference1.push().setValue(map);
+                reference2.push().setValue(map);
             }
         });
         reference1.addChildEventListener(new ChildEventListener() {
@@ -55,11 +55,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("message").toString();
-                String username = map.get("username").toString();
+                String username = map.get("user").toString();
                 if (username.equals(UserDetail.username)) {
                     addMessageBox("You: " + message, 1);
                 } else {
-                    addMessageBox(UserDetail.chat + ": " + message, 2);
+                    addMessageBox(UserDetail.receiver + ": " + message, 2);
                 }
             }
 
@@ -90,7 +90,7 @@ public class ChatActivity extends AppCompatActivity {
         textView.setText(message);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(0, 0, 0, 10);
+        lp.setMargins(10, 10, 0, 0);
         textView.setLayoutParams(lp);
         if (type == 1) {
             textView.setBackgroundResource(R.drawable.rounded_corner1);

@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:107725939183:android:524b2ab85697a74301961a",
+        "mobilesdk_app_id": "1:107725939183:android:8679a0e6bf4f95d901961a",
         "android_client_info": {
-          "package_name": "com.douglascollege.marketeer"
+          "package_name": "com.example.f23_3175_g4_marketeer"
         }
       },
       "oauth_client": [

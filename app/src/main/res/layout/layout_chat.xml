@@ -12,11 +12,11 @@
     <ScrollView
         android:id="@+id/scrView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="20">
 
         <LinearLayout
-            android:id="@+id/layout1"
+            android:id="@+id/layout_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"></LinearLayout>

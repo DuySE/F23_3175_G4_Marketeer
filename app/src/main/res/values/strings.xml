@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">F23_3175_G4_Marketeer</string>
+    <string name="txtViewNoUsers">No users found!</string>
 </resources>
