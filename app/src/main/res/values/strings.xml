@@ -1,4 +1,36 @@
 <resources>
     <string name="app_name">F23_3175_G4_Marketeer</string>
     <string name="txtViewNoUsers">No users found!</string>
+    <!--Will update with database items in the future!-->
+    <string-array name="items_name">
+        <item>Very Happy</item>
+        <item>Happy</item>
+        <item>Sad</item>
+        <item>Neutral</item>
+    </string-array>
+
+    <string-array name="items_price">
+        <item>$50</item>
+        <item>$75</item>
+        <item>$100</item>
+        <item>$150</item>
+    </string-array>
+
+    <string name="txtAddProduct">Add a new product</string>
+    <string name="txtAddAnImage">Add an image</string>
+    <string name="txtNewImg">New Image</string>
+    <string name="txtGalleryImg">Choose from Gallery</string>
+    <string name="txtProductName">Product Name</string>
+    <string name="txtPrice">Price (in CAD)</string>
+    <string name="txtAddNewProduct">Add Product</string>
+    <string name="txtImgViewNewProduct">Img to be added to create new product</string>
+    <string name="textViewLoginTitle">Marketeer //maybe place logo here</string>
+    <string name="editTextPassword">Enter Password</string>
+    <string name="btnLogin">Login</string>
+    <string name="txtViewPlaceholder">username: admin\npassword: admin\n(remove this text view in future)</string>
+    <string name="editTextUsername">Enter Username</string>
+    <string name="btnRegister">Register</string>
+    <string name="textViewRegister">Enter new account information</string>
+    <string name="btnCreateAccount">Create Account</string>
+    <string name="textViewRegisterTitle">Marketeer</string>
 </resources>
