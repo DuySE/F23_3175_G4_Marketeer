@@ -97,7 +97,7 @@ public class MyProfileActivity extends AppCompatActivity {
         String password = "";
         try {
             Bundle inBundle = getIntent().getExtras();
-            txtViewUsername.setText(inBundle.getString("USERNAME", "error"));
+            txtViewUsername.setText(LoginActivity.username);
             txtViewAddress.setText(inBundle.getString("ADDRESS","None"));
             txtViewPhone.setText(inBundle.getString("PHONE","None"));
             String inPassword = inBundle.getString("PASSWORD", "error");

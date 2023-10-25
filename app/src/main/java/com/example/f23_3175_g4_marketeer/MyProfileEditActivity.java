@@ -107,6 +107,8 @@ public class MyProfileEditActivity extends AppCompatActivity {
                             editTxtCity.getText().toString() + ", " +
                             editTxtProvince.getText().toString();
 
+                    LoginActivity.username = editTxtUsername.getText().toString();
+
                     Intent intent = new Intent(MyProfileEditActivity.this, MyProfileActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("USERNAME",editTxtUsername.getText().toString());
