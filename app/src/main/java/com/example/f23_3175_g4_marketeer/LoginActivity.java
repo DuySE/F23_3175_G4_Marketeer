@@ -22,7 +22,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextPassword;
     Button btnLogin, btnRegister;
     Intent intentMain, intentRegister;
-    String username, password;
+    public static String username;
+    String password;
 
     //couldnt figure out how to store new accounts in array, so i will come back to this when the database is implemented
     //List<String> usernameList = new ArrayList<>();
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             else if(editTextUsername.getText().toString().equals(username) && editTextPassword.getText().toString().equals(password)) {
                 startActivity(intentMain);
             }
+            username = editTextUsername.getText().toString();
                 /*for(int i = 0; i < usernameList.size(); i++) {
                     if(editTextUsername.getText().toString().equals(usernameList.get(i)) && editTextPassword.getText().toString().equals(passwordList.get(i))) {
                         startActivity(intentMain);
@@ -72,4 +74,5 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intentRegister);
         });
     }
+
 }
