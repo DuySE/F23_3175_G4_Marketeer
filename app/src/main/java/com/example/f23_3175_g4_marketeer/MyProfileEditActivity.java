@@ -43,6 +43,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
     final int CAMERA_PERMISSION_CODE = 1;
     final int CAMERA_REQUEST_CODE = 2;
     final int GALLERY_REQUEST_CODE = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
 
         Bundle inBundle = getIntent().getExtras();
         editTxtUsername.setText(inBundle.getString("USERNAME", "New Username"));
-        if (!(inBundle.getString("PASSWORD").equals("No Password"))){
+        if (!(inBundle.getString("PASSWORD").equals("No Password"))) {
             editTxtPassword.setText(inBundle.getString("PASSWORD", "New Password"));
         }
         editTxtPhone.setText(inBundle.getString("PHONE"));
@@ -106,14 +107,15 @@ public class MyProfileEditActivity extends AppCompatActivity {
                             editTxtStreetName.getText().toString() + ", " +
                             editTxtCity.getText().toString() + ", " +
                             editTxtProvince.getText().toString();
-
-                    LoginActivity.username = editTxtUsername.getText().toString();
+                    String username = editTxtUsername.getText().toString();
+                    StoredDataHelper.save(MyProfileEditActivity.this, "username",
+                            username);
 
                     Intent intent = new Intent(MyProfileEditActivity.this, MyProfileActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("USERNAME",editTxtUsername.getText().toString());
-                    bundle.putString("PASSWORD",editTxtPassword.getText().toString());
-                    bundle.putString("PHONE",editTxtPhone.getText().toString());
+                    bundle.putString("USERNAME", editTxtUsername.getText().toString());
+                    bundle.putString("PASSWORD", editTxtPassword.getText().toString());
+                    bundle.putString("PHONE", editTxtPhone.getText().toString());
                     bundle.putString("ADDRESS", address);
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -157,12 +159,12 @@ public class MyProfileEditActivity extends AppCompatActivity {
         }
     }
 
-    private File createImgFile() throws IOException{
+    private File createImgFile() throws IOException {
         String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imgFileName = "JPEG_" + time + "_";
         File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        File imgFile = File.createTempFile(imgFileName,".jpg", storageDirectory);
+        File imgFile = File.createTempFile(imgFileName, ".jpg", storageDirectory);
         imgPath = imgFile.getAbsolutePath();
         return imgFile;
     }

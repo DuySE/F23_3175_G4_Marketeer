@@ -3,6 +3,12 @@ package com.example.f23_3175_g4_marketeer;
 public class User {
     // Fields
     private String username, password;
+    // Constructor
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     // Getters and setters
     public String getUsername() {

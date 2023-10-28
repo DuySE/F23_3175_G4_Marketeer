@@ -47,14 +47,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean getUser(String username, String password) {
+    public User getUser(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = new String[]{DatabaseHelper.COLUMN_USERNAME, DatabaseHelper.COLUMN_PASSWORD};
-        String selection = String.format("%s = ? AND %s = ?", COLUMN_USERNAME, COLUMN_PASSWORD);
+        String selection = COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
         String[] selectionArgs = new String[]{username, password};
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, columns, selection,
                 selectionArgs, null, null, null);
-        int count = cursor.getCount();
-        return count > 0;
+        int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
+        int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
+        User user = null;
+        if (cursor.moveToFirst()) {
+            user = new User(cursor.getString(colUsername),
+                    cursor.getString(colPassword));
+        }
+        return user;
     }
 }

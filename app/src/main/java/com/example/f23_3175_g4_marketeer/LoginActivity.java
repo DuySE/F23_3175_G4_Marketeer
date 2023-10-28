@@ -16,22 +16,12 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextPassword;
     Button btnLogin, btnRegister;
     Intent intentMain, intentRegister;
-    String username, password;
     DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        try {
-            Bundle bundle = getIntent().getExtras();
-            username = bundle.getString("USERNAME", "");
-            password = bundle.getString("PASSWORD", "");
-            //usernameList.add(username);
-            //passwordList.add(password);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         textViewLogin = findViewById(R.id.textViewLoginTitle);
         editTextUsername = findViewById(R.id.editTextUsernameLogin);
         editTextPassword = findViewById(R.id.editTextPasswordLogin);
@@ -50,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
                 editTextUsername.setError("Please type your username.");
             } else if (password.isEmpty()) {
                 editTextPassword.setError("Please type your password.");
-            } else if (databaseHelper.getUser(username, password)) {
+            } else if (databaseHelper.getUser(username, password) != null) {
+                StoredDataHelper.save(this, "username", username);
                 startActivity(intentMain);
             } else {
                 Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
