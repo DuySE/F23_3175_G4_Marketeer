@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/menuGroup"
+        android:checkableBehavior="single"
+        >
+        <item
+            android:id="@+id/menuMainActivity"
+            android:icon="@drawable/baseline_shop_24"
+            android:title="@string/menuMainActivity" />
+        <item
+            android:id="@+id/menuMyProfileActivity"
+            android:icon="@drawable/baseline_manage_accounts_24"
+            android:title="@string/menuMyProfileActivity" />
+        <item
+            android:id="@+id/menuEditProductActivity"
+            android:icon="@drawable/baseline_sell_24"
+            android:title="@string/menuEditProductActivity" />
+
+        <!--Waiting for pull requests to approve to add more items here-->
+    </group>
+</menu>

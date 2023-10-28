@@ -72,4 +72,11 @@
     <string name="txtSold">Sold</string>
     <string name="txtEditProduct">Confirm Edit</string>
     <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
+    <string name="menuMainActivity">Main</string>
+    <string name="menuMyProfileActivity">My Profile</string>
+    <string name="menuEditProductActivity">Manage Products</string>
+    <string name="textNavTitle">Marketeer</string>
+    <string name="navDrawOpen">Open Navigation Drawer</string>
+    <string name="navDrawClose">Close Navigation Drawer</string>
+    <string name="navLogoDesc">Logo</string>
 </resources>
