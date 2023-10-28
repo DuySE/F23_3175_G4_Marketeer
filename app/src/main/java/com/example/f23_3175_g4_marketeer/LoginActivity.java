@@ -10,23 +10,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoginActivity extends AppCompatActivity {
-
-    //no create account feature yet
-
     TextView textViewLogin;
     EditText editTextUsername;
     EditText editTextPassword;
     Button btnLogin, btnRegister;
     Intent intentMain, intentRegister;
     String username, password;
+    DatabaseHelper databaseHelper;
 
-    //couldnt figure out how to store new accounts in array, so i will come back to this when the database is implemented
-    //List<String> usernameList = new ArrayList<>();
-    //List<String> passwordList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,27 +37,24 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPasswordLogin);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
+        databaseHelper = new DatabaseHelper(this);
         Login();
     }
 
     private void Login() {
         intentMain = new Intent(this, MainActivity.class);
         btnLogin.setOnClickListener((View view) -> {
-            if(editTextUsername.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Must input username", Toast.LENGTH_SHORT).show();
-            } else if(editTextPassword.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Must input password", Toast.LENGTH_SHORT).show();
-            } else if(editTextPassword.getText().toString().equals("admin") && editTextUsername.getText().toString().equals("admin")) {
+            String username = editTextUsername.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+            if (username.isEmpty()) {
+                editTextUsername.setError("Please type your username.");
+            } else if (password.isEmpty()) {
+                editTextPassword.setError("Please type your password.");
+            } else if (databaseHelper.getUser(username, password)) {
                 startActivity(intentMain);
+            } else {
+                Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
             }
-            else if(editTextUsername.getText().toString().equals(username) && editTextPassword.getText().toString().equals(password)) {
-                startActivity(intentMain);
-            }
-                /*for(int i = 0; i < usernameList.size(); i++) {
-                    if(editTextUsername.getText().toString().equals(usernameList.get(i)) && editTextPassword.getText().toString().equals(passwordList.get(i))) {
-                        startActivity(intentMain);
-                    }
-                }*/
         });
         btnRegister.setOnClickListener((View view) -> {
             intentRegister = new Intent(this, RegisterActivity.class);
