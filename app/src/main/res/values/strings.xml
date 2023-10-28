@@ -66,4 +66,10 @@
     <string name="textPhone">Phone:</string>
     <string name="txtNewPfp">New Image</string>
     <string name="txtFromGallery">Pick from Gallery</string>
+    <string name="txtEditYourProduct">Edit Your Product</string>
+    <string name="txtStatus">Status</string>
+    <string name="txtAvailable">Available</string>
+    <string name="txtSold">Sold</string>
+    <string name="txtEditProduct">Confirm Edit</string>
+    <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
 </resources>
