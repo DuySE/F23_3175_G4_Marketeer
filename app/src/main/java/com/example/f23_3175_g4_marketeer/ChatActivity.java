@@ -34,18 +34,18 @@ public class ChatActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.btnSend);
         messageArea = findViewById(R.id.messageArea);
         scrollView = findViewById(R.id.scrView);
-
+        String storedUsername = StoredDataHelper.get(this, "username");
         Firebase.setAndroidContext(this);
         reference1 = new Firebase("https://chat-b11e1.firebaseio.com/messages/" +
-                UserDetail.username + "_" + UserDetail.receiver);
+                storedUsername + "_" + User.receiver);
         reference2 = new Firebase("https://chat-b11e1.firebaseio.com/messages/" +
-                UserDetail.receiver + "_" + UserDetail.username);
+                User.receiver + "_" + storedUsername);
         btnSend.setOnClickListener(view -> {
             String message = messageArea.getText().toString();
             if (!message.equals("")) {
                 Map<String, String> map = new HashMap<>();
                 map.put("message", message);
-                map.put("user", UserDetail.username);
+                map.put("user", storedUsername);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
             }
@@ -56,11 +56,10 @@ public class ChatActivity extends AppCompatActivity {
                 Map map = dataSnapshot.getValue(Map.class);
                 String message = map.get("message").toString();
                 String username = map.get("user").toString();
-                if (username.equals(UserDetail.username)) {
+                if (username.equals(storedUsername))
                     addMessageBox("You: " + message, 1);
-                } else {
-                    addMessageBox(UserDetail.receiver + ": " + message, 2);
-                }
+                else
+                    addMessageBox(User.receiver.toLowerCase() + ": " + message, 2);
             }
 
             @Override
@@ -90,7 +89,7 @@ public class ChatActivity extends AppCompatActivity {
         textView.setText(message);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(10, 10, 0, 0);
+        lp.setMargins(15, 15, 15, 15);
         textView.setLayoutParams(lp);
         if (type == 1) {
             textView.setBackgroundResource(R.drawable.rounded_corner1);
