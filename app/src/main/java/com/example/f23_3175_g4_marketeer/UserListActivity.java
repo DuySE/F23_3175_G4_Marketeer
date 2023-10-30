@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Users extends AppCompatActivity {
+public class UserListActivity extends AppCompatActivity {
     ListView usersList;
     TextView noUsersText;
     ArrayList<String> al = new ArrayList<>();
@@ -36,22 +36,23 @@ public class Users extends AppCompatActivity {
         String url = "https://chat-b11e1.firebaseio.com/users.json";
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> doOnSuccess(response), error -> System.out.println("" + error));
-        RequestQueue queue = Volley.newRequestQueue(Users.this);
+        RequestQueue queue = Volley.newRequestQueue(UserListActivity.this);
         queue.add(request);
         usersList.setOnItemClickListener((adapterView, view, i, l) -> {
-            UserDetail.receiver = al.get(i);
-            startActivity(new Intent(Users.this, ChatActivity.class));
+            User.receiver = al.get(i);
+            startActivity(new Intent(UserListActivity.this, ChatActivity.class));
         });
     }
 
     private void doOnSuccess(String response) {
+        String username = StoredDataHelper.get(this, "username");
         try {
             JSONObject obj = new JSONObject(response);
             Iterator i = obj.keys();
             String key = "";
             while (i.hasNext()) {
                 key = i.next().toString();
-                if (!key.equals(UserDetail.username)) {
+                if (!key.equals(username)) {
                     al.add(key);
                 }
                 totalUsers++;
