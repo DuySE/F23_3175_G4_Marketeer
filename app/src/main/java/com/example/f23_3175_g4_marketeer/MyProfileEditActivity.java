@@ -46,10 +46,10 @@ public class MyProfileEditActivity extends AppCompatActivity {
     final int CAMERA_PERMISSION_CODE = 1;
     final int CAMERA_REQUEST_CODE = 2;
     final int GALLERY_REQUEST_CODE = 3;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageReference = storage.getReference();
     String imgName;
     Uri imgUri;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +66,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.btnCamera);
         btnGallery = findViewById(R.id.btnGallery);
         imgView = findViewById(R.id.imgViewEditPfp);
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
         Bundle inBundle = getIntent().getExtras();
         editTxtUsername.setText(inBundle.getString("USERNAME", "New Username"));
@@ -81,56 +82,52 @@ public class MyProfileEditActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askPermission();
-            }
+        btnCamera.setOnClickListener(view -> askPermission());
+
+        btnGallery.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, GALLERY_REQUEST_CODE);
         });
 
-        btnGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, GALLERY_REQUEST_CODE);
-            }
-        });
+        btnSave.setOnClickListener(view -> {
+            if (editTxtUsername.getText().toString().isEmpty() ||
+                    editTxtPassword.getText().toString().isEmpty() ||
+                    editTxtHomeNumber.getText().toString().isEmpty() ||
+                    editTxtStreetName.getText().toString().isEmpty() ||
+                    editTxtCity.getText().toString().isEmpty() ||
+                    editTxtProvince.getText().toString().isEmpty() ||
+                    editTxtPhone.getText().toString().isEmpty()) {
+                Toast.makeText(MyProfileEditActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
+            } else if (editTxtPhone.getText().toString().length() != 10) {
+                Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
+            } else {
+                String address = editTxtHomeNumber.getText().toString() + " " +
+                        editTxtStreetName.getText().toString() + ", " +
+                        editTxtCity.getText().toString() + ", " +
+                        editTxtProvince.getText().toString();
+                String username = editTxtUsername.getText().toString();
+                StoredDataHelper.save(MyProfileEditActivity.this, "username",
+                        username);
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editTxtUsername.getText().toString().isEmpty() ||
-                        editTxtPassword.getText().toString().isEmpty() ||
-                        editTxtHomeNumber.getText().toString().isEmpty() ||
-                        editTxtStreetName.getText().toString().isEmpty() ||
-                        editTxtCity.getText().toString().isEmpty() ||
-                        editTxtProvince.getText().toString().isEmpty() ||
-                        editTxtPhone.getText().toString().isEmpty()) {
-                    Toast.makeText(MyProfileEditActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
-                } else if (editTxtPhone.getText().toString().length() != 10) {
-                    Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
-                } else if (imgName == null || imgUri == null){
-                    Toast.makeText(MyProfileEditActivity.this, "Please choose your profile picture", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MyProfileEditActivity.this, MyProfileActivity.class);
+                String storedUsername = StoredDataHelper.get(this, "username");
+                String storedPassword = StoredDataHelper.get(this, "password");
+                User user = databaseHelper.getUser(storedUsername, storedPassword);
+                if (user != null) {
+                    user.setUsername(username);
+                    user.setPassword(editTxtPassword.getText().toString());
+                    user.setAddress(address);
+                    user.setPhone(editTxtPhone.getText().toString());
                 }
-                  else {
-                    String address = editTxtHomeNumber.getText().toString() + " " +
-                            editTxtStreetName.getText().toString() + ", " +
-                            editTxtCity.getText().toString() + ", " +
-                            editTxtProvince.getText().toString();
-                    String username = editTxtUsername.getText().toString();
-                    StoredDataHelper.save(MyProfileEditActivity.this, "username",
-                            username);
-                    UploadEditedProduct(imgName,imgUri);
-
-                    Intent intent = new Intent(MyProfileEditActivity.this, MyProfileActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("USERNAME", editTxtUsername.getText().toString());
-                    bundle.putString("PASSWORD", editTxtPassword.getText().toString());
-                    bundle.putString("PHONE", editTxtPhone.getText().toString());
-                    bundle.putString("ADDRESS", address);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
+                databaseHelper.updateUser(user);
+                UploadEditedProfile(imgName,imgUri);
+                Bundle bundle = new Bundle();
+                bundle.putString("USERNAME", user.getUsername());
+                bundle.putString("PASSWORD", user.getPassword());
+                bundle.putString("PHONE", user.getPhone());
+                bundle.putString("ADDRESS", user.getAddress());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
@@ -213,7 +210,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
         }
     }
 
-    private void UploadEditedProduct(String imgName, Uri imgUri){
+    private void UploadEditedProfile(String imgName, Uri imgUri){
         StorageReference img = storageReference.child("ProfileImg/" + imgName);
         img.putFile(imgUri);
     }

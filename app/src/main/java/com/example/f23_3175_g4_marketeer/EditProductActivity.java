@@ -48,6 +48,7 @@ public class EditProductActivity extends AppCompatActivity {
     StorageReference storageReference = storage.getReference();
     String imgName;
     Uri imgUri;
+    String status;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +79,7 @@ public class EditProductActivity extends AppCompatActivity {
         btnEditProd.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseHelper databaseHelper = new DatabaseHelper(EditProductActivity.this);
                 if (editTxtProdName.getText().toString().isEmpty()) {
                     Toast.makeText(EditProductActivity.this, "Please name your product", Toast.LENGTH_SHORT).show();
                 } else if (editTxtPrice.getText().toString().isEmpty()) {
@@ -86,6 +88,15 @@ public class EditProductActivity extends AppCompatActivity {
                     Toast.makeText(EditProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
                     UploadEditedProduct(imgName,imgUri);
+                    if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnAvailable){
+                        status = "Available";
+                    } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold){
+                        status = "Sold";
+                    }
+
+                    databaseHelper.updateProduct(editTxtProdName.getText().toString(),
+                            Double.parseDouble(editTxtPrice.getText().toString()),
+                            StoredDataHelper.get(EditProductActivity.this,"username"), status, imgName);
                 }
             }
         }));
