@@ -169,5 +169,9 @@ public class NewProductActivity extends AppCompatActivity {
     private void UploadNewProduct(String imgName, Uri imgUri){
         StorageReference img = storageReference.child("ProductImg/" + imgName);
         img.putFile(imgUri);
+        DatabaseHelper databaseHelper = new DatabaseHelper(NewProductActivity.this);
+        databaseHelper.addProduct(editTxtProdName.getText().toString(),
+                Double.parseDouble(editTxtPrice.getText().toString()),
+                StoredDataHelper.get(this,"username"), imgName);
     }
 }

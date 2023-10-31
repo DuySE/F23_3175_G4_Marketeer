@@ -15,18 +15,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String DB_NAME = "MARKETEER.DB";
     // Table name
     static final String TABLE_USERS = "USERS";
+    static final String TABLE_PRODUCTS = "PRODUCTS";
     // Database version
     static final int DB_VERSION = 1;
     static final String COLUMN_USERNAME = "username";
     static final String COLUMN_PASSWORD = "password";
+    static final String COLUMN_PRODUCT_ID = "product_id";
+    static final String COLUMN_NAME = "name";
+    static final String COLUMN_PRICE = "price";
+    static final String COLUMN_SELLER = "seller";
+    static final String COLUMN_STATUS = "status";
+    static final String COLUMN_IMG_NAME = "image";
     // Create table
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + " (" +
             COLUMN_USERNAME + " TEXT PRIMARY KEY, " + COLUMN_PASSWORD + " TEXT NOT NULL)";
+    private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
+            COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_NAME + " TEXT NOT NULL, " + COLUMN_PRICE + " REAL NOT NULL, " +
+            COLUMN_SELLER + " TEXT NOT NULL, " + COLUMN_STATUS + " TEXT NOT NULL, " +
+            COLUMN_IMG_NAME + " TEXT NOT NULL)";
 
     // This method is called the first time a database is accessed.
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TABLE_USERS);
+        sqLiteDatabase.execSQL(CREATE_TABLE_PRODUCTS);
     }
 
     /* This method is called if the database version number changes.
@@ -35,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
         onCreate(sqLiteDatabase);
     }
 
@@ -62,5 +76,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(colPassword));
         }
         return user;
+    }
+
+    public void addProduct(String name, double price, String seller, String imgName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.COLUMN_NAME, name);
+        contentValue.put(DatabaseHelper.COLUMN_PRICE, price);
+        contentValue.put(DatabaseHelper.COLUMN_SELLER, seller);
+        contentValue.put(DatabaseHelper.COLUMN_STATUS, "Available");
+        contentValue.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
+        db.insert(DatabaseHelper.TABLE_PRODUCTS, null, contentValue);
     }
 }
