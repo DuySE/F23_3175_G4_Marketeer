@@ -15,6 +15,7 @@ public class MyProfileActivity extends AppCompatActivity {
     TextView txtViewAddress;
     Button btn;
     Button btn2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +32,10 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("USERNAME",txtViewUsername.getText().toString());
-                bundle.putString("PASSWORD",txtViewPassword.getText().toString());
-                if (txtViewPhone.getText().toString().length()==10){
-                    bundle.putString("PHONE",txtViewPhone.getText().toString());
+                bundle.putString("USERNAME", txtViewUsername.getText().toString());
+                bundle.putString("PASSWORD", txtViewPassword.getText().toString());
+                if (txtViewPhone.getText().toString().length() == 10) {
+                    bundle.putString("PHONE", txtViewPhone.getText().toString());
                 }
 
                 String address = txtViewAddress.getText().toString();
@@ -46,13 +47,13 @@ public class MyProfileActivity extends AppCompatActivity {
 
                     String[] streetNames = numberAndStreet.split(" ");
                     String streetName = "";
-                    for (int i=1; i<streetNames.length; i++){
+                    for (int i = 1; i < streetNames.length; i++) {
                         streetName += streetNames[i] + " ";
                     }
-                    bundle.putString("HOMENUMBER",homeNumber);
-                    bundle.putString("STREET",streetName);
-                    bundle.putString("CITY",city);
-                    bundle.putString("PROVINCE",province);
+                    bundle.putString("HOMENUMBER", homeNumber);
+                    bundle.putString("STREET", streetName);
+                    bundle.putString("CITY", city);
+                    bundle.putString("PROVINCE", province);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -73,16 +74,16 @@ public class MyProfileActivity extends AppCompatActivity {
 
     private void showPassword() {
         String password = "";
-        try{
+        try {
             Bundle inBundle = getIntent().getExtras();
             password = inBundle.getString("PASSWORD");
             String passwordStr = "";
-            if (btn2.getText().toString().equals("SHOW")){
+            if (btn2.getText().toString().equals("SHOW")) {
                 txtViewPassword.setText(password);
                 btn2.setText(R.string.txtHide);
             } else {
-                for (int i=0; i < password.length(); i++){
-                    passwordStr+="*";
+                for (int i = 0; i < password.length(); i++) {
+                    passwordStr += "*";
                     txtViewPassword.setText(passwordStr);
                 }
                 btn2.setText(R.string.txtShow);
@@ -93,20 +94,20 @@ public class MyProfileActivity extends AppCompatActivity {
 
     }
 
-    public void setProfile(){
+    public void setProfile() {
         String password = "";
         try {
             Bundle inBundle = getIntent().getExtras();
             String username = StoredDataHelper.get(this, "username");
             txtViewUsername.setText(username);
-            txtViewAddress.setText(inBundle.getString("ADDRESS","None"));
-            txtViewPhone.setText(inBundle.getString("PHONE","None"));
+            txtViewAddress.setText(inBundle.getString("ADDRESS", "None"));
+            txtViewPhone.setText(inBundle.getString("PHONE", "None"));
             String inPassword = inBundle.getString("PASSWORD", "error");
 
-            if (inPassword.equals("error")){
+            if (inPassword.equals("error")) {
                 txtViewPassword.setText(R.string.error);
             } else {
-                for (int i=0; i<inPassword.length(); i++){
+                for (int i = 0; i < inPassword.length(); i++) {
                     password += "*";
                 }
                 txtViewPassword.setText(password);

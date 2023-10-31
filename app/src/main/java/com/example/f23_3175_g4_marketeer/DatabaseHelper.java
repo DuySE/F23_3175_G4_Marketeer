@@ -14,14 +14,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database information
     static final String DB_NAME = "MARKETEER.DB";
     // Table name
-    static final String TABLE_USERS = "USERS";
+    static final String TABLE_USERS = "Users";
     // Database version
     static final int DB_VERSION = 1;
-    static final String COLUMN_USERNAME = "username";
-    static final String COLUMN_PASSWORD = "password";
+    // Column name
+    static final String COLUMN_USERNAME = "Username";
+    static final String COLUMN_PASSWORD = "Password";
+    static final String COLUMN_ADDRESS = "Address";
+    static final String COLUMN_PHONE = "Phone";
     // Create table
-    private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + " (" +
-            COLUMN_USERNAME + " TEXT PRIMARY KEY, " + COLUMN_PASSWORD + " TEXT NOT NULL)";
+    private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
+            COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL," +
+            COLUMN_PASSWORD + " TEXT NOT NULL," +
+            COLUMN_ADDRESS + " TEXT," +
+            COLUMN_PHONE + " TEXT" +
+            ")";
 
     // This method is called the first time a database is accessed.
     @Override
@@ -40,19 +47,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void addUser(String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValue = new ContentValues();
-        contentValue.put(DatabaseHelper.COLUMN_USERNAME, username);
-        contentValue.put(DatabaseHelper.COLUMN_PASSWORD, password);
-        db.insert(DatabaseHelper.TABLE_USERS, null, contentValue);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_USERNAME, username);
+        contentValues.put(COLUMN_PASSWORD, password);
+        db.insert(TABLE_USERS, null, contentValues);
         db.close();
     }
 
     public User getUser(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = new String[]{DatabaseHelper.COLUMN_USERNAME, DatabaseHelper.COLUMN_PASSWORD};
+        String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD};
         String selection = COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
         String[] selectionArgs = new String[]{username, password};
-        Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, columns, selection,
+        Cursor cursor = db.query(TABLE_USERS, columns, selection,
                 selectionArgs, null, null, null);
         int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
         int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
@@ -62,5 +69,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(colPassword));
         }
         return user;
+    }
+
+    public void updateUser(User user) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (user != null) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COLUMN_USERNAME, user.getUsername());
+            contentValues.put(COLUMN_PASSWORD, user.getPassword());
+            contentValues.put(COLUMN_ADDRESS, user.getAddress());
+            contentValues.put(COLUMN_PHONE, user.getPhone());
+            String where = COLUMN_USERNAME + " = ?";
+            String[] whereArgs = new String[]{user.getUsername()};
+            db.update(TABLE_USERS, contentValues, where, whereArgs);
+            db.close();
+        }
     }
 }
