@@ -8,7 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MyProfileActivity extends AppCompatActivity {
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMyProfileBinding;
+
+public class MyProfileActivity extends DrawerActivity {
+
+    ActivityMyProfileBinding myProfileBinding;
     TextView txtViewUsername;
     TextView txtViewPassword;
     TextView txtViewPhone;
@@ -18,7 +23,12 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+
+        myProfileBinding = ActivityMyProfileBinding.inflate(getLayoutInflater());
+        setContentView(myProfileBinding.getRoot());
+        allocateActivityTitle("My Profile");
+
+        //setContentView(R.layout.activity_my_profile);
         txtViewUsername = findViewById(R.id.txtViewUsername);
         txtViewPassword = findViewById(R.id.txtViewUserPassword);
         txtViewPhone = findViewById(R.id.txtViewPhone);

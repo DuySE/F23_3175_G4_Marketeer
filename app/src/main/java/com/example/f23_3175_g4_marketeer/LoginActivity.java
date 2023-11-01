@@ -14,14 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
-
-    //no create account feature yet
-
     TextView textViewLogin;
     EditText editTextUsername;
     EditText editTextPassword;
     Button btnLogin, btnRegister;
-    Intent intentMain, intentRegister;
+    Intent intentHome, intentRegister;
     public static String username;
     String password;
 
@@ -50,17 +47,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void Login() {
-        intentMain = new Intent(this, MainActivity.class);
+        intentHome = new Intent(this, HomepageActivity.class);
         btnLogin.setOnClickListener((View view) -> {
             if(editTextUsername.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Must input username", Toast.LENGTH_SHORT).show();
             } else if(editTextPassword.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Must input password", Toast.LENGTH_SHORT).show();
             } else if(editTextPassword.getText().toString().equals("admin") && editTextUsername.getText().toString().equals("admin")) {
-                startActivity(intentMain);
+                startActivity(intentHome);
             }
             else if(editTextUsername.getText().toString().equals(username) && editTextPassword.getText().toString().equals(password)) {
-                startActivity(intentMain);
+                startActivity(intentHome);
             }
             username = editTextUsername.getText().toString();
                 /*for(int i = 0; i < usernameList.size(); i++) {

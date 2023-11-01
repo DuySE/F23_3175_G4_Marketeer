@@ -4,37 +4,34 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.Group;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
 
-public class DrawerActivity extends AppCompatActivity{
-    public DrawerLayout drawer;
-    public NavigationView navigation;
-    Intent intentMain, intentEditProduct, intentMyProfile;
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    DrawerLayout drawer;
+    NavigationView navigation;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawer);
-        SetUpDrawer();
-    }
-    public void SetUpDrawer() {
-        intentMain = new Intent(this, MainActivity.class);
-        intentEditProduct = new Intent(this, EditProductActivity.class);
-        intentMyProfile = new Intent(this, MyProfileActivity.class);
-        Toolbar toolbar = findViewById(R.id.drawerToolbar);
-        navigation = findViewById(R.id.drawerNavView);
+    public void setContentView(View view) {
+        drawer = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer, null);
+        FrameLayout container = drawer.findViewById(R.id.activityContainer);
+        container.addView(view);
+        super.setContentView(drawer);
+
+        Toolbar toolbar = drawer.findViewById(R.id.drawerToolbar);
         setSupportActionBar(toolbar);
-        drawer = findViewById(R.id.activity_drawer);
+
+        navigation = drawer.findViewById(R.id.drawerNavView);
+        navigation.setNavigationItemSelectedListener(this);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 drawer,
                 toolbar,
@@ -42,28 +39,26 @@ public class DrawerActivity extends AppCompatActivity{
                 R.string.navDrawClose);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int id=menuItem.getItemId();
-                if (id == R.id.menuMainActivity){
-                    Toast.makeText(DrawerActivity.this, "Main Selected", Toast.LENGTH_SHORT).show();
-                    startActivity(intentMain);
-                } else if(id==R.id.menuEditProductActivity) {
-                    startActivity(intentEditProduct);
-                } else if(id==R.id.menuMyProfileActivity) {
-                    startActivity(intentMyProfile);
-                }
-                return true;
-            }
-        });
     }
+
     @Override
-    public void onBackPressed() {
-        if(drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawer.closeDrawer(GravityCompat.START);
+
+        //If else statement to change activities
+        if(item.getItemId()==R.id.menuMainActivity) {
+            startActivity(new Intent(this, MainActivity.class));
+            overridePendingTransition(0, 0);
+        }
+        else if(item.getItemId()==R.id.menuMyProfileActivity) {
+            startActivity(new Intent(this, MyProfileActivity.class));
+            overridePendingTransition(0, 0);
+        }
+        return false;
+    }
+    protected void allocateActivityTitle(String title) {
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
         }
     }
 }
