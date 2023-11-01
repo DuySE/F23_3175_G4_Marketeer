@@ -23,6 +23,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -44,6 +47,10 @@ public class MyProfileEditActivity extends AppCompatActivity {
     final int CAMERA_REQUEST_CODE = 2;
     final int GALLERY_REQUEST_CODE = 3;
     DatabaseHelper databaseHelper;
+    String imgName;
+    Uri imgUri;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +118,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
                 }
                 databaseHelper.updateUser(user);
                 StoredDataHelper.save(MyProfileEditActivity.this, "username", user.getUsername());
-//                Bundle bundle = new Bundle();
-//                bundle.putString("USERNAME", user.getUsername());
-//                bundle.putString("PASSWORD", user.getPassword());
-//                bundle.putString("PHONE", user.getPhone());
-//                bundle.putString("ADDRESS", user.getAddress());
-//                intent.putExtras(bundle);
+                UploadEditedProfile(imgName,imgUri);
                 startActivity(intent);
             }
         });
@@ -173,8 +175,9 @@ public class MyProfileEditActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK && imgPath != null) {
                 File imgFile = new File(imgPath);
-                Uri imgUri = Uri.fromFile(imgFile);
+                imgUri = Uri.fromFile(imgFile);
                 imgView.setImageURI(imgUri);
+                imgName = imgFile.getName();
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(imgUri);
@@ -186,16 +189,21 @@ public class MyProfileEditActivity extends AppCompatActivity {
 
         if (requestCode == GALLERY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Uri imgUri = data.getData();
+                imgUri = data.getData();
                 String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
                 ContentResolver resolver = getContentResolver();
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String extension = mime.getExtensionFromMimeType(resolver.getType(imgUri));
 
-                String imgFileName = "JPEG_" + time + "." + extension;
+                imgName = "JPEG_" + time + "." + extension;
                 imgView.setImageURI(imgUri);
             }
         }
+    }
+
+    private void UploadEditedProfile(String imgName, Uri imgUri){
+        StorageReference img = storageReference.child("ProfileImg/" + imgName);
+        img.putFile(imgUri);
     }
 }

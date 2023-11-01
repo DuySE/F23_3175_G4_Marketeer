@@ -24,6 +24,9 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -41,6 +44,11 @@ public class EditProductActivity extends AppCompatActivity {
     Button btnEditProd;
     String imgPath;
     RadioGroup radGroupStatus;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
+    String imgName;
+    Uri imgUri;
+    String status;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +79,7 @@ public class EditProductActivity extends AppCompatActivity {
         btnEditProd.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseHelper databaseHelper = new DatabaseHelper(EditProductActivity.this);
                 if (editTxtProdName.getText().toString().isEmpty()) {
                     Toast.makeText(EditProductActivity.this, "Please name your product", Toast.LENGTH_SHORT).show();
                 } else if (editTxtPrice.getText().toString().isEmpty()) {
@@ -78,7 +87,16 @@ public class EditProductActivity extends AppCompatActivity {
                 } else if (imgView.getDrawable() == null) {
                     Toast.makeText(EditProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
-                    //update the product in the database
+                    UploadEditedProduct(imgName,imgUri);
+                    if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnAvailable){
+                        status = "Available";
+                    } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold){
+                        status = "Sold";
+                    }
+
+                    databaseHelper.updateProduct(editTxtProdName.getText().toString(),
+                            Double.parseDouble(editTxtPrice.getText().toString()),
+                            StoredDataHelper.get(EditProductActivity.this,"username"), status, imgName);
                 }
             }
         }));
@@ -134,8 +152,9 @@ public class EditProductActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK && imgPath != null) {
                 File imgFile = new File(imgPath);
-                Uri imgUri = Uri.fromFile(imgFile);
+                imgUri = Uri.fromFile(imgFile);
                 imgView.setImageURI(imgUri);
+                imgName = imgFile.getName();
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(imgUri);
@@ -147,16 +166,21 @@ public class EditProductActivity extends AppCompatActivity {
 
         if (requestCode == GALLERY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Uri imgUri = data.getData();
+                imgUri = data.getData();
                 String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
                 ContentResolver resolver = getContentResolver();
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String extension = mime.getExtensionFromMimeType(resolver.getType(imgUri));
 
-                String imgFileName = "JPEG_" + time + "." + extension;
+                imgName = "JPEG_" + time + "." + extension;
                 imgView.setImageURI(imgUri);
             }
         }
+    }
+
+    private void UploadEditedProduct(String imgName, Uri imgUri){
+        StorageReference img = storageReference.child("ProductImg/" + imgName);
+        img.putFile(imgUri);
     }
 }
