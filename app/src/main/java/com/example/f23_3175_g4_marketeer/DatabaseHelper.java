@@ -59,7 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean login(String username, String password) {
         User user = getUser(username);
-        String userPwd = user.getPassword();
+        String userPwd = "";
+        if (user != null) userPwd = user.getPassword();
         // Check if password inputted by user matches with password stored in database
         return BCrypt.checkpw(password, userPwd);
     }
@@ -74,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 selectionArgs, null, null, null);
         int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
         int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
-        int colAddress= cursor.getColumnIndex(COLUMN_ADDRESS);
+        int colAddress = cursor.getColumnIndex(COLUMN_ADDRESS);
         int colPhone = cursor.getColumnIndex(COLUMN_PHONE);
         User user = null;
         if (cursor.moveToFirst()) {
@@ -85,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        return user != null ? user : null;
+        return user;
     }
 
     public void updateUser(User user) {
