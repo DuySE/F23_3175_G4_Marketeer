@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -35,7 +37,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
     EditText editTxtStreetName;
     EditText editTxtCity;
     EditText editTxtProvince;
-    EditText editTxtPhone;
+    TextInputEditText editTxtPhone;
     ImageView imgView;
     Button btnCamera;
     Button btnGallery;
@@ -51,7 +53,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
         editTxtUsername = findViewById(R.id.editTxtUsername);
         editTxtPassword = findViewById(R.id.editTxtPassword);
         editTxtHomeNumber = findViewById(R.id.editTxtHomeNumber);
-        editTxtStreetName = findViewById(R.id.editTxtStreetName);
+        editTxtStreetName = findViewById(R.id.editTxtStreet);
         editTxtCity = findViewById(R.id.editTxtCity);
         editTxtProvince = findViewById(R.id.editTxtProvince);
         editTxtPhone = findViewById(R.id.editTxtPhone);
@@ -60,12 +62,13 @@ public class MyProfileEditActivity extends AppCompatActivity {
         btnGallery = findViewById(R.id.btnGallery);
         imgView = findViewById(R.id.imgViewEditPfp);
 
+
         Bundle inBundle = getIntent().getExtras();
         editTxtUsername.setText(inBundle.getString("USERNAME", "New Username"));
         if (!(inBundle.getString("PASSWORD").equals("No Password"))) {
             editTxtPassword.setText(inBundle.getString("PASSWORD", "New Password"));
         }
-        editTxtPhone.setText(inBundle.getString("PHONE"));
+        //editTxtPhone.setText(inBundle.getString("PHONE"));
         try {
             editTxtHomeNumber.setText(inBundle.getString("HOMENUMBER"));
             editTxtStreetName.setText(inBundle.getString("STREET"));
@@ -100,8 +103,8 @@ public class MyProfileEditActivity extends AppCompatActivity {
                         editTxtProvince.getText().toString().isEmpty() ||
                         editTxtPhone.getText().toString().isEmpty()) {
                     Toast.makeText(MyProfileEditActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
-                } else if (editTxtPhone.getText().toString().length() != 10) {
-                    Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
+                //} else if (editTxtPhone.getText().toString().length() != 10) {
+                    //Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
                 } else {
                     String address = editTxtHomeNumber.getText().toString() + " " +
                             editTxtStreetName.getText().toString() + ", " +
@@ -115,7 +118,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putString("USERNAME", editTxtUsername.getText().toString());
                     bundle.putString("PASSWORD", editTxtPassword.getText().toString());
-                    bundle.putString("PHONE", editTxtPhone.getText().toString());
+                    //bundle.putString("PHONE", editTxtPhone.getText().toString());
                     bundle.putString("ADDRESS", address);
                     intent.putExtras(bundle);
                     startActivity(intent);

@@ -40,6 +40,8 @@ public class NewProductActivity extends AppCompatActivity {
     final int CAMERA_PERMISSION_CODE = 1;
     final int CAMERA_REQUEST_CODE = 2;
     final int GALLERY_REQUEST_CODE = 3;
+    String imgName;
+    Uri imgUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
