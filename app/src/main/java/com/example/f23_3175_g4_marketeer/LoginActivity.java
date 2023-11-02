@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                 editTextPassword.setError("Please type your password.");
             } else if (databaseHelper.getUser(username, password) != null) {
                 StoredDataHelper.save(this, "username", username);
+                StoredDataHelper.save(this, "password", password);
                 startActivity(intentMain);
             } else {
                 Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();

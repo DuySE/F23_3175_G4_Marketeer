@@ -23,6 +23,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -35,11 +38,12 @@ public class NewProductActivity extends AppCompatActivity {
     Button btnCamera;
     Button btnGallery;
     Button btnAddProd;
-
     String imgPath;
     final int CAMERA_PERMISSION_CODE = 1;
     final int CAMERA_REQUEST_CODE = 2;
     final int GALLERY_REQUEST_CODE = 3;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
     String imgName;
     Uri imgUri;
     @Override
@@ -78,7 +82,7 @@ public class NewProductActivity extends AppCompatActivity {
                 } else if (imgView.getDrawable() == null) {
                     Toast.makeText(NewProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
-                    //put the product in the database
+                    UploadNewProduct(imgName, imgUri);
                 }
             }
         }));
@@ -135,8 +139,9 @@ public class NewProductActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK && imgPath != null) {
                 File imgFile = new File(imgPath);
-                Uri imgUri = Uri.fromFile(imgFile);
+                imgUri = Uri.fromFile(imgFile);
                 imgView.setImageURI(imgUri);
+                imgName = imgFile.getName();
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(imgUri);
@@ -148,17 +153,25 @@ public class NewProductActivity extends AppCompatActivity {
 
         if (requestCode == GALLERY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Uri imgUri = data.getData();
+                imgUri = data.getData();
                 String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
                 ContentResolver resolver = getContentResolver();
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String extension = mime.getExtensionFromMimeType(resolver.getType(imgUri));
 
-                String imgFileName = "JPEG_" + time + "." + extension;
+                imgName = "JPEG_" + time + "." + extension;
                 imgView.setImageURI(imgUri);
             }
         }
     }
 
+    private void UploadNewProduct(String imgName, Uri imgUri){
+        StorageReference img = storageReference.child("ProductImg/" + imgName);
+        img.putFile(imgUri);
+        DatabaseHelper databaseHelper = new DatabaseHelper(NewProductActivity.this);
+        databaseHelper.addProduct(editTxtProdName.getText().toString(),
+                Double.parseDouble(editTxtPrice.getText().toString()),
+                StoredDataHelper.get(this,"username"), imgName);
+    }
 }
