@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:text="@string/txtNewImg"
         app:layout_constraintStart_toEndOf="@+id/imgViewProductImg"
         app:layout_constraintTop_toBottomOf="@+id/txtViewAddProduct" />
@@ -48,51 +48,44 @@
         app:layout_constraintStart_toEndOf="@+id/imgViewProductImg"
         app:layout_constraintTop_toBottomOf="@+id/btnNewImg" />
 
-    <TextView
-        android:id="@+id/txtViewProductName"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtFieldProdName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/txtProductName"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgViewProductImg" />
-
-    <EditText
-        android:id="@+id/editTxtProductName"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:hint="@string/txtProductName"
-        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewProductName" />
+        app:layout_constraintTop_toBottomOf="@+id/imgViewProductImg">
 
-    <TextView
-        android:id="@+id/txtViewListedPrice"
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTxtProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtFieldPrice"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="@string/txtPrice"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTxtProductName" />
-
-    <EditText
-        android:id="@+id/editTxtPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
+        android:layout_marginEnd="32dp"
         android:hint="@string/txtPrice"
-        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewListedPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/txtFieldProdName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTxtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnAddNewProduct"
@@ -102,6 +95,6 @@
         android:text="@string/txtAddNewProduct"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTxtPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/txtFieldPrice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

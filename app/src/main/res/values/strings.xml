@@ -50,20 +50,20 @@
     <string name="txtShow">SHOW</string>
     <string name="txtAddress">Address</string>
     <string name="txtHomeNumber">Home Number</string>
-    <string name="txtStreetName">Street Name</string>
+    <string name="txtStreetName">Street</string>
     <string name="txtCity">City</string>
     <string name="txtProvince">Province/State</string>
-    <string name="txtHomeNumberHint">Home number</string>
+    <string name="txtHomeNumberHint">Number</string>
     <string name="txtStreetSample">Home street</string>
     <string name="txtCitySample">Home city</string>
     <string name="txtProvinceSample">Province</string>
-    <string name="txtPhoneNumber">Phone</string>
-    <string name="txtPhoneSample">Phone number</string>
+    <string name="txtPhoneNumber">Phone:</string>
+    <string name="txtPhoneSample">Phone Number</string>
     <string name="txtEmpty"> </string>
     <string name="txtViewAddress_Profile">Address:</string>
     <string name="txtNone">None</string>
-    <string name="textPhone">Phone</string>
-    <string name="txtNewPfp">New Image</string>
+    <string name="textPhone">Phone Number</string>
+    <string name="txtNewPfp">New Profile Image</string>
     <string name="txtFromGallery">Pick from Gallery</string>
     <string name="txtEditYourProduct">Edit Your Product</string>
     <string name="txtStatus">Status</string>
@@ -71,4 +71,5 @@
     <string name="txtSold">Sold</string>
     <string name="txtEditProduct">Confirm Edit</string>
     <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
+    <string name="txtNotAdded">Not added</string>
 </resources>

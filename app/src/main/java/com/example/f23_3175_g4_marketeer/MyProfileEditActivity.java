@@ -23,8 +23,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +60,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
         editTxtUsername = findViewById(R.id.editTxtUsername);
         editTxtPassword = findViewById(R.id.editTxtPassword);
         editTxtHomeNumber = findViewById(R.id.editTxtHomeNumber);
-        editTxtStreetName = findViewById(R.id.editTxtStreetName);
+        editTxtStreetName = findViewById(R.id.editTxtStreet);
         editTxtCity = findViewById(R.id.editTxtCity);
         editTxtProvince = findViewById(R.id.editTxtProvince);
         editTxtPhone = findViewById(R.id.editTxtPhone);
@@ -70,15 +72,22 @@ public class MyProfileEditActivity extends AppCompatActivity {
 
         Bundle inBundle = getIntent().getExtras();
         editTxtUsername.setText(inBundle.getString("USERNAME", "New Username"));
-        if (!(inBundle.getString("PASSWORD").equals("No Password"))) {
-            editTxtPassword.setText(inBundle.getString("PASSWORD", "New Password"));
-        }
+        editTxtPassword.setText(inBundle.getString("PASSWORD"));
         editTxtPhone.setText(inBundle.getString("PHONE"));
         try {
             editTxtHomeNumber.setText(inBundle.getString("HOMENUMBER"));
             editTxtStreetName.setText(inBundle.getString("STREET"));
             editTxtCity.setText(inBundle.getString("CITY"));
             editTxtProvince.setText(inBundle.getString("PROVINCE"));
+            imgName = inBundle.getString("IMGNAME");
+            StorageReference img = storageReference.child("ProfileImg/" + inBundle.getString("IMGNAME"));
+            img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(imgView);
+                    imgUri = uri;
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,16 +109,18 @@ public class MyProfileEditActivity extends AppCompatActivity {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
             } else if (editTxtPhone.getText().toString().length() != 10) {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
+            } else if (imgView.getDrawable() == null) {
+                Toast.makeText(MyProfileEditActivity.this, "Please choose a profile image for your account", Toast.LENGTH_SHORT).show();
             } else {
                 String address = editTxtHomeNumber.getText().toString() + " " +
                         editTxtStreetName.getText().toString() + ", " +
                         editTxtCity.getText().toString() + ", " +
                         editTxtProvince.getText().toString();
                 String username = editTxtUsername.getText().toString();
+                UploadEditedProfile(imgName,imgUri);
+
                 StoredDataHelper.save(MyProfileEditActivity.this, "username",
                         username);
-
-                Intent intent = new Intent(MyProfileEditActivity.this, MyProfileActivity.class);
                 String storedUsername = StoredDataHelper.get(this, "username");
                 String storedPassword = StoredDataHelper.get(this, "password");
                 User user = databaseHelper.getUser(storedUsername, storedPassword);
@@ -118,16 +129,11 @@ public class MyProfileEditActivity extends AppCompatActivity {
                     user.setPassword(editTxtPassword.getText().toString());
                     user.setAddress(address);
                     user.setPhone(editTxtPhone.getText().toString());
+                    user.setProfileImg(imgName);
                 }
+
                 databaseHelper.updateUser(user);
-                UploadEditedProfile(imgName,imgUri);
-                Bundle bundle = new Bundle();
-                bundle.putString("USERNAME", user.getUsername());
-                bundle.putString("PASSWORD", user.getPassword());
-                bundle.putString("PHONE", user.getPhone());
-                bundle.putString("ADDRESS", user.getAddress());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(new Intent(MyProfileEditActivity.this, MyProfileActivity.class));
             }
         });
     }

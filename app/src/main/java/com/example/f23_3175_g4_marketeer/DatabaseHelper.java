@@ -23,18 +23,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_PASSWORD = "Password";
     static final String COLUMN_ADDRESS = "Address";
     static final String COLUMN_PHONE = "Phone";
-    static final String COLUMN_PRODUCT_ID = "product_id";
-    static final String COLUMN_NAME = "name";
-    static final String COLUMN_PRICE = "price";
-    static final String COLUMN_SELLER = "seller";
-    static final String COLUMN_STATUS = "status";
-    static final String COLUMN_IMG_NAME = "image";
+    static final String COLUMN_PROFILE_IMG = "Profile_Image";
+    static final String COLUMN_PRODUCT_ID = "Product_Id";
+    static final String COLUMN_NAME = "Name";
+    static final String COLUMN_PRICE = "Price";
+    static final String COLUMN_SELLER = "Seller";
+    static final String COLUMN_STATUS = "Status";
+    static final String COLUMN_IMG_NAME = "Image";
     // Create table
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
             COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL," +
             COLUMN_PASSWORD + " TEXT NOT NULL," +
             COLUMN_ADDRESS + " TEXT," +
-            COLUMN_PHONE + " TEXT" +
+            COLUMN_PHONE + " TEXT," +
+            COLUMN_PROFILE_IMG + " TEXT" +
             ")";
 
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
@@ -86,14 +88,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    public void updateUser(User user) {
+    //This version is to query for ProfileActivity
+    public User getUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_ADDRESS, COLUMN_PHONE, COLUMN_PROFILE_IMG};
+        String selection = COLUMN_USERNAME + " = ?";
+        String[] selectionArgs = new String[]{username};
+        Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
+        int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
+        int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
+        int colAddress = cursor.getColumnIndex(COLUMN_ADDRESS);
+        int colPhone = cursor.getColumnIndex(COLUMN_PHONE);
+        int colProfileImg = cursor.getColumnIndex(COLUMN_PROFILE_IMG);
+
+        User user = null;
+        if (cursor.moveToFirst()) {
+            user = new User(cursor.getString(colUsername), cursor.getString(colPassword),
+                    cursor.getString(colAddress), cursor.getString(colPhone),
+                    cursor.getString(colProfileImg));
+        }
+        return user;
+    }
+
+    public void updateUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
         if (user != null) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_USERNAME, user.getUsername());
             contentValues.put(COLUMN_PASSWORD, user.getPassword());
             contentValues.put(COLUMN_ADDRESS, user.getAddress());
             contentValues.put(COLUMN_PHONE, user.getPhone());
+            contentValues.put(COLUMN_PROFILE_IMG, user.getProfileImg());
             String where = COLUMN_USERNAME + " = ?";
             String[] whereArgs = new String[]{user.getUsername()};
             db.update(TABLE_USERS, contentValues, where, whereArgs);

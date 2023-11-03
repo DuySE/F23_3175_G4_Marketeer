@@ -3,10 +3,20 @@ package com.example.f23_3175_g4_marketeer;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyProfileActivity extends AppCompatActivity {
     TextView txtViewUsername;
@@ -15,6 +25,10 @@ public class MyProfileActivity extends AppCompatActivity {
     TextView txtViewAddress;
     Button btn;
     Button btn2;
+    ImageView imgView;
+    String imgName;
+    User user;
+    String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +40,7 @@ public class MyProfileActivity extends AppCompatActivity {
         txtViewAddress = findViewById(R.id.txtViewAddress);
         btn = findViewById(R.id.btnEditProfile);
         btn2 = findViewById(R.id.btnShowPassword);
+        imgView = findViewById(R.id.imgViewPfp);
         setProfile();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +48,7 @@ public class MyProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("USERNAME", txtViewUsername.getText().toString());
-                bundle.putString("PASSWORD", txtViewPassword.getText().toString());
+                bundle.putString("PASSWORD", password);
                 if (txtViewPhone.getText().toString().length() == 10) {
                     bundle.putString("PHONE", txtViewPhone.getText().toString());
                 }
@@ -54,6 +69,7 @@ public class MyProfileActivity extends AppCompatActivity {
                     bundle.putString("STREET", streetName);
                     bundle.putString("CITY", city);
                     bundle.putString("PROVINCE", province);
+                    bundle.putString("IMGNAME", imgName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -75,8 +91,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private void showPassword() {
         String password = "";
         try {
-            Bundle inBundle = getIntent().getExtras();
-            password = inBundle.getString("PASSWORD");
+            password = user.getPassword();
             String passwordStr = "";
             if (btn2.getText().toString().equals("SHOW")) {
                 txtViewPassword.setText(password);
@@ -95,23 +110,41 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     public void setProfile() {
-        String password = "";
+        String hiddenPassword = "";
         try {
-            Bundle inBundle = getIntent().getExtras();
-            String username = StoredDataHelper.get(this, "username");
-            txtViewUsername.setText(username);
-            txtViewAddress.setText(inBundle.getString("ADDRESS", "None"));
-            txtViewPhone.setText(inBundle.getString("PHONE", "None"));
-            String inPassword = inBundle.getString("PASSWORD", "error");
+            DatabaseHelper db = new DatabaseHelper(this);
+            user = db.getUser(StoredDataHelper.get(this, "username"));
+            txtViewUsername.setText(user.getUsername());
+            password = user.getPassword();
+            txtViewAddress.setText(user.getAddress());
+            txtViewPhone.setText(user.getPhone());
+            imgName = user.getProfileImg();
 
-            if (inPassword.equals("error")) {
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageReference = storage.getReference();
+                    StorageReference img = storageReference.child("ProfileImg/" + imgName);
+                    img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Picasso.get().load(uri).into(imgView);
+                        }
+                    });
+                }
+            };
+
+            Timer timer = new Timer();
+            if (password == null) {
                 txtViewPassword.setText(R.string.error);
             } else {
-                for (int i = 0; i < inPassword.length(); i++) {
-                    password += "*";
+                for (int i = 0; i < password.length(); i++) {
+                    hiddenPassword += "*";
                 }
-                txtViewPassword.setText(password);
+                txtViewPassword.setText(hiddenPassword);
             }
+            timer.schedule(timerTask,3000);
         } catch (Exception e) {
             e.printStackTrace();
         }
