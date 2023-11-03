@@ -13,7 +13,21 @@
             android:id="@+id/menuMyProfileActivity"
             android:icon="@drawable/baseline_manage_accounts_24"
             android:title="@string/menuMyProfileActivity" />
-
-        <!--Waiting for pull requests to approve to add more items here-->
+        <item
+            android:id="@+id/menuNewProductActivity"
+            android:icon="@drawable/baseline_new_label_24"
+            android:title="@string/menuNewProductActivity" />
+    </group>
+    <group>
+        <item
+            android:id="@+id/menuChatActivity"
+            android:icon="@drawable/baseline_message_24"
+            android:title="@string/menuChatActivity" />
+    </group>
+    <group>
+        <item
+            android:id="@+id/menuPreviousActivity"
+            android:icon="@drawable/baseline_keyboard_return_24"
+            android:title="@string/menuPreviousActivity" />
     </group>
 </menu>

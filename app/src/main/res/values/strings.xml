@@ -78,4 +78,7 @@
     <string name="navDrawOpen">Open Navigation Drawer</string>
     <string name="navDrawClose">Close Navigation Drawer</string>
     <string name="navLogoDesc">Logo</string>
+    <string name="menuChatActivity">Chat</string>
+    <string name="menuNewProductActivity">New Product</string>
+    <string name="menuPreviousActivity">Back</string>
 </resources>

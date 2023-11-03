@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -44,15 +45,26 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
-
         //If else statement to change activities
-        if(item.getItemId()==R.id.menuMainActivity) {
+        if (item.getItemId() == R.id.menuMainActivity) {
             startActivity(new Intent(this, MainActivity.class));
             overridePendingTransition(0, 0);
         }
-        else if(item.getItemId()==R.id.menuMyProfileActivity) {
+        else if (item.getItemId() == R.id.menuMyProfileActivity) {
             startActivity(new Intent(this, MyProfileActivity.class));
             overridePendingTransition(0, 0);
+        }
+        else if (item.getItemId() == R.id.menuChatActivity) {
+            startActivity(new Intent(this, ChatActivity.class));
+            overridePendingTransition(0, 0);
+        }
+        else if (item.getItemId() == R.id.menuNewProductActivity) {
+            startActivity(new Intent(this, NewProductActivity.class));
+            overridePendingTransition(0, 0);
+        }
+        else if (item.getItemId() == R.id.menuPreviousActivity) {
+                finish();
+                overridePendingTransition(0, 0);
         }
         return false;
     }

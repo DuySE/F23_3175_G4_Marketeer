@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityNewProductBinding;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -31,7 +33,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class NewProductActivity extends AppCompatActivity {
+public class NewProductActivity extends DrawerActivity {
+    ActivityNewProductBinding newProductBinding;
     ImageView imgView;
     EditText editTxtProdName;
     EditText editTxtPrice;
@@ -49,7 +52,11 @@ public class NewProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_product);
+
+        newProductBinding = ActivityNewProductBinding.inflate(getLayoutInflater());
+        setContentView(newProductBinding.getRoot());
+        allocateActivityTitle("New Product");
+
         imgView = findViewById(R.id.imgViewProductImg);
         editTxtPrice = findViewById(R.id.editTxtPrice);
         editTxtProdName = findViewById(R.id.editTxtProductName);
