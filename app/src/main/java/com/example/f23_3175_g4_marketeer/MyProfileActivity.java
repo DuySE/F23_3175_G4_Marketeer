@@ -107,7 +107,8 @@ public class MyProfileActivity extends DrawerActivity {
         String password = "";
         try {
             Bundle inBundle = getIntent().getExtras();
-            txtViewUsername.setText(LoginActivity.username);
+            String username = StoredDataHelper.get(this, "username");
+            txtViewUsername.setText(username);
             txtViewAddress.setText(inBundle.getString("ADDRESS","None"));
             txtViewPhone.setText(inBundle.getString("PHONE","None"));
             String inPassword = inBundle.getString("PASSWORD", "error");

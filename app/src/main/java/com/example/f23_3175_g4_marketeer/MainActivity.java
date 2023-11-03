@@ -43,7 +43,7 @@ public class MainActivity extends DrawerActivity {
         String[] itemNames = getResources().getStringArray(R.array.items_name);
         String[] itemPrices = getResources().getStringArray(R.array.items_price);
 
-        for(int i = 0; i < itemNames.length; i++){
+        for (int i = 0; i < itemNames.length; i++) {
             itemModels.add(new ItemModel(
                     itemNames[i],
                     itemPrices[i],
@@ -67,14 +67,14 @@ public class MainActivity extends DrawerActivity {
     }
     private void filterList(String text) {
         List<ItemModel> filteredList = new ArrayList<>();
-        for(ItemModel item : itemModels){
-            if(item.getName().toLowerCase().contains(text.toLowerCase())) {
+        for (ItemModel item : itemModels) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
         }
-        if (filteredList.isEmpty()){
+        if (filteredList.isEmpty()) {
             Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show();
-        } else{
+        } else {
             itemAdapter.setFilteredList(filteredList);
         }
     }

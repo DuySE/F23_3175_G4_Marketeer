@@ -13,6 +13,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText editTextUsername, editTextPassword;
     Button btnCreateAccount;
     Intent intentLogin;
+    DatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,23 +24,21 @@ public class RegisterActivity extends AppCompatActivity {
         btnCreateAccount = findViewById(R.id.btnCreateAccount);
         Register();
     }
-    private void Register(){
-        //For now this is very basic registration that will only work one time
+
+    private void Register() {
+        // For now this is very basic registration that will only work one time
         intentLogin = new Intent(this, LoginActivity.class);
         btnCreateAccount.setOnClickListener((View view) -> {
-            if(editTextUsername.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Must input new username", Toast.LENGTH_SHORT).show();
-            } else if(editTextPassword.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Must input new password", Toast.LENGTH_SHORT).show();
-            } else{
+            if (editTextUsername.getText().toString().isEmpty()) {
+                editTextUsername.setError("Please type your username.");
+            } else if (editTextPassword.getText().toString().isEmpty()) {
+                editTextPassword.setError("Please type your password.");
+            } else {
                 try {
-                    String newUsername, newPassword;
-                    newUsername = editTextUsername.getText().toString();
-                    newPassword = editTextPassword.getText().toString();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("USERNAME", newUsername);
-                    bundle.putString("PASSWORD", newPassword);
-                    intentLogin.putExtras(bundle);
+                    String newUsername = editTextUsername.getText().toString();
+                    String newPassword = editTextPassword.getText().toString();
+                    databaseHelper = new DatabaseHelper(this);
+                    databaseHelper.addUser(newUsername, newPassword);
                     startActivity(intentLogin);
                 } catch (Exception ex) {
                     ex.printStackTrace();

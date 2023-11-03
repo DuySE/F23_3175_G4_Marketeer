@@ -10,61 +10,42 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoginActivity extends AppCompatActivity {
     TextView textViewLogin;
     EditText editTextUsername;
     EditText editTextPassword;
     Button btnLogin, btnRegister;
-    Intent intentHome, intentRegister;
-    public static String username;
-    String password;
+    Intent intentMain, intentRegister;
+    DatabaseHelper databaseHelper;
 
-    //couldnt figure out how to store new accounts in array, so i will come back to this when the database is implemented
-    //List<String> usernameList = new ArrayList<>();
-    //List<String> passwordList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        try {
-            Bundle bundle = getIntent().getExtras();
-            username = bundle.getString("USERNAME", "");
-            password = bundle.getString("PASSWORD", "");
-            //usernameList.add(username);
-            //passwordList.add(password);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         textViewLogin = findViewById(R.id.textViewLoginTitle);
         editTextUsername = findViewById(R.id.editTextUsernameLogin);
         editTextPassword = findViewById(R.id.editTextPasswordLogin);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
+        databaseHelper = new DatabaseHelper(this);
         Login();
     }
 
     private void Login() {
-        intentHome = new Intent(this, HomepageActivity.class);
+        intentMain = new Intent(this, MainActivity.class);
         btnLogin.setOnClickListener((View view) -> {
-            if(editTextUsername.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Must input username", Toast.LENGTH_SHORT).show();
-            } else if(editTextPassword.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Must input password", Toast.LENGTH_SHORT).show();
-            } else if(editTextPassword.getText().toString().equals("admin") && editTextUsername.getText().toString().equals("admin")) {
-                startActivity(intentHome);
+            String username = editTextUsername.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+            if (username.isEmpty()) {
+                editTextUsername.setError("Please type your username.");
+            } else if (password.isEmpty()) {
+                editTextPassword.setError("Please type your password.");
+            } else if (databaseHelper.getUser(username, password) != null) {
+                StoredDataHelper.save(this, "username", username);
+                startActivity(intentMain);
+            } else {
+                Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
             }
-            else if(editTextUsername.getText().toString().equals(username) && editTextPassword.getText().toString().equals(password)) {
-                startActivity(intentHome);
-            }
-            username = editTextUsername.getText().toString();
-                /*for(int i = 0; i < usernameList.size(); i++) {
-                    if(editTextUsername.getText().toString().equals(usernameList.get(i)) && editTextPassword.getText().toString().equals(passwordList.get(i))) {
-                        startActivity(intentMain);
-                    }
-                }*/
         });
         btnRegister.setOnClickListener((View view) -> {
             intentRegister = new Intent(this, RegisterActivity.class);
