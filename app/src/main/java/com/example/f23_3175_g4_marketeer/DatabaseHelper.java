@@ -5,6 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
@@ -12,23 +19,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Database information
-    static final String DB_NAME = "MARKETEER.DB";
+    private static final String DB_NAME = "MARKETEER.DB";
     // Table name
-    static final String TABLE_USERS = "Users";
-    static final String TABLE_PRODUCTS = "PRODUCTS";
+    private static final String TABLE_USERS = "Users";
+    private static final String TABLE_PRODUCTS = "PRODUCTS";
+    private static final String TABLE_TRANSACTIONS = "Transactions";
     // Database version
-    static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
     // Column name
-    static final String COLUMN_USERNAME = "Username";
-    static final String COLUMN_PASSWORD = "Password";
-    static final String COLUMN_ADDRESS = "Address";
-    static final String COLUMN_PHONE = "Phone";
-    static final String COLUMN_PRODUCT_ID = "product_id";
-    static final String COLUMN_NAME = "name";
-    static final String COLUMN_PRICE = "price";
-    static final String COLUMN_SELLER = "seller";
-    static final String COLUMN_STATUS = "status";
-    static final String COLUMN_IMG_NAME = "image";
+    private static final String COLUMN_USERNAME = "Username";
+    private static final String COLUMN_PASSWORD = "Password";
+    private static final String COLUMN_ADDRESS = "Address";
+    private static final String COLUMN_PHONE = "Phone";
+    private static final String COLUMN_PRODUCT_ID = "product_id";
+    private static final String COLUMN_NAME = "name";
+    private static final String COLUMN_PRICE = "price";
+    private static final String COLUMN_SELLER = "seller";
+    private static final String COLUMN_STATUS = "status";
+    private static final String COLUMN_IMG_NAME = "image";
+    private static final String COLUMN_PRODUCT_NAME = "ProductName";
+    private static final String COLUMN_TRANSACTION_DATE = "TransactionDate";
     // Create table
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
             COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL," +
@@ -43,11 +53,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_SELLER + " TEXT NOT NULL, " + COLUMN_STATUS + " TEXT NOT NULL, " +
             COLUMN_IMG_NAME + " TEXT NOT NULL)";
 
+    private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE " + TABLE_TRANSACTIONS + " (" +
+            COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
+            COLUMN_IMG_NAME + " TEXT NOT NULL, " +
+            COLUMN_TRANSACTION_DATE + " TEXT NOT NULL, " +
+            COLUMN_USERNAME + " TEXT NOT NULL)";
+
     // This method is called the first time a database is accessed.
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TABLE_USERS);
         sqLiteDatabase.execSQL(CREATE_TABLE_PRODUCTS);
+        sqLiteDatabase.execSQL(CREATE_TABLE_TRANSACTIONS);
     }
 
     /* This method is called if the database version number changes.
@@ -57,9 +74,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTIONS);
         onCreate(sqLiteDatabase);
     }
 
+    // Table Users methods
     public void addUser(String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -87,7 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateUser(User user) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         if (user != null) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_USERNAME, user.getUsername());
@@ -101,7 +120,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addProduct(String name, double price, String seller, String imgName){
+    // Table Products methods
+    public void addProduct(String name, double price, String seller, String imgName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.COLUMN_NAME, name);
@@ -112,10 +132,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(DatabaseHelper.TABLE_PRODUCTS, null, contentValues);
     }
 
-    public void updateProduct(String name, double price, String seller, String status, String imgName){
-        SQLiteDatabase db = this.getReadableDatabase();
+    public void updateProduct(String name, double price, String seller, String status, String imgName) {
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.COLUMN_NAME, name);
         contentValues.put(DatabaseHelper.COLUMN_NAME, name);
         contentValues.put(DatabaseHelper.COLUMN_PRICE, price);
         contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
@@ -123,8 +142,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
         String where = COLUMN_PRODUCT_ID + " = 1";
         String[] whereArgs = new String[]{};
-        db.update(TABLE_PRODUCTS,contentValues,where,whereArgs);
+        db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
     }
 
+    // Table Transactions methods
+    public void addTransaction(String name, String image, String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String transactionDate = formatter.format(date);
+        contentValues.put(DatabaseHelper.COLUMN_PRODUCT_NAME, name);
+        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, image);
+        contentValues.put(DatabaseHelper.COLUMN_TRANSACTION_DATE, transactionDate);
+        contentValues.put(DatabaseHelper.COLUMN_USERNAME, username);
+        db.insert(DatabaseHelper.TABLE_TRANSACTIONS, null, contentValues);
+    }
 
+    public List<Transaction> getTransactions(String username, String date) {
+        List<Transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COLUMN_PRODUCT_NAME, COLUMN_IMG_NAME,
+                COLUMN_TRANSACTION_DATE};
+        String selection;
+        String[] selectionArgs;
+        if (date != null) {
+            selection = COLUMN_USERNAME + " = ? AND " + COLUMN_TRANSACTION_DATE + " = ?";
+            selectionArgs = new String[]{username, date};
+        } else {
+            selection = COLUMN_USERNAME + " = ?";
+            selectionArgs = new String[]{username};
+        }
+        Cursor cursor = db.query(TABLE_TRANSACTIONS, columns, selection,
+                selectionArgs, null, null, null);
+        int colProductName = cursor.getColumnIndex(COLUMN_PRODUCT_NAME);
+        int colImageName = cursor.getColumnIndex(COLUMN_IMG_NAME);
+        int colTransactionDate = cursor.getColumnIndex(COLUMN_TRANSACTION_DATE);
+        Transaction transaction;
+        while (cursor.moveToNext()) {
+            transaction = new Transaction(cursor.getString(colTransactionDate),
+                    cursor.getString(colProductName), cursor.getString(colImageName), username);
+            transactions.add(transaction);
+        }
+        return transactions;
+    }
 }

@@ -71,4 +71,5 @@
     <string name="txtSold">Sold</string>
     <string name="txtEditProduct">Confirm Edit</string>
     <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
+    <string name="productImage">Product Image</string>
 </resources>

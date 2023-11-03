@@ -49,6 +49,7 @@ public class EditProductActivity extends AppCompatActivity {
     String imgName;
     Uri imgUri;
     String status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,20 +88,25 @@ public class EditProductActivity extends AppCompatActivity {
                 } else if (imgView.getDrawable() == null) {
                     Toast.makeText(EditProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
-                    UploadEditedProduct(imgName,imgUri);
-                    if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnAvailable){
+                    UploadEditedProduct(imgName, imgUri);
+                    if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnAvailable) {
                         status = "Available";
-                    } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold){
+                    } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold) {
                         status = "Sold";
                     }
-
+                    String username = StoredDataHelper.get(EditProductActivity.this, "username");
                     databaseHelper.updateProduct(editTxtProdName.getText().toString(),
                             Double.parseDouble(editTxtPrice.getText().toString()),
-                            StoredDataHelper.get(EditProductActivity.this,"username"), status, imgName);
+                            username, status, imgName);
+                    // Add to transaction if a product is sold
+                    if (status.equals("Sold"))
+                        databaseHelper.addTransaction(editTxtProdName.getText().toString(),
+                                imgName, username);
                 }
             }
         }));
     }
+
     private void askPermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
@@ -136,12 +142,12 @@ public class EditProductActivity extends AppCompatActivity {
         }
     }
 
-    private File createImgFile() throws IOException{
+    private File createImgFile() throws IOException {
         String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imgFileName = "JPEG_" + time + "_";
         File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        File imgFile = File.createTempFile(imgFileName,".jpg", storageDirectory);
+        File imgFile = File.createTempFile(imgFileName, ".jpg", storageDirectory);
         imgPath = imgFile.getAbsolutePath();
         return imgFile;
     }
@@ -179,7 +185,7 @@ public class EditProductActivity extends AppCompatActivity {
         }
     }
 
-    private void UploadEditedProduct(String imgName, Uri imgUri){
+    private void UploadEditedProduct(String imgName, Uri imgUri) {
         StorageReference img = storageReference.child("ProductImg/" + imgName);
         img.putFile(imgUri);
     }
