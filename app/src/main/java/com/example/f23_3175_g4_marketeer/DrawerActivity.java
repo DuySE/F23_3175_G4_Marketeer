@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -20,6 +21,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
     DrawerLayout drawer;
     NavigationView navigation;
+    ImageButton backButton;
     @Override
     public void setContentView(View view) {
         drawer = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_drawer, null);
@@ -30,6 +32,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         Toolbar toolbar = drawer.findViewById(R.id.drawerToolbar);
         setSupportActionBar(toolbar);
 
+        SetUpBackButton();
         navigation = drawer.findViewById(R.id.drawerNavView);
         navigation.setNavigationItemSelectedListener(this);
 
@@ -41,7 +44,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
-
+    private void SetUpBackButton() {
+        backButton = findViewById(R.id.backButton);
+            backButton.setOnClickListener((View view1) -> {
+                finish();
+            });
+        }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
@@ -61,10 +69,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         else if (item.getItemId() == R.id.menuNewProductActivity) {
             startActivity(new Intent(this, NewProductActivity.class));
             overridePendingTransition(0, 0);
-        }
-        else if (item.getItemId() == R.id.menuPreviousActivity) {
-                finish();
-                overridePendingTransition(0, 0);
         }
         return false;
     }

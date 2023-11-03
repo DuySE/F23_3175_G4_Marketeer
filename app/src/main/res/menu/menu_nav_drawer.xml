@@ -24,10 +24,4 @@
             android:icon="@drawable/baseline_message_24"
             android:title="@string/menuChatActivity" />
     </group>
-    <group>
-        <item
-            android:id="@+id/menuPreviousActivity"
-            android:icon="@drawable/baseline_keyboard_return_24"
-            android:title="@string/menuPreviousActivity" />
-    </group>
 </menu>
