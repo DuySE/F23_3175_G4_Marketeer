@@ -6,9 +6,8 @@ public class User {
     static String receiver;
 
     // Constructor
-    public User(String username, String password) {
+    public User(String username) {
         this.username = username;
-        this.password = password;
     }
 
     // Getters and setters

@@ -46,6 +46,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
     final int CAMERA_PERMISSION_CODE = 1;
     final int CAMERA_REQUEST_CODE = 2;
     final int GALLERY_REQUEST_CODE = 3;
+    DatabaseHelper databaseHelper;
     String imgName;
     Uri imgUri;
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -66,7 +67,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
         btnCamera = findViewById(R.id.btnCamera);
         btnGallery = findViewById(R.id.btnGallery);
         imgView = findViewById(R.id.imgViewEditPfp);
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        databaseHelper = new DatabaseHelper(this);
 
         Bundle inBundle = getIntent().getExtras();
         editTxtUsername.setText(inBundle.getString("USERNAME", "New Username"));
@@ -106,13 +107,9 @@ public class MyProfileEditActivity extends AppCompatActivity {
                         editTxtCity.getText().toString() + ", " +
                         editTxtProvince.getText().toString();
                 String username = editTxtUsername.getText().toString();
-                StoredDataHelper.save(MyProfileEditActivity.this, "username",
-                        username);
-
                 Intent intent = new Intent(MyProfileEditActivity.this, MyProfileActivity.class);
-                String storedUsername = StoredDataHelper.get(this, "username");
-                String storedPassword = StoredDataHelper.get(this, "password");
-                User user = databaseHelper.getUser(storedUsername, storedPassword);
+                String storedUsername = StoredDataHelper.get(MyProfileEditActivity.this, "username");
+                User user = databaseHelper.getUser(storedUsername);
                 if (user != null) {
                     user.setUsername(username);
                     user.setPassword(editTxtPassword.getText().toString());
@@ -120,13 +117,8 @@ public class MyProfileEditActivity extends AppCompatActivity {
                     user.setPhone(editTxtPhone.getText().toString());
                 }
                 databaseHelper.updateUser(user);
+                StoredDataHelper.save(MyProfileEditActivity.this, "username", user.getUsername());
                 UploadEditedProfile(imgName,imgUri);
-                Bundle bundle = new Bundle();
-                bundle.putString("USERNAME", user.getUsername());
-                bundle.putString("PASSWORD", user.getPassword());
-                bundle.putString("PHONE", user.getPhone());
-                bundle.putString("ADDRESS", user.getAddress());
-                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
