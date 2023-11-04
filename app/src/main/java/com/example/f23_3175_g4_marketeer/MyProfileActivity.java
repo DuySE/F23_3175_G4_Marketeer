@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +42,7 @@ public class MyProfileActivity extends AppCompatActivity {
         btn2 = findViewById(R.id.btnShowPassword);
         imgView = findViewById(R.id.imgViewPfp);
         setProfile();
-
+      
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,40 +73,35 @@ public class MyProfileActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+               
                 Intent intent = new Intent(MyProfileActivity.this, MyProfileEditActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            }
+            } 
         });
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPassword();
-            }
-        });
+        btnShowPassword.setOnClickListener(view -> showPassword());
     }
 
     private void showPassword() {
         String password = "";
+        String username = StoredDataHelper.get(this, "username");
+        User user = databaseHelper.getUser(username);
         try {
             password = user.getPassword();
             String passwordStr = "";
-            if (btn2.getText().toString().equals("SHOW")) {
+            if (btnShowPassword.getText().toString().equals("SHOW")) {
                 txtViewPassword.setText(password);
-                btn2.setText(R.string.txtHide);
+                btnShowPassword.setText(R.string.txtHide);
             } else {
                 for (int i = 0; i < password.length(); i++) {
                     passwordStr += "*";
                     txtViewPassword.setText(passwordStr);
                 }
-                btn2.setText(R.string.txtShow);
+                btnShowPassword.setText(R.string.txtShow);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void setProfile() {

@@ -6,19 +6,12 @@ public class User {
     static String receiver;
 
     // Constructor
-
-
     public User(String username, String password, String address, String phone, String profile_img) {
         this.username = username;
         this.password = password;
         this.address = address;
         this.phone = phone;
         this.profile_img = profile_img;
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
     }
 
     // Getters and setters
