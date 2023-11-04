@@ -24,11 +24,14 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -60,6 +63,24 @@ public class EditProductActivity extends AppCompatActivity {
         btnGallery = findViewById(R.id.btnGalleryImgEdit);
         btnEditProd = findViewById(R.id.btnEditProduct);
         radGroupStatus = findViewById(R.id.radGroupStatus);
+
+        Bundle bundle = getIntent().getExtras();
+
+        DatabaseHelper db = new DatabaseHelper(this);
+        Product product = db.getProduct(bundle.getInt("INDEX"));
+        editTxtProdName.setText(product.getName());
+        editTxtPrice.setText(product.getPrice().replace("$",""));
+
+        StorageReference img = storageReference.child("ProductImg/" + product.getImgName());
+        imgName = product.getImgName();
+        img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(imgView);
+                imgUri = uri;
+            }
+        });
+
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,9 +114,9 @@ public class EditProductActivity extends AppCompatActivity {
                     } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold){
                         status = "Sold";
                     }
-
-                    databaseHelper.updateProduct(editTxtProdName.getText().toString(),
-                            Double.parseDouble(editTxtPrice.getText().toString()),
+                    DecimalFormat df = new DecimalFormat("$#.##");
+                    String price = df.format(Double.parseDouble(editTxtPrice.getText().toString()));
+                    databaseHelper.updateProduct(editTxtProdName.getText().toString(), price,
                             StoredDataHelper.get(EditProductActivity.this,"username"), status, imgName);
                 }
             }

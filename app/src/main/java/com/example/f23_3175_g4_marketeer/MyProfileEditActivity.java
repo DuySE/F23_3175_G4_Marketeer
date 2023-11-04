@@ -81,6 +81,7 @@ public class MyProfileEditActivity extends AppCompatActivity {
             editTxtProvince.setText(inBundle.getString("PROVINCE"));
             imgName = inBundle.getString("IMGNAME");
             StorageReference img = storageReference.child("ProfileImg/" + inBundle.getString("IMGNAME"));
+            imgName = inBundle.getString("IMGNAME");
             img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {

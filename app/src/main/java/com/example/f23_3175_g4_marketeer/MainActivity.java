@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
     }
     private void SetUpSearchView() {
         SearchView searchView = findViewById(R.id.searchView);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ManageProductActivity.class));
+            }
+        });
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

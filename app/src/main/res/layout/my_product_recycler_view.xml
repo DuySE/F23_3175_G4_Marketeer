@@ -13,7 +13,7 @@
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="220dp"
+            android:layout_width="200dp"
             android:layout_height="125dp">
 
 
@@ -21,20 +21,18 @@
                 android:id="@+id/imgViewRecyclerImg"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                android:background="#78d6c0"
+                android:background="#fafafa"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.19999999"
-                app:srcCompat="@drawable/baseline_sentiment_satisfied_alt_24" />
+                app:layout_constraintVertical_bias="0.19999999" />
 
             <TextView
                 android:id="@+id/txtViewRecyclerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.14"
@@ -45,11 +43,23 @@
                 android:id="@+id/txtViewRecyclerPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imgViewRecyclerImg"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.57" />
+
+            <ImageView
+                android:id="@+id/imgViewRecyclerEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.74"
+                app:layout_constraintStart_toEndOf="@+id/imgViewRecyclerImg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
