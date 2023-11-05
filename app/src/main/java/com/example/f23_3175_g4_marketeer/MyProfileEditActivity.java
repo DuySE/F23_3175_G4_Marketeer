@@ -121,15 +121,16 @@ public class MyProfileEditActivity extends AppCompatActivity {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter all the required fields", Toast.LENGTH_SHORT).show();
             } else if (editTxtPhone.getText().toString().length() != 10) {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
-            } else if (imgView.getDrawable() == null) {
-                Toast.makeText(MyProfileEditActivity.this, "Please choose a profile image for your account", Toast.LENGTH_SHORT).show();
             } else {
                 String address = editTxtHomeNumber.getText().toString() + " " +
                         editTxtStreetName.getText().toString() + ", " +
                         editTxtCity.getText().toString() + ", " +
                         editTxtProvince.getText().toString();
                 String username = editTxtUsername.getText().toString();
-                UploadEditedProfile(imgName,imgUri);
+
+                if (imgName != null) {
+                    UploadEditedProfile(imgName,imgUri);
+                }
                 String storedUsername = StoredDataHelper.get(this, "username");
                 User user = databaseHelper.getUser(storedUsername);
                 
