@@ -76,4 +76,5 @@
     <string name="txtCurrentPassword">Enter current password to confirm edit*</string>
     <string name="txtAsteriskField">(All the fields with * must be entered)</string>
     <string name="txtEmptyString" />
+    <string name="txtNoProductFound">No Product Found</string>
 </resources>
