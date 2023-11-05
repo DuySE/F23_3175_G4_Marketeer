@@ -81,4 +81,5 @@
     <string name="menuChatActivity">Chat</string>
     <string name="menuNewProductActivity">New Product</string>
     <string name="menuPreviousActivity">Back</string>
+    <string name="textHomeWelcome">Welcome to Marketeer! \nPlease open the drawer and select your destination</string>
 </resources>

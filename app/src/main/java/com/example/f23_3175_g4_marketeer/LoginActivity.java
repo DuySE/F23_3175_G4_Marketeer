@@ -15,7 +15,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextUsername;
     EditText editTextPassword;
     Button btnLogin, btnRegister;
-    Intent intentMain, intentRegister;
+    Intent intentHome, intentRegister;
     DatabaseHelper databaseHelper;
 
     @Override
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void Login() {
-        intentMain = new Intent(this, MainActivity.class);
+        intentHome = new Intent(this, HomepageActivity.class);
         btnLogin.setOnClickListener((View view) -> {
             String username = editTextUsername.getText().toString().trim();
             String password = editTextPassword.getText().toString().trim();
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             } else if (databaseHelper.getUser(username, password) != null) {
                 StoredDataHelper.save(this, "username", username);
                 StoredDataHelper.save(this, "password", password);
-                startActivity(intentMain);
+                startActivity(intentHome);
             } else {
                 Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
             }

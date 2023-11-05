@@ -22,7 +22,7 @@
         android:theme="@style/Theme.F23_3175_G4_Marketeer"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
+            android:name=".HomepageActivity"
             android:exported="false" />
         <activity
             android:name=".DrawerActivity"
@@ -52,7 +52,7 @@
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".HomepageActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
