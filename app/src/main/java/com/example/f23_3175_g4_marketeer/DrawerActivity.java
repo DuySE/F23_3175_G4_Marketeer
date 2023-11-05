@@ -44,7 +44,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
-    private void SetUpBackButton() {
+    protected void SetUpBackButton() {
         backButton = findViewById(R.id.backButton);
             backButton.setOnClickListener((View view1) -> {
                 finish();

@@ -10,6 +10,11 @@ public class HomepageActivity extends DrawerActivity {
     ActivityHomepageBinding homepageBinding;
 
     @Override
+    protected void SetUpBackButton() {
+        //Do nothing (to avoid a crash)
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         homepageBinding = ActivityHomepageBinding.inflate(getLayoutInflater());
