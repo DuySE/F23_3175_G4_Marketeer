@@ -6,35 +6,40 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
     // Database information
-    static final String DB_NAME = "MARKETEER.DB";
+    private static final String DB_NAME = "MARKETEER.DB";
     // Table name
-    static final String TABLE_USERS = "Users";
+    private static final String TABLE_USERS = "Users";
     static final String TABLE_PRODUCTS = "PRODUCTS";
     // Database version
-    static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
     // Column name
     static final String COLUMN_USERNAME = "Username";
     static final String COLUMN_PASSWORD = "Password";
     static final String COLUMN_ADDRESS = "Address";
     static final String COLUMN_PHONE = "Phone";
-    static final String COLUMN_PRODUCT_ID = "product_id";
-    static final String COLUMN_NAME = "name";
-    static final String COLUMN_PRICE = "price";
-    static final String COLUMN_SELLER = "seller";
-    static final String COLUMN_STATUS = "status";
-    static final String COLUMN_IMG_NAME = "image";
+    static final String COLUMN_PROFILE_IMG = "Profile_Image";
+    static final String COLUMN_PRODUCT_ID = "Product_Id";
+    static final String COLUMN_NAME = "Name";
+    static final String COLUMN_PRICE = "Price";
+    static final String COLUMN_SELLER = "Seller";
+    static final String COLUMN_STATUS = "Status";
+    static final String COLUMN_IMG_NAME = "Image";
+
     // Create table
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
             COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL," +
             COLUMN_PASSWORD + " TEXT NOT NULL," +
             COLUMN_ADDRESS + " TEXT," +
-            COLUMN_PHONE + " TEXT" +
+            COLUMN_PHONE + " TEXT," +
+            COLUMN_PROFILE_IMG + " TEXT" +
             ")";
 
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
@@ -64,36 +69,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USERNAME, username);
-        contentValues.put(COLUMN_PASSWORD, password);
+        // Hash password before store it in database
+        contentValues.put(COLUMN_PASSWORD, BCrypt.hashpw(password, BCrypt.gensalt(12)));
         db.insert(TABLE_USERS, null, contentValues);
         db.close();
     }
 
-    public User getUser(String username, String password) {
+    public boolean login(String username, String password) {
+        User user = getUser(username);
+        String userPwd = "";
+        if (user != null) userPwd = user.getPassword();
+        // Check if password inputted by user matches with password stored in database
+        return BCrypt.checkpw(password, userPwd);
+    }
+
+    public User getUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD};
-        String selection = COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
-        String[] selectionArgs = new String[]{username, password};
-        Cursor cursor = db.query(TABLE_USERS, columns, selection,
-                selectionArgs, null, null, null);
+        String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_ADDRESS, COLUMN_PHONE, COLUMN_PROFILE_IMG};
+        String selection = COLUMN_USERNAME + " = ?";
+        String[] selectionArgs = new String[]{username};
+        Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
         int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
         int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
+        int colAddress = cursor.getColumnIndex(COLUMN_ADDRESS);
+        int colPhone = cursor.getColumnIndex(COLUMN_PHONE);
+        int colProfileImg = cursor.getColumnIndex(COLUMN_PROFILE_IMG);
+
         User user = null;
         if (cursor.moveToFirst()) {
-            user = new User(cursor.getString(colUsername),
-                    cursor.getString(colPassword));
+            user = new User(cursor.getString(colUsername), cursor.getString(colPassword),
+                    cursor.getString(colAddress), cursor.getString(colPhone),
+                    cursor.getString(colProfileImg));
         }
         return user;
     }
 
     public void updateUser(User user) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         if (user != null) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_USERNAME, user.getUsername());
-            contentValues.put(COLUMN_PASSWORD, user.getPassword());
+            contentValues.put(COLUMN_PASSWORD, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
             contentValues.put(COLUMN_ADDRESS, user.getAddress());
             contentValues.put(COLUMN_PHONE, user.getPhone());
+            contentValues.put(COLUMN_PROFILE_IMG, user.getProfileImg());
             String where = COLUMN_USERNAME + " = ?";
             String[] whereArgs = new String[]{user.getUsername()};
             db.update(TABLE_USERS, contentValues, where, whereArgs);
@@ -125,6 +144,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = new String[]{};
         db.update(TABLE_PRODUCTS,contentValues,where,whereArgs);
     }
-
-
 }

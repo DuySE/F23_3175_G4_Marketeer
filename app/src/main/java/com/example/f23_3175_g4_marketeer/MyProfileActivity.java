@@ -3,23 +3,35 @@ package com.example.f23_3175_g4_marketeer;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMyProfileBinding;
 
-public class MyProfileActivity extends DrawerActivity {
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class MyProfileActivity extends DrawerActivity {
     ActivityMyProfileBinding myProfileBinding;
     TextView txtViewUsername;
-    TextView txtViewPassword;
     TextView txtViewPhone;
     TextView txtViewAddress;
-    Button btn;
-    Button btn2;
+    Button btnEditProfile;
+    ImageView imgView;
+    String imgName;
+    User user;
+    String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +41,19 @@ public class MyProfileActivity extends DrawerActivity {
         setContentView(myProfileBinding.getRoot());
         allocateActivityTitle("My Profile");
 
-        //setContentView(R.layout.activity_my_profile);
         txtViewUsername = findViewById(R.id.txtViewUsername);
-        txtViewPassword = findViewById(R.id.txtViewUserPassword);
         txtViewPhone = findViewById(R.id.txtViewPhone);
         txtViewAddress = findViewById(R.id.txtViewAddress);
-        btn = findViewById(R.id.btnEditProfile);
-        btn2 = findViewById(R.id.btnShowPassword);
+        btnEditProfile = findViewById(R.id.btnEditProfile);
+        imgView = findViewById(R.id.imgViewPfp);
         setProfile();
-
-        btn.setOnClickListener(new View.OnClickListener() {
+      
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("USERNAME", txtViewUsername.getText().toString());
-                bundle.putString("PASSWORD", txtViewPassword.getText().toString());
+                bundle.putString("PASSWORD", password);
                 if (txtViewPhone.getText().toString().length() == 10) {
                     bundle.putString("PHONE", txtViewPhone.getText().toString());
                 }
@@ -64,64 +74,46 @@ public class MyProfileActivity extends DrawerActivity {
                     bundle.putString("STREET", streetName);
                     bundle.putString("CITY", city);
                     bundle.putString("PROVINCE", province);
+                    bundle.putString("IMGNAME", imgName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+               
                 Intent intent = new Intent(MyProfileActivity.this, MyProfileEditActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            }
+            } 
         });
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPassword();
-            }
-        });
-    }
-
-    private void showPassword() {
-        String password = "";
-        try {
-            Bundle inBundle = getIntent().getExtras();
-            password = inBundle.getString("PASSWORD");
-            String passwordStr = "";
-            if (btn2.getText().toString().equals("SHOW")) {
-                txtViewPassword.setText(password);
-                btn2.setText(R.string.txtHide);
-            } else {
-                for (int i = 0; i < password.length(); i++) {
-                    passwordStr += "*";
-                    txtViewPassword.setText(passwordStr);
-                }
-                btn2.setText(R.string.txtShow);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void setProfile() {
-        String password = "";
+        String hiddenPassword = "";
         try {
-            Bundle inBundle = getIntent().getExtras();
-            String username = StoredDataHelper.get(this, "username");
-            txtViewUsername.setText(username);
-            txtViewAddress.setText(inBundle.getString("ADDRESS", "None"));
-            txtViewPhone.setText(inBundle.getString("PHONE", "None"));
-            String inPassword = inBundle.getString("PASSWORD", "error");
+            DatabaseHelper db = new DatabaseHelper(this);
+            user = db.getUser(StoredDataHelper.get(this, "username"));
+            txtViewUsername.setText(user.getUsername());
+            password = user.getPassword();
+            txtViewAddress.setText(user.getAddress());
+            txtViewPhone.setText(user.getPhone());
+            imgName = user.getProfileImg();
 
-            if (inPassword.equals("error")) {
-                txtViewPassword.setText(R.string.error);
-            } else {
-                for (int i = 0; i < inPassword.length(); i++) {
-                    password += "*";
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageReference = storage.getReference();
+                    StorageReference img = storageReference.child("ProfileImg/" + imgName);
+                    img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Picasso.get().load(uri).into(imgView);
+                        }
+                    });
                 }
-                txtViewPassword.setText(password);
-            }
+            };
+
+            Timer timer = new Timer();
+            timer.schedule(timerTask,3000);
         } catch (Exception e) {
             e.printStackTrace();
         }
