@@ -41,7 +41,7 @@
     <string name="btnEditProfile">Edit Profile</string>
     <string name="txtEditProfile">Edit Profile</string>
     <string name="txtPassword2">Password</string>
-    <string name="editTxtUsername">New Username</string>
+    <string name="editTxtUsername">Username*</string>
     <string name="txtNewPassword">New Password</string>
     <string name="txtSaveChanges">Save Changes</string>
     <string name="error">error</string>
@@ -50,19 +50,19 @@
     <string name="txtShow">SHOW</string>
     <string name="txtAddress">Address</string>
     <string name="txtHomeNumber">Home Number</string>
-    <string name="txtStreetName">Street</string>
-    <string name="txtCity">City</string>
+    <string name="txtStreetName">Street*</string>
+    <string name="txtCity">City*</string>
     <string name="txtProvince">Province/State</string>
-    <string name="txtHomeNumberHint">Number</string>
+    <string name="txtHomeNumberHint">Number*</string>
     <string name="txtStreetSample">Home street</string>
     <string name="txtCitySample">Home city</string>
-    <string name="txtProvinceSample">Province</string>
+    <string name="txtProvinceSample">Province*</string>
     <string name="txtPhoneNumber">Phone:</string>
     <string name="txtPhoneSample">Phone Number</string>
     <string name="txtEmpty"> </string>
     <string name="txtViewAddress_Profile">Address:</string>
     <string name="txtNone">None</string>
-    <string name="textPhone">Phone Number</string>
+    <string name="textPhone">Phone Number*</string>
     <string name="txtNewPfp">New Profile Image</string>
     <string name="txtFromGallery">Pick from Gallery</string>
     <string name="txtEditYourProduct">Edit Your Product</string>
@@ -72,5 +72,8 @@
     <string name="txtEditProduct">Confirm Edit</string>
     <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
     <string name="txtNotAdded">Not added</string>
-    <string name="txtNoProductFound">No Product Found</string>
+    <string name="editTxtNewPassword">New Password</string>
+    <string name="txtCurrentPassword">Enter current password to confirm edit*</string>
+    <string name="txtAsteriskField">(All the fields with * must be entered)</string>
+    <string name="txtEmptyString" />
 </resources>

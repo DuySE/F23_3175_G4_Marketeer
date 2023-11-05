@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,11 +21,9 @@ import java.util.TimerTask;
 
 public class MyProfileActivity extends AppCompatActivity {
     TextView txtViewUsername;
-    TextView txtViewPassword;
     TextView txtViewPhone;
     TextView txtViewAddress;
-    Button btn;
-    Button btn2;
+    Button btnEditProfile;
     ImageView imgView;
     String imgName;
     User user;
@@ -35,15 +34,13 @@ public class MyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
         txtViewUsername = findViewById(R.id.txtViewUsername);
-        txtViewPassword = findViewById(R.id.txtViewUserPassword);
         txtViewPhone = findViewById(R.id.txtViewPhone);
         txtViewAddress = findViewById(R.id.txtViewAddress);
-        btn = findViewById(R.id.btnEditProfile);
-        btn2 = findViewById(R.id.btnShowPassword);
+        btnEditProfile = findViewById(R.id.btnEditProfile);
         imgView = findViewById(R.id.imgViewPfp);
         setProfile();
-
-        btn.setOnClickListener(new View.OnClickListener() {
+      
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
@@ -73,40 +70,12 @@ public class MyProfileActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+               
                 Intent intent = new Intent(MyProfileActivity.this, MyProfileEditActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
-            }
+            } 
         });
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPassword();
-            }
-        });
-    }
-
-    private void showPassword() {
-        String password = "";
-        try {
-            password = user.getPassword();
-            String passwordStr = "";
-            if (btn2.getText().toString().equals("SHOW")) {
-                txtViewPassword.setText(password);
-                btn2.setText(R.string.txtHide);
-            } else {
-                for (int i = 0; i < password.length(); i++) {
-                    passwordStr += "*";
-                    txtViewPassword.setText(passwordStr);
-                }
-                btn2.setText(R.string.txtShow);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void setProfile() {
@@ -136,14 +105,6 @@ public class MyProfileActivity extends AppCompatActivity {
             };
 
             Timer timer = new Timer();
-            if (password == null) {
-                txtViewPassword.setText(R.string.error);
-            } else {
-                for (int i = 0; i < password.length(); i++) {
-                    hiddenPassword += "*";
-                }
-                txtViewPassword.setText(hiddenPassword);
-            }
             timer.schedule(timerTask,3000);
         } catch (Exception e) {
             e.printStackTrace();

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ManageProductActivity.class));
+                startActivity(new Intent(MainActivity.this, MyProfileActivity.class));
             }
         });
         searchView.clearFocus();

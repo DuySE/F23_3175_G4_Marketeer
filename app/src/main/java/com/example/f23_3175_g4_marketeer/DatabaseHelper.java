@@ -6,8 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
@@ -15,12 +14,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Database information
-    static final String DB_NAME = "MARKETEER.DB";
+    private static final String DB_NAME = "MARKETEER.DB";
     // Table name
-    static final String TABLE_USERS = "Users";
+    private static final String TABLE_USERS = "Users";
     static final String TABLE_PRODUCTS = "PRODUCTS";
     // Database version
-    static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
     // Column name
     static final String COLUMN_USERNAME = "Username";
     static final String COLUMN_PASSWORD = "Password";
@@ -33,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String COLUMN_SELLER = "Seller";
     static final String COLUMN_STATUS = "Status";
     static final String COLUMN_IMG_NAME = "Image";
+
     // Create table
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
             COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL," +
@@ -44,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
             COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_NAME + " TEXT NOT NULL, " + COLUMN_PRICE + " TEXT NOT NULL, " +
+            COLUMN_NAME + " TEXT NOT NULL, " + COLUMN_PRICE + " REAL NOT NULL, " +
             COLUMN_SELLER + " TEXT NOT NULL, " + COLUMN_STATUS + " TEXT NOT NULL, " +
             COLUMN_IMG_NAME + " TEXT NOT NULL)";
 
@@ -69,29 +69,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USERNAME, username);
-        contentValues.put(COLUMN_PASSWORD, password);
+        // Hash password before store it in database
+        contentValues.put(COLUMN_PASSWORD, BCrypt.hashpw(password, BCrypt.gensalt(12)));
         db.insert(TABLE_USERS, null, contentValues);
         db.close();
     }
 
-    public User getUser(String username, String password) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD};
-        String selection = COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
-        String[] selectionArgs = new String[]{username, password};
-        Cursor cursor = db.query(TABLE_USERS, columns, selection,
-                selectionArgs, null, null, null);
-        int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
-        int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
-        User user = null;
-        if (cursor.moveToFirst()) {
-            user = new User(cursor.getString(colUsername),
-                    cursor.getString(colPassword));
-        }
-        return user;
+    public boolean login(String username, String password) {
+        User user = getUser(username);
+        String userPwd = "";
+        if (user != null) userPwd = user.getPassword();
+        // Check if password inputted by user matches with password stored in database
+        return BCrypt.checkpw(password, userPwd);
     }
 
-    //This version is to query for ProfileActivity
     public User getUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_ADDRESS, COLUMN_PHONE, COLUMN_PROFILE_IMG};
@@ -118,7 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (user != null) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_USERNAME, user.getUsername());
-            contentValues.put(COLUMN_PASSWORD, user.getPassword());
+            contentValues.put(COLUMN_PASSWORD, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
             contentValues.put(COLUMN_ADDRESS, user.getAddress());
             contentValues.put(COLUMN_PHONE, user.getPhone());
             contentValues.put(COLUMN_PROFILE_IMG, user.getProfileImg());
@@ -129,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addProduct(String name, String price, String seller, String imgName){
+    public void addProduct(String name, double price, String seller, String imgName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.COLUMN_NAME, name);
@@ -140,9 +131,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(DatabaseHelper.TABLE_PRODUCTS, null, contentValues);
     }
 
-    public void updateProduct(String name, String price, String seller, String status, String imgName){
+    public void updateProduct(String name, double price, String seller, String status, String imgName){
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.COLUMN_NAME, name);
         contentValues.put(DatabaseHelper.COLUMN_NAME, name);
         contentValues.put(DatabaseHelper.COLUMN_PRICE, price);
         contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
@@ -152,68 +144,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = new String[]{};
         db.update(TABLE_PRODUCTS,contentValues,where,whereArgs);
     }
-
-    public List<Product> getProducts(String username){
-        List<Product> products = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = new String[]{COLUMN_PRODUCT_ID, COLUMN_NAME, COLUMN_PRICE, COLUMN_SELLER, COLUMN_STATUS, COLUMN_IMG_NAME};
-        String selection;
-        String[] selectionArgs;
-        if (username == null) {
-            selection = COLUMN_STATUS + " = ?";
-            selectionArgs = new String[]{"Available"};
-        } else {
-            selection = COLUMN_SELLER + " = ? AND " + COLUMN_STATUS + " = ?";
-            selectionArgs = new String[]{username, "Available"};
-        }
-
-        Cursor cursor = db.query(TABLE_PRODUCTS, columns, selection, selectionArgs, null, null, null);
-        int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
-        int colName = cursor.getColumnIndex(COLUMN_NAME);
-        int colPrice = cursor.getColumnIndex(COLUMN_PRICE);
-        int colSeller = cursor.getColumnIndex(COLUMN_SELLER);
-        int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
-        int colImgName = cursor.getColumnIndex(COLUMN_IMG_NAME);
-
-        Product product;
-        if (cursor.moveToFirst()) {
-            product = new Product(cursor.getString(colName), cursor.getString(colPrice),
-                    cursor.getString(colImgName), cursor.getString(colSeller),
-                    cursor.getString(colStatus), cursor.getInt(colId));
-            products.add(product);
-
-            while (cursor.moveToNext()) {
-                product = new Product(cursor.getString(colName), cursor.getString(colPrice),
-                        cursor.getString(colImgName), cursor.getString(colSeller),
-                        cursor.getString(colStatus), cursor.getInt(colId));
-                products.add(product);
-            }
-        }
-        return products;
-    }
-
-    public Product getProduct(int id){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = new String[]{COLUMN_PRODUCT_ID, COLUMN_NAME, COLUMN_PRICE, COLUMN_SELLER, COLUMN_STATUS, COLUMN_IMG_NAME};
-        String selection = COLUMN_PRODUCT_ID + " = ? ";
-        String[] selectionArgs = new String[]{Integer.toString(id + 1)};
-
-        Cursor cursor = db.query(TABLE_PRODUCTS, columns, selection, selectionArgs, null, null, null);
-        int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
-        int colName = cursor.getColumnIndex(COLUMN_NAME);
-        int colPrice = cursor.getColumnIndex(COLUMN_PRICE);
-        int colSeller = cursor.getColumnIndex(COLUMN_SELLER);
-        int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
-        int colImgName = cursor.getColumnIndex(COLUMN_IMG_NAME);
-
-        Product product = null;
-        if (cursor.moveToFirst()) {
-            product = new Product(cursor.getString(colName), cursor.getString(colPrice),
-                    cursor.getString(colImgName), cursor.getString(colSeller),
-                    cursor.getString(colStatus), cursor.getInt(colId));
-        }
-        return product;
-    }
-
-
 }

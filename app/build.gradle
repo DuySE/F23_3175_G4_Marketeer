@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.firebase:firebase-client-android:2.5.2'
+    implementation 'org.mindrot:jbcrypt:0.4'
     // Import the Firebase BoM
     implementation(platform('com.google.firebase:firebase-bom:32.3.1'))
     implementation 'com.google.firebase:firebase-storage:20.1.0'
