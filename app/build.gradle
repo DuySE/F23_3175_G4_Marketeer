@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace 'com.example.f23_3175_g4_marketeer'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.f23_3175_g4_marketeer"
@@ -36,6 +36,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.firebase:firebase-client-android:2.5.2'
     implementation 'org.mindrot:jbcrypt:0.4'
