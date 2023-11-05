@@ -17,31 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtViewPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/txtPassword"
-        android:textAlignment="viewEnd"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgViewPfp" />
-
-    <TextView
-        android:id="@+id/txtViewUserPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="128dp"
-        android:layout_marginTop="32dp"
-        android:maxWidth="160dp"
-        android:text="@string/txtUserPassword"
-        android:textAlignment="viewStart"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgViewPfp" />
-
     <Button
         android:id="@+id/btnEditProfile"
         android:layout_width="wrap_content"
@@ -67,23 +42,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="60dp"
         android:text="@string/txtViewUsername"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/imgViewPfp"
         app:layout_constraintTop_toBottomOf="@+id/txtViewTitleMyProfile" />
-
-    <Button
-        android:id="@+id/btnShowPassword"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/txtShow"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/txtViewUserPassword"
-        app:layout_constraintTop_toBottomOf="@+id/imgViewPfp" />
 
     <TextView
         android:id="@+id/txtViewAdd"
@@ -94,11 +57,11 @@
         android:text="@string/txtViewAddress_Profile"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewUserPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/imgViewPfp" />
 
     <TextView
         android:id="@+id/txtViewAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="128dp"
         android:layout_marginTop="32dp"
@@ -106,7 +69,7 @@
         android:text="@string/txtNone"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewUserPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/imgViewPfp" />
 
     <TextView
         android:id="@+id/textViewPhone"

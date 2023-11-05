@@ -30,13 +30,12 @@
         android:id="@+id/btnSaveChanges"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/txtSaveChanges"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFieldPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/txtViewNoteEditProfile" />
 
     <TextView
         android:id="@+id/txtAddress"
@@ -71,13 +70,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtFieldUsername"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/editTextUsername"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="@string/editTxtUsername"
+        app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgViewEditPfp">
 
@@ -90,21 +88,23 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtFieldPassword"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/editTextPassword"
+        android:hint="@string/editTxtNewPassword"
+        app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFieldUsername">
+        app:layout_constraintStart_toEndOf="@+id/txtFieldUsername"
+        app:layout_constraintTop_toBottomOf="@+id/imgViewEditPfp"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTxtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textWebPassword" />
+            android:inputType="textWebPassword"
+            android:text="@string/txtEmptyString" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,6 +115,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:hint="@string/txtHomeNumberHint"
+        app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAddress">
 
@@ -131,6 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/txtStreetName"
+        app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtFieldHomeNumber"
         app:layout_constraintTop_toBottomOf="@+id/txtAddress">
@@ -149,6 +151,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/txtCity"
+        app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtFieldStreet">
 
@@ -187,6 +190,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/textPhone"
+        app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtFieldProvince">
@@ -197,5 +201,39 @@
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtFieldCurrentPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/txtCurrentPassword"
+        app:hintTextColor="@color/m3_textfield_label_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtFieldPhone"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTxtCurrentPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textWebPassword"
+            android:text="@string/txtEmptyString" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/txtViewNoteEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/txtAsteriskField"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtFieldCurrentPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
