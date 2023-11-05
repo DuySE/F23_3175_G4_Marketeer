@@ -86,14 +86,20 @@ public class MyProfileEditActivity extends AppCompatActivity {
             editTxtCity.setText(inBundle.getString("CITY"));
             editTxtProvince.setText(inBundle.getString("PROVINCE"));
             imgName = inBundle.getString("IMGNAME");
-            StorageReference img = storageReference.child("ProfileImg/" + inBundle.getString("IMGNAME"));
-            img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.get().load(uri).into(imgView);
-                    imgUri = uri;
-                }
-            });
+
+            if (imgName == null) {
+                imgView.setImageResource(R.drawable.defaultpfp);
+            } else {
+                StorageReference img = storageReference.child("ProfileImg/" + inBundle.getString("IMGNAME"));
+                img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(imgView);
+                        imgUri = uri;
+                    }
+                });
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
