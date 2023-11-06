@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
@@ -22,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "MARKETEER.DB";
     // Table name
     private static final String TABLE_USERS = "Users";
-    private static final String TABLE_PRODUCTS = "PRODUCTS";
+    private static final String TABLE_PRODUCTS = "Products";
     private static final String TABLE_TRANSACTIONS = "Transactions";
     // Database version
     private static final int DB_VERSION = 1;
@@ -31,8 +32,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PASSWORD = "Password";
     private static final String COLUMN_ADDRESS = "Address";
     private static final String COLUMN_PHONE = "Phone";
-    private static final String COLUMN_PROFILE_IMG = "Profile_Image";
-    private static final String COLUMN_PRODUCT_ID = "Product_Id";
+    private static final String COLUMN_PROFILE_IMG = "ProfileImage";
+    private static final String COLUMN_PRODUCT_ID = "ProductId";
     private static final String COLUMN_NAME = "Name";
     private static final String COLUMN_PRICE = "Price";
     private static final String COLUMN_SELLER = "Seller";
@@ -145,22 +146,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void addProduct(String name, double price, String seller, String imgName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.COLUMN_NAME, name);
-        contentValues.put(DatabaseHelper.COLUMN_PRICE, price);
-        contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
-        contentValues.put(DatabaseHelper.COLUMN_STATUS, "Available");
-        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
-        db.insert(DatabaseHelper.TABLE_PRODUCTS, null, contentValues);
+        contentValues.put(COLUMN_NAME, name);
+        contentValues.put(COLUMN_PRICE, price);
+        contentValues.put(COLUMN_SELLER, seller);
+        contentValues.put(COLUMN_STATUS, "Available");
+        contentValues.put(COLUMN_IMG_NAME, imgName);
+        db.insert(TABLE_PRODUCTS, null, contentValues);
     }
 
     public void updateProduct(String name, double price, String seller, String status, String imgName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.COLUMN_NAME, name);
-        contentValues.put(DatabaseHelper.COLUMN_PRICE, price);
-        contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
-        contentValues.put(DatabaseHelper.COLUMN_STATUS, status);
-        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
+        contentValues.put(COLUMN_NAME, name);
+        contentValues.put(COLUMN_PRICE, price);
+        contentValues.put(COLUMN_SELLER, seller);
+        contentValues.put(COLUMN_STATUS, status);
+        contentValues.put(COLUMN_IMG_NAME, imgName);
         String where = COLUMN_PRODUCT_ID + " = 2";
         String[] whereArgs = new String[]{};
         db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
@@ -170,7 +171,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void addTransaction(Transaction transaction) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Locale locale = Locale.getDefault();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", locale);
         Date date = new Date();
         String transactionDate = formatter.format(date);
         contentValues.put(COLUMN_PRODUCT_NAME, transaction.getProductName());

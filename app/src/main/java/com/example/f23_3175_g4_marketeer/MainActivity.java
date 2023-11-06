@@ -1,6 +1,8 @@
 package com.example.f23_3175_g4_marketeer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,12 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void SetUpSearchView() {
         SearchView searchView = findViewById(R.id.searchView);
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MyProfileActivity.class));
-            }
-        });
+        searchView.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, MyProfileActivity.class)));
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
