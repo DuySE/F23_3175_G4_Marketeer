@@ -39,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_IMG_NAME = "image";
     private static final String COLUMN_PRODUCT_NAME = "ProductName";
     private static final String COLUMN_TRANSACTION_DATE = "TransactionDate";
+    private static final String COLUMN_AMOUNT = "Amount";
     // Create table
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
             COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL," +
@@ -57,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
             COLUMN_IMG_NAME + " TEXT NOT NULL, " +
             COLUMN_TRANSACTION_DATE + " TEXT NOT NULL, " +
+            COLUMN_AMOUNT + " INTEGER NOT NULL, " +
             COLUMN_USERNAME + " TEXT NOT NULL)";
 
     // This method is called the first time a database is accessed.
@@ -102,6 +104,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             user = new User(cursor.getString(colUsername),
                     cursor.getString(colPassword));
         }
+        cursor.close();
+        db.close();
         return user;
     }
 
@@ -140,23 +144,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
         contentValues.put(DatabaseHelper.COLUMN_STATUS, status);
         contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
-        String where = COLUMN_PRODUCT_ID + " = 1";
+        String where = COLUMN_PRODUCT_ID + " = 5";
         String[] whereArgs = new String[]{};
         db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
     }
 
     // Table Transactions methods
-    public void addTransaction(String name, String image, String username) {
+    public void addTransaction(Transaction transaction) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         String transactionDate = formatter.format(date);
-        contentValues.put(DatabaseHelper.COLUMN_PRODUCT_NAME, name);
-        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, image);
+        contentValues.put(DatabaseHelper.COLUMN_PRODUCT_NAME, transaction.getProductName());
+        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, transaction.getImageName());
         contentValues.put(DatabaseHelper.COLUMN_TRANSACTION_DATE, transactionDate);
-        contentValues.put(DatabaseHelper.COLUMN_USERNAME, username);
+        contentValues.put(DatabaseHelper.COLUMN_USERNAME, transaction.getUsername());
         db.insert(DatabaseHelper.TABLE_TRANSACTIONS, null, contentValues);
+        db.close();
+    }
+
+    public List<Transaction> getTransactionsChart(String username) {
+        List<Transaction> transactions = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = COLUMN_USERNAME + " = ?";
+        String[] selectionArgs = new String[]{username};
+        String[] columns = new String[]{COLUMN_PRODUCT_NAME, COLUMN_IMG_NAME,
+                COLUMN_TRANSACTION_DATE, "SUM(Amount) AS Amount"};
+        Cursor cursor = db.query(TABLE_TRANSACTIONS, columns, selection,
+                selectionArgs, COLUMN_TRANSACTION_DATE, null, null);
+        int colProductName = cursor.getColumnIndex(COLUMN_PRODUCT_NAME);
+        int colImageName = cursor.getColumnIndex(COLUMN_IMG_NAME);
+        int colTransactionDate = cursor.getColumnIndex(COLUMN_TRANSACTION_DATE);
+        int colAmount = cursor.getColumnIndex(COLUMN_AMOUNT);
+        Transaction transaction;
+        while (cursor.moveToNext()) {
+            transaction = new Transaction(cursor.getString(colTransactionDate),
+                    cursor.getString(colProductName), cursor.getString(colImageName), username);
+            transaction.setAmount(Integer.parseInt(cursor.getString(colAmount)));
+            transactions.add(transaction);
+        }
+        cursor.close();
+        db.close();
+        return transactions;
     }
 
     public List<Transaction> getTransactions(String username, String date) {
@@ -184,6 +214,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(colProductName), cursor.getString(colImageName), username);
             transactions.add(transaction);
         }
+        cursor.close();
+        db.close();
         return transactions;
     }
 }

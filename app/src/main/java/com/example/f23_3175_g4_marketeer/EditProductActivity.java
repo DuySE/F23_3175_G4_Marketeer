@@ -99,9 +99,17 @@ public class EditProductActivity extends AppCompatActivity {
                             Double.parseDouble(editTxtPrice.getText().toString()),
                             username, status, imgName);
                     // Add to transaction if a product is sold
-                    if (status.equals("Sold"))
-                        databaseHelper.addTransaction(editTxtProdName.getText().toString(),
+                    if (status.equals("Sold")) {
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = new Date();
+                        String transactionDate = formatter.format(date);
+                        Transaction transaction = new Transaction(
+                                transactionDate,
+                                editTxtProdName.getText().toString(),
                                 imgName, username);
+                        databaseHelper.addTransaction(transaction);
+
+                    }
                 }
             }
         }));

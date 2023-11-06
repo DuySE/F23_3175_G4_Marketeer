@@ -2,6 +2,7 @@ package com.example.f23_3175_g4_marketeer;
 
 public class Transaction {
     private String date, productName, imageName, username;
+    private int amount;
 
     public Transaction(String date, String productName, String imageName, String username) {
         this.date = date;
@@ -28,5 +29,13 @@ public class Transaction {
 
     public String getImageName() {
         return imageName;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }
