@@ -2,13 +2,16 @@ package com.example.f23_3175_g4_marketeer;
 
 public class User {
     // Fields
-    private String username, password, address, phone;
+    private String username, password, address, phone, profile_img;
     static String receiver;
 
     // Constructor
-    public User(String username, String password) {
+    public User(String username, String password, String address, String phone, String profile_img) {
         this.username = username;
         this.password = password;
+        this.address = address;
+        this.phone = phone;
+        this.profile_img = profile_img;
     }
 
     // Getters and setters
@@ -42,5 +45,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getProfileImg() {
+        return profile_img;
+    }
+
+    public void setProfileImg(String profile_img) {
+        this.profile_img = profile_img;
     }
 }

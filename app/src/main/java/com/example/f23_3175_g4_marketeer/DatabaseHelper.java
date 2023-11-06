@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -31,21 +33,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PASSWORD = "Password";
     private static final String COLUMN_ADDRESS = "Address";
     private static final String COLUMN_PHONE = "Phone";
-    private static final String COLUMN_PRODUCT_ID = "product_id";
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_PRICE = "price";
-    private static final String COLUMN_SELLER = "seller";
-    private static final String COLUMN_STATUS = "status";
-    private static final String COLUMN_IMG_NAME = "image";
+    private static final String COLUMN_PROFILE_IMG = "Profile_Image";
+    private static final String COLUMN_PRODUCT_ID = "Product_Id";
+    private static final String COLUMN_NAME = "Name";
+    private static final String COLUMN_PRICE = "Price";
+    private static final String COLUMN_SELLER = "Seller";
+    private static final String COLUMN_STATUS = "Status";
+    private static final String COLUMN_IMG_NAME = "Image";
     private static final String COLUMN_PRODUCT_NAME = "ProductName";
     private static final String COLUMN_TRANSACTION_DATE = "TransactionDate";
     private static final String COLUMN_AMOUNT = "Amount";
+
     // Create table
     private static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS + "(" +
             COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL," +
             COLUMN_PASSWORD + " TEXT NOT NULL," +
             COLUMN_ADDRESS + " TEXT," +
-            COLUMN_PHONE + " TEXT" +
+            COLUMN_PHONE + " TEXT," +
+            COLUMN_PROFILE_IMG + " TEXT" +
             ")";
 
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
@@ -85,24 +90,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_USERNAME, username);
-        contentValues.put(COLUMN_PASSWORD, password);
+        // Hash password before store it in database
+        contentValues.put(COLUMN_PASSWORD, BCrypt.hashpw(password, BCrypt.gensalt(12)));
         db.insert(TABLE_USERS, null, contentValues);
         db.close();
     }
 
-    public User getUser(String username, String password) {
+    public boolean login(String username, String password) {
+        User user = getUser(username);
+        String userPwd = "";
+        if (user != null) userPwd = user.getPassword();
+        // Check if password inputted by user matches with password stored in database
+        return BCrypt.checkpw(password, userPwd);
+    }
+
+    public User getUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD};
-        String selection = COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
-        String[] selectionArgs = new String[]{username, password};
-        Cursor cursor = db.query(TABLE_USERS, columns, selection,
-                selectionArgs, null, null, null);
+        String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_ADDRESS, COLUMN_PHONE, COLUMN_PROFILE_IMG};
+        String selection = COLUMN_USERNAME + " = ?";
+        String[] selectionArgs = new String[]{username};
+        Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
         int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
         int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
+        int colAddress = cursor.getColumnIndex(COLUMN_ADDRESS);
+        int colPhone = cursor.getColumnIndex(COLUMN_PHONE);
+        int colProfileImg = cursor.getColumnIndex(COLUMN_PROFILE_IMG);
+
         User user = null;
         if (cursor.moveToFirst()) {
-            user = new User(cursor.getString(colUsername),
-                    cursor.getString(colPassword));
+            user = new User(cursor.getString(colUsername), cursor.getString(colPassword),
+                    cursor.getString(colAddress), cursor.getString(colPhone),
+                    cursor.getString(colProfileImg));
         }
         cursor.close();
         db.close();
@@ -114,9 +132,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (user != null) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(COLUMN_USERNAME, user.getUsername());
-            contentValues.put(COLUMN_PASSWORD, user.getPassword());
+            contentValues.put(COLUMN_PASSWORD, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
             contentValues.put(COLUMN_ADDRESS, user.getAddress());
             contentValues.put(COLUMN_PHONE, user.getPhone());
+            contentValues.put(COLUMN_PROFILE_IMG, user.getProfileImg());
             String where = COLUMN_USERNAME + " = ?";
             String[] whereArgs = new String[]{user.getUsername()};
             db.update(TABLE_USERS, contentValues, where, whereArgs);
