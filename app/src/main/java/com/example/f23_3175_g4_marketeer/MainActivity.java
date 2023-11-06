@@ -5,9 +5,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void SetUpSearchView() {
-        SearchView searchView = findViewById(R.id.searchView);
+        SearchView searchView = findViewById(R.id.transactionSearchView);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
@@ -21,7 +23,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class TransactionActivity extends AppCompatActivity {
-    private LineChart lineChart;
+    private TransactionAdapter transactionAdapter;
+    List<Transaction> transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,8 @@ public class TransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transaction);
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         String username = StoredDataHelper.get(this, "username");
-        List<Transaction> transactions = databaseHelper.getTransactions(username, null);
-        TransactionAdapter transactionAdapter = new TransactionAdapter(transactions);
+        transactions = databaseHelper.getTransactions(username, null);
+        transactionAdapter = new TransactionAdapter(transactions);
         ListView listViewTransactions = findViewById(R.id.listViewTransactions);
         listViewTransactions.setAdapter(transactionAdapter);
         // Filter by date
@@ -46,11 +49,9 @@ public class TransactionActivity extends AppCompatActivity {
                                 "%04d-%02d-%02d", year1, monthOfYear + 1, dayOfMonth
                         );
                         editTextDate.setText(selectedDate);
-                        transactions.clear();
-                        List<Transaction> newTransactions = databaseHelper.getTransactions(username,
+                        List<Transaction> filteredTransactions = databaseHelper.getTransactions(username,
                                 editTextDate.getText().toString());
-                        add(transactions, newTransactions);
-                        transactionAdapter.notifyDataSetChanged();
+                        transactionAdapter.setFilteredList(filteredTransactions);
                     }, year, month, day);
             datePickerDialog.show();
         });
@@ -83,10 +84,35 @@ public class TransactionActivity extends AppCompatActivity {
             chart.animateY(1400, Easing.EaseInOutBounce);
             chart.invalidate();
         }
+        // Setup search view
+        SetUpSearchView();
     }
 
-    private void add(List<Transaction> oldList, List<Transaction> newList) {
-        oldList.clear();
-        oldList.addAll(newList);
+    private void SetUpSearchView() {
+        SearchView searchView = findViewById(R.id.transactionSearchView);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText, transactions);
+                return true;
+            }
+        });
+    }
+
+    private void filterList(String text, List<Transaction> transactions) {
+        List<Transaction> filteredList = new ArrayList<>();
+        if (transactions != null)
+            for (Transaction transaction : transactions)
+                if (transaction.getProductName().toLowerCase().contains(text.toLowerCase()))
+                    filteredList.add(transaction);
+        if (filteredList.isEmpty())
+            Toast.makeText(this, "Transaction not found!", Toast.LENGTH_SHORT).show();
+        else transactionAdapter.setFilteredList(filteredList);
     }
 }

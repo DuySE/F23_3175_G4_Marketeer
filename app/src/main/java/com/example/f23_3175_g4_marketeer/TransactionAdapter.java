@@ -23,6 +23,11 @@ public class TransactionAdapter extends BaseAdapter {
         this.adapterTransactions = adapterTransactions;
     }
 
+    public void setFilteredList(List<Transaction> filteredList) {
+        this.adapterTransactions = filteredList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return adapterTransactions.size();
