@@ -107,6 +107,7 @@ public class EditProductActivity extends AppCompatActivity {
                                 transactionDate,
                                 editTxtProdName.getText().toString(),
                                 imgName, username);
+                        transaction.setAmount(1);
                         databaseHelper.addTransaction(transaction);
 
                     }

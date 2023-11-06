@@ -156,11 +156,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         String transactionDate = formatter.format(date);
-        contentValues.put(DatabaseHelper.COLUMN_PRODUCT_NAME, transaction.getProductName());
-        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, transaction.getImageName());
-        contentValues.put(DatabaseHelper.COLUMN_TRANSACTION_DATE, transactionDate);
-        contentValues.put(DatabaseHelper.COLUMN_USERNAME, transaction.getUsername());
-        db.insert(DatabaseHelper.TABLE_TRANSACTIONS, null, contentValues);
+        contentValues.put(COLUMN_PRODUCT_NAME, transaction.getProductName());
+        contentValues.put(COLUMN_IMG_NAME, transaction.getImageName());
+        contentValues.put(COLUMN_TRANSACTION_DATE, transactionDate);
+        contentValues.put(COLUMN_AMOUNT, transaction.getAmount());
+        contentValues.put(COLUMN_USERNAME, transaction.getUsername());
+        db.insert(TABLE_TRANSACTIONS, null, contentValues);
         db.close();
     }
 
