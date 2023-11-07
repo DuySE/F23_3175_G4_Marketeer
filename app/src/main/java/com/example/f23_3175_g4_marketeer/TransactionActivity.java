@@ -12,9 +12,12 @@ import androidx.appcompat.widget.SearchView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
@@ -69,6 +72,24 @@ public class TransactionActivity extends AppCompatActivity {
 
         List<LineDataSet> lines = new ArrayList<>();
         LineDataSet set = new LineDataSet(entries, "Quantity");
+        YAxis leftYAxis = chart.getAxisLeft();
+        YAxis rightYAxis = chart.getAxisRight();
+        // avoid duplicate value when zooming
+        leftYAxis.setGranularity(1f);
+        rightYAxis.setGranularity(1f);
+        // cast Y-axis values to integer
+        leftYAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                return String.valueOf((int) value);
+            }
+        });
+        rightYAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                return String.valueOf((int) value);
+            }
+        });
         set.setDrawFilled(true);
         set.setFillColor(Color.WHITE);
         set.setColor(Color.RED);

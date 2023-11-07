@@ -162,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_SELLER, seller);
         contentValues.put(COLUMN_STATUS, status);
         contentValues.put(COLUMN_IMG_NAME, imgName);
-        String where = COLUMN_PRODUCT_ID + " = 2";
+        String where = COLUMN_PRODUCT_ID + " = 1";
         String[] whereArgs = new String[]{};
         db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
     }
