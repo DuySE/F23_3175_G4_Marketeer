@@ -30,6 +30,11 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void setFilteredList(List<Product> filteredList) {
+        products = filteredList;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
