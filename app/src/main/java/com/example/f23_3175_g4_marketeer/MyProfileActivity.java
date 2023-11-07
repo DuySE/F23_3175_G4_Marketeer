@@ -113,7 +113,7 @@ public class MyProfileActivity extends DrawerActivity {
             };
 
             Timer timer = new Timer();
-            timer.schedule(timerTask,3000);
+            timer.schedule(timerTask,1000);
         } catch (Exception e) {
             e.printStackTrace();
         }

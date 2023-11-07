@@ -54,12 +54,6 @@ public class MainActivity extends DrawerActivity {
     }
     private void SetUpSearchView() {
         SearchView searchView = findViewById(R.id.searchView);
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MyProfileActivity.class));
-            }
-        });
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
