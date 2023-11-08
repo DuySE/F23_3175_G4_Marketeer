@@ -8,7 +8,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMyProfileBinding;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -18,7 +19,8 @@ import com.squareup.picasso.Picasso;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MyProfileActivity extends AppCompatActivity {
+public class MyProfileActivity extends DrawerActivity {
+    ActivityMyProfileBinding myProfileBinding;
     TextView txtViewUsername;
     TextView txtViewPhone;
     TextView txtViewAddress;
@@ -31,7 +33,11 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+
+        myProfileBinding = ActivityMyProfileBinding.inflate(getLayoutInflater());
+        setContentView(myProfileBinding.getRoot());
+        allocateActivityTitle("My Profile");
+
         txtViewUsername = findViewById(R.id.txtViewUsername);
         txtViewPhone = findViewById(R.id.txtViewPhone);
         txtViewAddress = findViewById(R.id.txtViewAddress);
@@ -104,7 +110,7 @@ public class MyProfileActivity extends AppCompatActivity {
             };
 
             Timer timer = new Timer();
-            timer.schedule(timerTask,3000);
+            timer.schedule(timerTask,1000);
         } catch (Exception e) {
             e.printStackTrace();
         }

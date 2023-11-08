@@ -84,14 +84,20 @@ public class MyProfileEditActivity extends AppCompatActivity {
             editTxtCity.setText(inBundle.getString("CITY"));
             editTxtProvince.setText(inBundle.getString("PROVINCE"));
             imgName = inBundle.getString("IMGNAME");
-            StorageReference img = storageReference.child("ProfileImg/" + inBundle.getString("IMGNAME"));
-            img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.get().load(uri).into(imgView);
-                    imgUri = uri;
-                }
-            });
+
+            if (imgName == null) {
+                imgView.setImageResource(R.drawable.defaultpfp);
+            } else {
+                StorageReference img = storageReference.child("ProfileImg/" + inBundle.getString("IMGNAME"));
+                img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(imgView);
+                        imgUri = uri;
+                    }
+                });
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,15 +119,16 @@ public class MyProfileEditActivity extends AppCompatActivity {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter all the required fields", Toast.LENGTH_SHORT).show();
             } else if (editTxtPhone.getText().toString().length() != 10) {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
-            } else if (imgView.getDrawable() == null) {
-                Toast.makeText(MyProfileEditActivity.this, "Please choose a profile image for your account", Toast.LENGTH_SHORT).show();
             } else {
                 String address = editTxtHomeNumber.getText().toString() + " " +
                         editTxtStreetName.getText().toString() + ", " +
                         editTxtCity.getText().toString() + ", " +
                         editTxtProvince.getText().toString();
                 String username = editTxtUsername.getText().toString();
-                UploadEditedProfile(imgName,imgUri);
+
+                if (imgName != null) {
+                    UploadEditedProfile(imgName,imgUri);
+                }
                 String storedUsername = StoredDataHelper.get(this, "username");
                 User user = databaseHelper.getUser(storedUsername);
                 

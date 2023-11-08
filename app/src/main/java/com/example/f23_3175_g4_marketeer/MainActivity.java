@@ -1,19 +1,23 @@
 package com.example.f23_3175_g4_marketeer;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+//Drawer activity must be extended to function with nav drawer
+public class MainActivity extends DrawerActivity {
+    //Binding used for navigation drawer
+    ActivityMainBinding mainBinding;
     ArrayList<ItemModel> itemModels = new ArrayList<>();
     ItemRecyclerViewAdapter itemAdapter;
     int[] itemImages = {R.drawable.baseline_sentiment_very_satisfied_24,
@@ -23,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mainBinding.getRoot());
+        allocateActivityTitle("Main");
 
         SetUpSearchView();
         SetUpItemModel();
@@ -47,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     }
     private void SetUpSearchView() {
         SearchView searchView = findViewById(R.id.searchView);
-        searchView.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, MyProfileActivity.class)));
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

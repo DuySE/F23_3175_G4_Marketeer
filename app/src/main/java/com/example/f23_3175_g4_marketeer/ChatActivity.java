@@ -9,8 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
+import com.example.f23_3175_g4_marketeer.databinding.LayoutChatBinding;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -19,17 +20,21 @@ import com.firebase.client.FirebaseError;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends DrawerActivity {
+    LayoutChatBinding chatBinding;
     LinearLayout layout;
     ImageView btnSend;
     EditText messageArea;
     ScrollView scrollView;
     Firebase reference1, reference2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_chat);
+
+        chatBinding = LayoutChatBinding.inflate(getLayoutInflater());
+        setContentView(chatBinding.getRoot());
+        allocateActivityTitle("Chat");
+
         layout = findViewById(R.id.layout_chat);
         btnSend = findViewById(R.id.btnSend);
         messageArea = findViewById(R.id.messageArea);

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/menuGroup"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/menuMainActivity"
+            android:icon="@drawable/baseline_shop_24"
+            android:title="@string/menuMainActivity" />
+        <item
+            android:id="@+id/menuMyProfileActivity"
+            android:icon="@drawable/baseline_manage_accounts_24"
+            android:title="@string/menuMyProfileActivity" />
+        <item
+            android:id="@+id/menuNewProductActivity"
+            android:icon="@drawable/baseline_new_label_24"
+            android:title="@string/menuNewProductActivity" />
+    </group>
+    <group>
+        <item
+            android:id="@+id/menuChatActivity"
+            android:icon="@drawable/baseline_message_24"
+            android:title="@string/menuChatActivity" />
+    </group>
+</menu>
