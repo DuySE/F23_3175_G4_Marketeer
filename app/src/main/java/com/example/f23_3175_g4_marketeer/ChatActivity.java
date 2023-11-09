@@ -1,7 +1,14 @@
 package com.example.f23_3175_g4_marketeer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
 import com.example.f23_3175_g4_marketeer.databinding.LayoutChatBinding;
@@ -29,14 +40,14 @@ public class ChatActivity extends DrawerActivity {
     EditText messageArea;
     ScrollView scrollView;
     Firebase reference1, reference2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         chatBinding = LayoutChatBinding.inflate(getLayoutInflater());
         setContentView(chatBinding.getRoot());
-        allocateActivityTitle("Chat");
-
+        allocateActivityTitle(User.receiver);
         layout = findViewById(R.id.layout_chat);
         btnSend = findViewById(R.id.btnSend);
         messageArea = findViewById(R.id.messageArea);
@@ -56,6 +67,7 @@ public class ChatActivity extends DrawerActivity {
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
             }
+            addNotification();
         });
         reference1.addChildEventListener(new ChildEventListener() {
             @Override
@@ -91,7 +103,7 @@ public class ChatActivity extends DrawerActivity {
         });
     }
 
-    public void addMessageBox(String message, int type) {
+    private void addMessageBox(String message, int type) {
         TextView textView = new TextView(ChatActivity.this);
         textView.setText(message);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -105,5 +117,28 @@ public class ChatActivity extends DrawerActivity {
         }
         layout.addView(textView);
         scrollView.fullScroll(View.FOCUS_DOWN);
+    }
+
+    private void addNotification() {
+        String id = getString(R.string.channel_id);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            NotificationChannel notificationChannel = new NotificationChannel(id,
+                    name, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription(description);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, id)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Marketeer")
+                .setContentText("New message from " + User.receiver)
+                .setAutoCancel(true);
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        notificationManager.notify(0, builder.build());
     }
 }

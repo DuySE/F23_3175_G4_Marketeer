@@ -78,7 +78,7 @@
     <string name="navDrawOpen">Open Navigation Drawer</string>
     <string name="navDrawClose">Close Navigation Drawer</string>
     <string name="navLogoDesc">Logo</string>
-    <string name="menuChatActivity">Chat</string>
+    <string name="menuChatActivity">Messenger</string>
     <string name="menuNewProductActivity">New Product</string>
     <string name="menuPreviousActivity">Back</string>
     <string name="textHomeWelcome">Welcome to Marketeer! \nPlease open the drawer and select your destination</string>
@@ -87,4 +87,7 @@
     <string name="txtCurrentPassword">Enter current password to confirm edit*</string>
     <string name="txtAsteriskField">(All the fields with * must be entered)</string>
     <string name="txtEmptyString" />
+    <string name="channel_id">CHANNEL_ID</string>
+    <string name="channel_name">CHANNEL_NAME</string>
+    <string name="channel_description">Marketeer notifications</string>
 </resources>

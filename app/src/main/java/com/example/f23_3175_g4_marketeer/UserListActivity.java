@@ -1,7 +1,5 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,15 +11,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
+import com.firebase.client.Firebase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends DrawerActivity {
     ListView usersList;
+    ActivityUsersBinding usersBinding;
     TextView noUsersText;
     ArrayList<String> al = new ArrayList<>();
     int totalUsers = 0;
@@ -29,7 +32,9 @@ public class UserListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_users);
+        usersBinding = ActivityUsersBinding.inflate(getLayoutInflater());
+        setContentView(usersBinding.getRoot());
+        allocateActivityTitle("Contacts");
         usersList = findViewById(R.id.usersList);
         noUsersText = findViewById(R.id.noUsersText);
 

@@ -63,7 +63,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             overridePendingTransition(0, 0);
         }
         else if (item.getItemId() == R.id.menuChatActivity) {
-            startActivity(new Intent(this, ChatActivity.class));
+            startActivity(new Intent(this, UserListActivity.class));
             overridePendingTransition(0, 0);
         }
         else if (item.getItemId() == R.id.menuNewProductActivity) {
