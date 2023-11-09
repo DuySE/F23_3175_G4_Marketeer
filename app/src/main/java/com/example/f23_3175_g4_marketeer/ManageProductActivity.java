@@ -72,7 +72,7 @@ public class ManageProductActivity extends AppCompatActivity implements ProductR
     @Override
     public void onItemClick(int i) {
         Bundle bundle = new Bundle();
-        bundle.putInt("INDEX", i);
+        bundle.putInt("ID", products.get(i).getId());
         Intent intent = new Intent(ManageProductActivity.this, EditProductActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

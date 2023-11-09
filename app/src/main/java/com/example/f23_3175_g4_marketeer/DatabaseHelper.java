@@ -134,7 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(DatabaseHelper.TABLE_PRODUCTS, null, contentValues);
     }
 
-    public void updateProduct(String name, String price, String seller, String status, String imgName) {
+    public void updateProduct(int id, String name, String price, String seller, String status, String imgName) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.COLUMN_NAME, name);
@@ -143,8 +143,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
         contentValues.put(DatabaseHelper.COLUMN_STATUS, status);
         contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
-        String where = COLUMN_PRODUCT_ID + " = 1";
-        String[] whereArgs = new String[]{};
+        String where = COLUMN_PRODUCT_ID + " = ?";
+        String[] whereArgs = new String[]{Integer.toString(id)};
         db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
     }
 
@@ -152,7 +152,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = new String[]{COLUMN_PRODUCT_ID, COLUMN_NAME, COLUMN_PRICE, COLUMN_SELLER, COLUMN_STATUS, COLUMN_IMG_NAME};
         String selection = COLUMN_PRODUCT_ID + " = ?";
-        String[] selectionArgs = new String[]{Integer.toString(id + 1)};
+        String[] selectionArgs = new String[]{Integer.toString(id)};
         Cursor cursor = db.query(TABLE_PRODUCTS, columns, selection, selectionArgs, null, null, null);
         int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
         int colName = cursor.getColumnIndex(COLUMN_NAME);

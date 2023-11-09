@@ -67,7 +67,7 @@ public class EditProductActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         DatabaseHelper db = new DatabaseHelper(this);
-        Product product = db.getProduct(bundle.getInt("INDEX"));
+        Product product = db.getProduct(bundle.getInt("ID"));
         editTxtProdName.setText(product.getName());
         editTxtPrice.setText(product.getPrice().replace("$",""));
 
@@ -116,9 +116,10 @@ public class EditProductActivity extends AppCompatActivity {
                     }
                     DecimalFormat df = new DecimalFormat("$#.##");
                     String price = df.format(Double.parseDouble(editTxtPrice.getText().toString()));
-                    databaseHelper.updateProduct(editTxtProdName.getText().toString(), price,
+                    databaseHelper.updateProduct(product.getId(), editTxtProdName.getText().toString(), price,
                             StoredDataHelper.get(EditProductActivity.this,"username"), status, imgName);
                 }
+                startActivity(new Intent(EditProductActivity.this, ManageProductActivity.class));
             }
         }));
     }
