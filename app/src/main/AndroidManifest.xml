@@ -25,6 +25,12 @@
             android:name=".ManageProductActivity"
             android:exported="false" />
         <activity
+            android:name=".HomepageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DrawerActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditProductActivity"
             android:exported="false" />
         <activity

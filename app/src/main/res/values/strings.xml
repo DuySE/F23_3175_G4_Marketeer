@@ -71,6 +71,17 @@
     <string name="txtSold">Sold</string>
     <string name="txtEditProduct">Confirm Edit</string>
     <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
+    <string name="menuMainActivity">Main</string>
+    <string name="menuMyProfileActivity">My Profile</string>
+    <string name="menuEditProductActivity">Manage Products</string>
+    <string name="textNavTitle">Marketeer</string>
+    <string name="navDrawOpen">Open Navigation Drawer</string>
+    <string name="navDrawClose">Close Navigation Drawer</string>
+    <string name="navLogoDesc">Logo</string>
+    <string name="menuChatActivity">Chat</string>
+    <string name="menuNewProductActivity">New Product</string>
+    <string name="menuPreviousActivity">Back</string>
+    <string name="textHomeWelcome">Welcome to Marketeer! \nPlease open the drawer and select your destination</string>
     <string name="txtNotAdded">Not added</string>
     <string name="editTxtNewPassword">New Password</string>
     <string name="txtCurrentPassword">Enter current password to confirm edit*</string>
