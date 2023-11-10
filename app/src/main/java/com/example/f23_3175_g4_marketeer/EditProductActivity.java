@@ -121,7 +121,7 @@ public class EditProductActivity extends AppCompatActivity {
                     DecimalFormat df = new DecimalFormat("$#.##");
                     String price = df.format(Double.parseDouble(editTxtPrice.getText().toString()));
                     String username = StoredDataHelper.get(EditProductActivity.this, "username");
-                    databaseHelper.updateProduct(editTxtProdName.getText().toString(),
+                    databaseHelper.updateProduct(product.getId(), editTxtProdName.getText().toString(),
                          price, username, status, imgName);
                     // Add to transaction if a product is sold
                     if (status.equals("Sold")) {

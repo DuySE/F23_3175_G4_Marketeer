@@ -215,6 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return products;
+    }
 
     // Table Transactions methods
     public void addTransaction(Transaction transaction) {
