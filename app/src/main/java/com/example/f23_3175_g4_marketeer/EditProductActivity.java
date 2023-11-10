@@ -1,12 +1,5 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -24,7 +17,16 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -52,6 +54,7 @@ public class EditProductActivity extends AppCompatActivity {
     String imgName;
     Uri imgUri;
     String status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,21 +111,38 @@ public class EditProductActivity extends AppCompatActivity {
                 } else if (imgView.getDrawable() == null) {
                     Toast.makeText(EditProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
-                    UploadEditedProduct(imgName,imgUri);
-                    if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnAvailable){
+                    UploadEditedProduct(imgName, imgUri);
+                    if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnAvailable) {
                         status = "Available";
-                    } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold){
+                    } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold) {
                         status = "Sold";
                     }
+
                     DecimalFormat df = new DecimalFormat("$#.##");
                     String price = df.format(Double.parseDouble(editTxtPrice.getText().toString()));
-                    databaseHelper.updateProduct(product.getId(), editTxtProdName.getText().toString(), price,
-                            StoredDataHelper.get(EditProductActivity.this,"username"), status, imgName);
+                    String username = StoredDataHelper.get(EditProductActivity.this, "username");
+                    databaseHelper.updateProduct(editTxtProdName.getText().toString(),
+                         price, username, status, imgName);
+                    // Add to transaction if a product is sold
+                    if (status.equals("Sold")) {
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = new Date();
+                        String transactionDate = formatter.format(date);
+                        Transaction transaction = new Transaction(
+                                transactionDate,
+                                editTxtProdName.getText().toString(),
+                                imgName, username);
+                        transaction.setAmount(1);
+                        databaseHelper.addTransaction(transaction);
+
+                    }
+
                 }
                 startActivity(new Intent(EditProductActivity.this, ManageProductActivity.class));
             }
         }));
     }
+
     private void askPermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
@@ -158,12 +178,12 @@ public class EditProductActivity extends AppCompatActivity {
         }
     }
 
-    private File createImgFile() throws IOException{
+    private File createImgFile() throws IOException {
         String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imgFileName = "JPEG_" + time + "_";
         File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        File imgFile = File.createTempFile(imgFileName,".jpg", storageDirectory);
+        File imgFile = File.createTempFile(imgFileName, ".jpg", storageDirectory);
         imgPath = imgFile.getAbsolutePath();
         return imgFile;
     }
@@ -201,7 +221,7 @@ public class EditProductActivity extends AppCompatActivity {
         }
     }
 
-    private void UploadEditedProduct(String imgName, Uri imgUri){
+    private void UploadEditedProduct(String imgName, Uri imgUri) {
         StorageReference img = storageReference.child("ProductImg/" + imgName);
         img.putFile(imgUri);
     }
