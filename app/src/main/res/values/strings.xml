@@ -42,7 +42,6 @@
     <string name="txtEditProfile">Edit Profile</string>
     <string name="txtPassword2">Password</string>
     <string name="editTxtUsername">Username*</string>
-    <string name="txtNewPassword">New Password</string>
     <string name="txtSaveChanges">Save Changes</string>
     <string name="error">error</string>
     <string name="txtShowPassword">Show</string>
@@ -71,6 +70,7 @@
     <string name="txtSold">Sold</string>
     <string name="txtEditProduct">Confirm Edit</string>
     <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
+    <string name="productImage">Product Image</string>
     <string name="menuMainActivity">Main</string>
     <string name="menuMyProfileActivity">My Profile</string>
     <string name="menuEditProductActivity">Manage Products</string>
