@@ -1,6 +1,5 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,10 +8,13 @@ import android.os.Bundle;
 import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageProductActivity extends AppCompatActivity implements ProductRecyclerViewAdapter.OnItemClickListener {
+public class ManageProductActivity extends DrawerActivity implements ProductRecyclerViewAdapter.OnItemClickListener {
+    ActivityMainBinding mainBinding;
     List<Product> products = new ArrayList<>();
     RecyclerView recyclerViewProduct;
     ProductRecyclerViewAdapter myAdapter;
@@ -22,7 +24,11 @@ public class ManageProductActivity extends AppCompatActivity implements ProductR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mainBinding.getRoot());
+        allocateActivityTitle("Manage Products");
+
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

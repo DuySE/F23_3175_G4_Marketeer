@@ -17,6 +17,14 @@
             android:id="@+id/menuNewProductActivity"
             android:icon="@drawable/baseline_new_label_24"
             android:title="@string/menuNewProductActivity" />
+        <item
+            android:id="@+id/menuManageProductActivity"
+            android:icon="@drawable/baseline_new_label_24"
+            android:title="@string/menuManageProductActivity" />
+        <item
+            android:id="@+id/menuTransactionHistoryActivity"
+            android:icon="@drawable/baseline_new_label_24"
+            android:title="@string/menuTransactionHistoryActivity" />
     </group>
     <group>
         <item

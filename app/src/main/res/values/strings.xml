@@ -88,4 +88,6 @@
     <string name="txtAsteriskField">(All the fields with * must be entered)</string>
     <string name="txtEmptyString" />
     <string name="txtNoProductFound">No Product Found</string>
+    <string name="menuManageProductActivity">Manage Products</string>
+    <string name="menuTransactionHistoryActivity">Transaction History</string>
 </resources>

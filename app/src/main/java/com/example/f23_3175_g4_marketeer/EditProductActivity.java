@@ -115,16 +115,12 @@ public class EditProductActivity extends AppCompatActivity {
                     } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold) {
                         status = "Sold";
                     }
+                    String username = StoredDataHelper.get(EditProductActivity.this, "username");
                     DecimalFormat df = new DecimalFormat("$#.##");
                     String price = df.format(Double.parseDouble(editTxtPrice.getText().toString()));
                     databaseHelper.updateProduct(product.getId(), editTxtProdName.getText().toString(), price,
-                            StoredDataHelper.get(EditProductActivity.this,"username"), status, imgName);
-
-
-                    String username = StoredDataHelper.get(EditProductActivity.this, "username");
-                    databaseHelper.updateProduct(editTxtProdName.getText().toString(),
-                            Double.parseDouble(editTxtPrice.getText().toString()),
                             username, status, imgName);
+
                     // Add to transaction if a product is sold
                     if (status.equals("Sold")) {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
