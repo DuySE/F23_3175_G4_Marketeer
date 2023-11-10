@@ -123,7 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addProduct(String name, String price, String seller, String imgName){
+    public Product addProduct(String name, String price, String seller, String imgName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.COLUMN_NAME, name);
@@ -132,6 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COLUMN_STATUS, "Available");
         contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
         db.insert(DatabaseHelper.TABLE_PRODUCTS, null, contentValues);
+        return null;
     }
 
     public void updateProduct(int id, String name, String price, String seller, String status, String imgName) {

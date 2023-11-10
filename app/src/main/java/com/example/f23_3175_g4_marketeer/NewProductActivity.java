@@ -91,6 +91,8 @@ public class NewProductActivity extends DrawerActivity {
                     Toast.makeText(NewProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
                     UploadNewProduct(imgName, imgUri);
+                    Intent mainIntent = new Intent(NewProductActivity.this, MainActivity.class);
+                    startActivity(mainIntent);
                 }
             }
         }));
