@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.SearchView;
+
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,9 +25,10 @@ public class ManageProductActivity extends AppCompatActivity implements ProductR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_manage_product);
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
         searchView = findViewById(R.id.searchView);
+        ImageView addNewProdImgView = findViewById(R.id.startNewProdActivityImgView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -50,6 +54,8 @@ public class ManageProductActivity extends AppCompatActivity implements ProductR
             recyclerViewProduct.setAdapter(myAdapter);
             recyclerViewProduct.setLayoutManager(new GridLayoutManager(this, 2));
         }
+
+        addNewProdImgView.setOnClickListener((View view) -> startActivity(new Intent(ManageProductActivity.this, NewProductActivity.class)));
     }
 
     private void filterProduct(String newText, List<Product> products) {
