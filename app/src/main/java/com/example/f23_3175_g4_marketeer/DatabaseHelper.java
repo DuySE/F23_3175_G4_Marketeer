@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -54,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
             COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_NAME + " TEXT NOT NULL, " + COLUMN_PRICE + " REAL NOT NULL, " +
+            COLUMN_NAME + " TEXT NOT NULL, " + COLUMN_PRICE + " TEXT NOT NULL, " +
             COLUMN_SELLER + " TEXT NOT NULL, " + COLUMN_STATUS + " TEXT NOT NULL, " +
             COLUMN_IMG_NAME + " TEXT NOT NULL)";
 
@@ -143,7 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Table Products methods
-    public void addProduct(String name, double price, String seller, String imgName) {
+    public void addProduct(String name, String price, String seller, String imgName){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, name);
@@ -154,17 +155,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_PRODUCTS, null, contentValues);
     }
 
-    public void updateProduct(String name, double price, String seller, String status, String imgName) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void updateProduct(int id, String name, String price, String seller, String status, String imgName) {
+        SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_NAME, name);
-        contentValues.put(COLUMN_PRICE, price);
-        contentValues.put(COLUMN_SELLER, seller);
-        contentValues.put(COLUMN_STATUS, status);
-        contentValues.put(COLUMN_IMG_NAME, imgName);
-        String where = COLUMN_PRODUCT_ID + " = 1";
-        String[] whereArgs = new String[]{};
+        contentValues.put(DatabaseHelper.COLUMN_NAME, name);
+        contentValues.put(DatabaseHelper.COLUMN_PRICE, price);
+        contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
+        contentValues.put(DatabaseHelper.COLUMN_STATUS, status);
+        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
+        String where = COLUMN_PRODUCT_ID + " = ?";
+        String[] whereArgs = new String[]{Integer.toString(id)};
         db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
+    }
+
+    public Product getProduct(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COLUMN_PRODUCT_ID, COLUMN_NAME, COLUMN_PRICE, COLUMN_SELLER, COLUMN_STATUS, COLUMN_IMG_NAME};
+        String selection = COLUMN_PRODUCT_ID + " = ?";
+        String[] selectionArgs = new String[]{Integer.toString(id)};
+        Cursor cursor = db.query(TABLE_PRODUCTS, columns, selection, selectionArgs, null, null, null);
+        int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
+        int colName = cursor.getColumnIndex(COLUMN_NAME);
+        int colPrice = cursor.getColumnIndex(COLUMN_PRICE);
+        int colSeller = cursor.getColumnIndex(COLUMN_SELLER);
+        int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
+        int colImg = cursor.getColumnIndex(COLUMN_IMG_NAME);
+
+        Product product = null;
+        if (cursor.moveToFirst()) {
+            product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
+                    cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
+        }
+        return product;
+    }
+
+    public List<Product> getProducts(String seller) {
+        List<Product> products = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COLUMN_PRODUCT_ID, COLUMN_NAME, COLUMN_PRICE, COLUMN_SELLER, COLUMN_STATUS, COLUMN_IMG_NAME};
+        String selection = COLUMN_SELLER + " = ? AND " + COLUMN_STATUS + " = ? ";
+        String[] selectionArgs = new String[]{seller, "Available"};
+        Cursor cursor = db.query(TABLE_PRODUCTS, columns, selection, selectionArgs, null, null, null);
+        int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
+        int colName = cursor.getColumnIndex(COLUMN_NAME);
+        int colPrice = cursor.getColumnIndex(COLUMN_PRICE);
+        int colSeller = cursor.getColumnIndex(COLUMN_SELLER);
+        int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
+        int colImg = cursor.getColumnIndex(COLUMN_IMG_NAME);
+
+        Product product = null;
+        if (cursor.moveToFirst()) {
+            product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
+                    cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
+            products.add(product);
+            while (cursor.moveToNext()) {
+                product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
+                        cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
+                products.add(product);
+            }
+        }
+        return products;
     }
 
     // Table Transactions methods

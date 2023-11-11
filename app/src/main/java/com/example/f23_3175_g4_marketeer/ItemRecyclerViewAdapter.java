@@ -47,9 +47,9 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         TextView textViewName, textViewPrice;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.image);
-            textViewName = itemView.findViewById(R.id.textViewProductName);
-            textViewPrice = itemView.findViewById(R.id.textViewProductPrice);
+            imageView = itemView.findViewById(R.id.imgViewRecyclerImg);
+            textViewName = itemView.findViewById(R.id.txtViewRecyclerName);
+            textViewPrice = itemView.findViewById(R.id.txtViewRecyclerPrice);
         }
     }
 }

@@ -29,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -89,6 +90,8 @@ public class NewProductActivity extends DrawerActivity {
                     Toast.makeText(NewProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
                     UploadNewProduct(imgName, imgUri);
+                    Toast.makeText(NewProductActivity.this, "Your product has been added", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(NewProductActivity.this, ManageProductActivity.class));
                 }
             }
         }));
@@ -175,9 +178,11 @@ public class NewProductActivity extends DrawerActivity {
     private void UploadNewProduct(String imgName, Uri imgUri){
         StorageReference img = storageReference.child("ProductImg/" + imgName);
         img.putFile(imgUri);
+        DecimalFormat df = new DecimalFormat("$#.##");
+        String price = df.format(Double.parseDouble(editTxtPrice.getText().toString()));
+
         DatabaseHelper databaseHelper = new DatabaseHelper(NewProductActivity.this);
-        databaseHelper.addProduct(editTxtProdName.getText().toString(),
-                Double.parseDouble(editTxtPrice.getText().toString()),
+        databaseHelper.addProduct(editTxtProdName.getText().toString(), price,
                 StoredDataHelper.get(this,"username"), imgName);
     }
 }
