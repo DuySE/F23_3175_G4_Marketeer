@@ -2,21 +2,16 @@ package com.example.f23_3175_g4_marketeer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
-import com.example.f23_3175_g4_marketeer.databinding.LayoutChatBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
