@@ -18,12 +18,12 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecyclerViewAdapter.MyViewHolder> {
     List<Product> products;
     OnItemClickListener onItemClickListener;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageReference = storage.getReference();
 
     public ProductRecyclerViewAdapter(List<Product> products, OnItemClickListener onItemClickListener) {
         this.products = products;
@@ -47,15 +47,25 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.txtViewName.setText(products.get(position).getName());
         holder.txtViewPrice.setText(products.get(position).getPrice());
-        StorageReference img = storageReference.child("ProductImg/" + products.get(position).getImgName());
-        img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        String imgName = products.get(position).getImgName();
+        TimerTask timerTask = new TimerTask() {
             @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(holder.imgView);
+            public void run() {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageReference = storage.getReference();
+                StorageReference img = storageReference.child("ProductImg/" + imgName);
+                img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(holder.imgView);
+                    }
+                });
             }
-        });
-    }
+        };
 
+        Timer timer = new Timer();
+        timer.schedule(timerTask,1000);
+    }
 
     @Override
     public int getItemCount() {

@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.SearchView;
+
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
@@ -31,6 +34,7 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
 
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
         searchView = findViewById(R.id.searchView);
+        ImageView addNewProdImgView = findViewById(R.id.startNewProdActivityImgView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -56,6 +60,8 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
             recyclerViewProduct.setAdapter(myAdapter);
             recyclerViewProduct.setLayoutManager(new GridLayoutManager(this, 2));
         }
+
+        addNewProdImgView.setOnClickListener((View view) -> startActivity(new Intent(ManageProductActivity.this, NewProductActivity.class)));
     }
 
     private void filterProduct(String newText, List<Product> products) {

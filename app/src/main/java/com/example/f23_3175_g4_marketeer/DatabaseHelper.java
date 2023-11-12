@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -54,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
             COLUMN_PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_NAME + " TEXT NOT NULL, " + COLUMN_PRICE + " REAL NOT NULL, " +
+            COLUMN_NAME + " TEXT NOT NULL, " + COLUMN_PRICE + " TEXT NOT NULL, " +
             COLUMN_SELLER + " TEXT NOT NULL, " + COLUMN_STATUS + " TEXT NOT NULL, " +
             COLUMN_IMG_NAME + " TEXT NOT NULL)";
 
@@ -141,6 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
     // Table Products methods
     public void addProduct(String name, String price, String seller, String imgName){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -154,13 +156,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateProduct(int id, String name, String price, String seller, String status, String imgName) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_NAME, name);
-        contentValues.put(COLUMN_PRICE, price);
-        contentValues.put(COLUMN_SELLER, seller);
-        contentValues.put(COLUMN_STATUS, status);
-        contentValues.put(COLUMN_IMG_NAME, imgName);
+        contentValues.put(DatabaseHelper.COLUMN_NAME, name);
+        contentValues.put(DatabaseHelper.COLUMN_PRICE, price);
+        contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
+        contentValues.put(DatabaseHelper.COLUMN_STATUS, status);
+        contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
         String where = COLUMN_PRODUCT_ID + " = ?";
         String[] whereArgs = new String[]{Integer.toString(id)};
         db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);

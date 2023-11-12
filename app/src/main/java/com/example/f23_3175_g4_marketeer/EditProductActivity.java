@@ -1,12 +1,5 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -25,6 +18,14 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -115,12 +116,12 @@ public class EditProductActivity extends AppCompatActivity {
                     } else if (radGroupStatus.getCheckedRadioButtonId() == R.id.radBtnSold) {
                         status = "Sold";
                     }
-                    String username = StoredDataHelper.get(EditProductActivity.this, "username");
+
                     DecimalFormat df = new DecimalFormat("$#.##");
                     String price = df.format(Double.parseDouble(editTxtPrice.getText().toString()));
-                    databaseHelper.updateProduct(product.getId(), editTxtProdName.getText().toString(), price,
-                            username, status, imgName);
-
+                    String username = StoredDataHelper.get(EditProductActivity.this, "username");
+                    databaseHelper.updateProduct(product.getId(), editTxtProdName.getText().toString(),
+                         price, username, status, imgName);
                     // Add to transaction if a product is sold
                     if (status.equals("Sold")) {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -134,6 +135,7 @@ public class EditProductActivity extends AppCompatActivity {
                         databaseHelper.addTransaction(transaction);
 
                     }
+
                 }
                 startActivity(new Intent(EditProductActivity.this, ManageProductActivity.class));
             }
