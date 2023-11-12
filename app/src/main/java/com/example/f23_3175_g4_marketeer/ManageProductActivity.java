@@ -12,12 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityManageProductBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManageProductActivity extends DrawerActivity implements ProductRecyclerViewAdapter.OnItemClickListener {
-    ActivityMainBinding mainBinding;
+    ActivityManageProductBinding manageProductBinding;
     List<Product> products = new ArrayList<>();
     RecyclerView recyclerViewProduct;
     ProductRecyclerViewAdapter myAdapter;
@@ -28,8 +29,8 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(mainBinding.getRoot());
+        manageProductBinding = ActivityManageProductBinding.inflate(getLayoutInflater());
+        setContentView(manageProductBinding.getRoot());
         allocateActivityTitle("Manage Products");
 
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
