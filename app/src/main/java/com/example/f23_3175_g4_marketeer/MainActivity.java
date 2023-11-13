@@ -37,7 +37,7 @@ public class MainActivity extends DrawerActivity {
     private void SetUpProductView() {
         // refactored some code from ManageProductActivity
         DatabaseHelper db = new DatabaseHelper(this);
-        productList = db.getProducts(StoredDataHelper.get(this, "username"));
+        productList = db.getProducts();
 
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
         if (productList.size() == 0){
