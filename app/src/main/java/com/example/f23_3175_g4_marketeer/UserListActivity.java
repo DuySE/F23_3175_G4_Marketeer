@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends DrawerActivity {
     ListView usersList;
     TextView noUsersText;
     ArrayList<String> al = new ArrayList<>();

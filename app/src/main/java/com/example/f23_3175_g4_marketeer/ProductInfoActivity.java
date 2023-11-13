@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.f23_3175_g4_marketeer.databinding.ActivityNewProductBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityProductInfoBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -17,12 +19,15 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
-public class ProductInfoActivity extends AppCompatActivity {
+public class ProductInfoActivity extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_info);
+        ActivityProductInfoBinding productInfoBinding = ActivityProductInfoBinding.inflate(getLayoutInflater());
+        setContentView(productInfoBinding.getRoot());
+        allocateActivityTitle("Product Information");
+
         ImageView imgView = findViewById(R.id.imgViewProdInfo);
         TextView txtViewName = findViewById(R.id.txtViewProdNameInfo);
         TextView txtViewPrice = findViewById(R.id.txtViewProdPriceInfo);
