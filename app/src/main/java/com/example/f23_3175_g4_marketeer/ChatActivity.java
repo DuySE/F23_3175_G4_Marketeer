@@ -1,7 +1,5 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
-import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.f23_3175_g4_marketeer.databinding.LayoutChatBinding;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -22,7 +20,7 @@ import com.firebase.client.FirebaseError;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChatActivity extends DrawerActivity {
+public class ChatActivity extends AppCompatActivity {
     LayoutChatBinding chatBinding;
     LinearLayout layout;
     ImageView btnSend;
@@ -33,9 +31,7 @@ public class ChatActivity extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        chatBinding = LayoutChatBinding.inflate(getLayoutInflater());
         setContentView(chatBinding.getRoot());
-        allocateActivityTitle("Chat");
 
         layout = findViewById(R.id.layout_chat);
         btnSend = findViewById(R.id.btnSend);

@@ -25,6 +25,9 @@
             android:name=".ManageProductActivity"
             android:exported="false" />
         <activity
+            android:name=".TransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomepageActivity"
             android:exported="false" />
         <activity
@@ -62,7 +65,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+            </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
