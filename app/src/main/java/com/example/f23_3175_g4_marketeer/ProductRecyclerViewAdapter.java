@@ -64,7 +64,7 @@ public class ProductRecyclerViewAdapter extends RecyclerView.Adapter<ProductRecy
         };
 
         Timer timer = new Timer();
-        timer.schedule(timerTask,1000);
+        timer.schedule(timerTask,1500);
     }
 
     @Override
