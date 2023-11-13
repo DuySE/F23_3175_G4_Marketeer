@@ -7,12 +7,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +19,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends DrawerActivity{
+    ActivityUsersBinding usersBinding;
+
     ListView usersList;
     TextView noUsersText;
     ArrayList<String> al = new ArrayList<>();
@@ -29,7 +30,11 @@ public class UserListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_users);
+
+        usersBinding = ActivityUsersBinding.inflate(getLayoutInflater());
+        setContentView(usersBinding.getRoot());
+        allocateActivityTitle("Messages");
+
         usersList = findViewById(R.id.usersList);
         noUsersText = findViewById(R.id.noUsersText);
 

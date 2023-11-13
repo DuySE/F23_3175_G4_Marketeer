@@ -1,6 +1,5 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,10 +11,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityManageProductBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageProductActivity extends AppCompatActivity implements ProductRecyclerViewAdapter.OnItemClickListener {
+public class ManageProductActivity extends DrawerActivity implements ProductRecyclerViewAdapter.OnItemClickListener {
+    ActivityManageProductBinding manageProductBinding;
     List<Product> products = new ArrayList<>();
     RecyclerView recyclerViewProduct;
     ProductRecyclerViewAdapter myAdapter;
@@ -25,7 +28,11 @@ public class ManageProductActivity extends AppCompatActivity implements ProductR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_product);
+
+        manageProductBinding = ActivityManageProductBinding.inflate(getLayoutInflater());
+        setContentView(manageProductBinding.getRoot());
+        allocateActivityTitle("Manage Products");
+
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
         searchView = findViewById(R.id.searchView);
         ImageView addNewProdImgView = findViewById(R.id.startNewProdActivityImgView);

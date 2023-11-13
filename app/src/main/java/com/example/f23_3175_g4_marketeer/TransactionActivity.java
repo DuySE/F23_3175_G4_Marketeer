@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import com.example.f23_3175_g4_marketeer.databinding.ActivityTransactionBinding;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -25,14 +27,19 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TransactionActivity extends AppCompatActivity {
+public class TransactionActivity extends DrawerActivity {
+    ActivityTransactionBinding transactionBinding;
     private TransactionAdapter transactionAdapter;
     List<Transaction> transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transaction);
+
+        transactionBinding = ActivityTransactionBinding.inflate(getLayoutInflater());
+        setContentView(transactionBinding.getRoot());
+        allocateActivityTitle("Transaction History");
+
         DatabaseHelper databaseHelper = new DatabaseHelper(this);
         String username = StoredDataHelper.get(this, "username");
         transactions = databaseHelper.getTransactions(username, null);
