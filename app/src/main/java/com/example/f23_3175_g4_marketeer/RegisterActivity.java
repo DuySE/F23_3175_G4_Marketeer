@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText editTextUsername, editTextPassword;
-    Button btnCreateAccount;
+    Button btnCreateAccount, btnLogin;
     Intent intentLogin;
     DatabaseHelper databaseHelper;
 
@@ -21,6 +21,8 @@ public class RegisterActivity extends AppCompatActivity {
         editTextUsername = findViewById(R.id.editTextUsernameRegister);
         editTextPassword = findViewById(R.id.editTextPasswordRegister);
         btnCreateAccount = findViewById(R.id.btnCreateAccount);
+        btnLogin = findViewById(R.id.btnLogin1);
+        databaseHelper = new DatabaseHelper(this);
         Register();
     }
 
@@ -28,11 +30,14 @@ public class RegisterActivity extends AppCompatActivity {
         // For now this is very basic registration that will only work one time
         intentLogin = new Intent(this, LoginActivity.class);
         btnCreateAccount.setOnClickListener((View view) -> {
-            if (editTextUsername.getText().toString().isEmpty()) {
+            User user = databaseHelper.getUser(editTextUsername.getText().toString());
+            if (editTextUsername.getText().toString().isEmpty())
                 editTextUsername.setError("Please type your username.");
-            } else if (editTextPassword.getText().toString().isEmpty()) {
+            else if (user != null)
+                editTextUsername.setError("This username is taken. Try another.");
+            else if (editTextPassword.getText().toString().isEmpty())
                 editTextPassword.setError("Please type your password.");
-            } else {
+            else {
                 try {
                     String newUsername = editTextUsername.getText().toString();
                     String newPassword = editTextPassword.getText().toString();
@@ -44,5 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        btnLogin.setOnClickListener(v -> startActivity(intentLogin));
     }
 }

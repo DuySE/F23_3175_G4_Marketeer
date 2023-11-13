@@ -7,10 +7,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityTransactionBinding;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;

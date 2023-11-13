@@ -101,7 +101,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String userPwd = "";
         if (user != null) userPwd = user.getPassword();
         // Check if password inputted by user matches with password stored in database
-        return BCrypt.checkpw(password, userPwd);
+        if (!userPwd.isEmpty() && BCrypt.checkpw(password, userPwd)) return true;
+        return false;
     }
 
     public User getUser(String username) {

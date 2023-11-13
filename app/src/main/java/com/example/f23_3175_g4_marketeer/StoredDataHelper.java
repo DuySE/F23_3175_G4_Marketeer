@@ -19,4 +19,11 @@ public class StoredDataHelper {
         String value = sharedPreferences.getString(key, "");
         return value;
     }
+
+    static void clear(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("application", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+    }
 }
