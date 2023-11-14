@@ -9,8 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.f23_3175_g4_marketeer.databinding.LayoutChatBinding;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -20,19 +18,22 @@ import com.firebase.client.FirebaseError;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends DrawerActivity {
     LayoutChatBinding chatBinding;
     LinearLayout layout;
     ImageView btnSend;
     EditText messageArea;
     ScrollView scrollView;
-    Firebase reference1, reference2;
+    Firebase reference1, reference2, usersList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Bundle bundle = getIntent().getExtras();
+        String seller = bundle.get("SELLER").toString();
         setContentView(chatBinding.getRoot());
-
+        chatBinding = LayoutChatBinding.inflate(getLayoutInflater());
+        allocateActivityTitle(seller);
         layout = findViewById(R.id.layout_chat);
         btnSend = findViewById(R.id.btnSend);
         messageArea = findViewById(R.id.messageArea);
@@ -40,9 +41,10 @@ public class ChatActivity extends AppCompatActivity {
         String storedUsername = StoredDataHelper.get(this, "username");
         Firebase.setAndroidContext(this);
         reference1 = new Firebase("https://chat-b11e1.firebaseio.com/messages/" +
-                storedUsername + "_" + User.receiver);
+                storedUsername + "_" + seller);
         reference2 = new Firebase("https://chat-b11e1.firebaseio.com/messages/" +
-                User.receiver + "_" + storedUsername);
+                seller + "_" + storedUsername);
+        usersList = new Firebase("https://chat-b11e1.firebaseio.com/users/");
         btnSend.setOnClickListener(view -> {
             String message = messageArea.getText().toString();
             if (!message.equals("")) {
@@ -51,6 +53,8 @@ public class ChatActivity extends AppCompatActivity {
                 map.put("user", storedUsername);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
+                usersList.child(seller).setValue("");
+                usersList.child(storedUsername).setValue("");
             }
         });
         reference1.addChildEventListener(new ChildEventListener() {
@@ -62,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (username.equals(storedUsername))
                     addMessageBox("You: " + message, 1);
                 else
-                    addMessageBox(User.receiver.toLowerCase() + ": " + message, 2);
+                    addMessageBox(seller.toLowerCase() + ": " + message, 2);
             }
 
             @Override
