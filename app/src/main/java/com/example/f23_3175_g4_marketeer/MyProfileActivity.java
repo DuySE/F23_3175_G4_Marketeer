@@ -1,11 +1,8 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -113,7 +110,7 @@ public class MyProfileActivity extends DrawerActivity {
             };
 
             Timer timer = new Timer();
-            timer.schedule(timerTask,1000);
+            timer.schedule(timerTask,1500);
         } catch (Exception e) {
             e.printStackTrace();
         }
