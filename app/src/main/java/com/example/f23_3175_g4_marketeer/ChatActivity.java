@@ -31,8 +31,8 @@ public class ChatActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         String seller = bundle.get("SELLER").toString();
-        setContentView(chatBinding.getRoot());
         chatBinding = LayoutChatBinding.inflate(getLayoutInflater());
+        setContentView(chatBinding.getRoot());
         allocateActivityTitle(seller);
         layout = findViewById(R.id.layout_chat);
         btnSend = findViewById(R.id.btnSend);
@@ -53,8 +53,7 @@ public class ChatActivity extends DrawerActivity {
                 map.put("user", storedUsername);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
-                usersList.child(seller).setValue("");
-                usersList.child(storedUsername).setValue("");
+                usersList.child(storedUsername).setValue(seller);
             }
         });
         reference1.addChildEventListener(new ChildEventListener() {
