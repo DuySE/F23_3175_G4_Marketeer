@@ -89,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void addUser(String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_USERNAME, username);
+        contentValues.put(COLUMN_USERNAME, username.toLowerCase());
         // Hash password before store it in database
         contentValues.put(COLUMN_PASSWORD, BCrypt.hashpw(password, BCrypt.gensalt(12)));
         db.insert(TABLE_USERS, null, contentValues);
@@ -101,14 +101,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String userPwd = "";
         if (user != null) userPwd = user.getPassword();
         // Check if password inputted by user matches with password stored in database
-        return BCrypt.checkpw(password, userPwd);
+        return !userPwd.isEmpty() && BCrypt.checkpw(password, userPwd);
     }
 
     public User getUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = new String[]{COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_ADDRESS, COLUMN_PHONE, COLUMN_PROFILE_IMG};
         String selection = COLUMN_USERNAME + " = ?";
-        String[] selectionArgs = new String[]{username};
+        String[] selectionArgs = new String[]{username.toLowerCase()};
         Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
         int colUsername = cursor.getColumnIndex(COLUMN_USERNAME);
         int colPassword = cursor.getColumnIndex(COLUMN_PASSWORD);
@@ -186,6 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
                     cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
         }
+        cursor.close();
         return product;
     }
 
@@ -203,7 +204,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
         int colImg = cursor.getColumnIndex(COLUMN_IMG_NAME);
 
-        Product product = null;
+        Product product;
         if (cursor.moveToFirst()) {
             product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
                     cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
@@ -214,6 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 products.add(product);
             }
         }
+        cursor.close();
         return products;
     }
 

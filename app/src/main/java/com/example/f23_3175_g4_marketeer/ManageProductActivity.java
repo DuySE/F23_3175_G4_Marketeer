@@ -1,17 +1,15 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.widget.SearchView;
-
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.f23_3175_g4_marketeer.databinding.ActivityManageProductBinding;
 
 import java.util.ArrayList;
