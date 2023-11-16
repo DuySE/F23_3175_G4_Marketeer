@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class UserListActivity extends DrawerActivity{
+public class UserListActivity extends DrawerActivity {
     ActivityUsersBinding usersBinding;
 
     ListView usersList;
@@ -41,12 +41,15 @@ public class UserListActivity extends DrawerActivity{
 
         String url = "https://chat-b11e1.firebaseio.com/users.json";
         StringRequest request = new StringRequest(Request.Method.GET, url,
-                response -> doOnSuccess(response), error -> System.out.println("" + error));
+                this::doOnSuccess, error -> System.out.println("" + error));
         RequestQueue queue = Volley.newRequestQueue(UserListActivity.this);
         queue.add(request);
         usersList.setOnItemClickListener((adapterView, view, i, l) -> {
-            User.receiver = al.get(i);
-            startActivity(new Intent(UserListActivity.this, ChatActivity.class));
+            Bundle bundle = new Bundle();
+            bundle.putString("SELLER", al.get(i));
+            Intent intent = new Intent(UserListActivity.this, ChatActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
     }
 
@@ -57,8 +60,15 @@ public class UserListActivity extends DrawerActivity{
             Iterator<String> i = obj.keys();
             String key;
             while (i.hasNext()) {
-                key = i.next().toString();
-                if (key.equals(username)) al.add(obj.get(key).toString());
+                key = i.next();
+                if (key.equals(username)) {
+                    JSONObject userObj = new JSONObject(obj.get(key).toString());
+                    i = userObj.keys();
+                    while (i.hasNext()) {
+                        key = i.next();
+                        al.add(key);
+                    }
+                }
                 totalUsers++;
             }
         } catch (JSONException e) {

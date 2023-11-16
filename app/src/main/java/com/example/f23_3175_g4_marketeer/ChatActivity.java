@@ -47,22 +47,22 @@ public class ChatActivity extends DrawerActivity {
         usersList = new Firebase("https://chat-b11e1.firebaseio.com/users/");
         btnSend.setOnClickListener(view -> {
             String message = messageArea.getText().toString();
-            if (!message.equals("")) {
+            if (!message.isEmpty()) {
                 Map<String, String> map = new HashMap<>();
                 map.put("message", message);
                 map.put("user", storedUsername);
                 reference1.push().setValue(map);
                 reference2.push().setValue(map);
-                usersList.child(storedUsername).setValue(seller);
+                usersList.child(storedUsername).child(seller).setValue("");
             }
         });
         reference1.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map map = dataSnapshot.getValue(Map.class);
-                String message = map.get("message").toString();
-                String username = map.get("user").toString();
-                if (username.equals(storedUsername))
+                Object message = map.get("message");
+                Object username = map.get("user");
+                if (username != null && username.equals(storedUsername))
                     addMessageBox("You: " + message, 1);
                 else
                     addMessageBox(seller.toLowerCase() + ": " + message, 2);

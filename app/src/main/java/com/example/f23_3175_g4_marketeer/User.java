@@ -3,7 +3,6 @@ package com.example.f23_3175_g4_marketeer;
 public class User {
     // Fields
     private String username, password, address, phone, profile_img;
-    static String receiver;
 
     // Constructor
     public User(String username, String password, String address, String phone, String profile_img) {
