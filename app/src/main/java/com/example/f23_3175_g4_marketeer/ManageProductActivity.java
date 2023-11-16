@@ -1,5 +1,7 @@
 package com.example.f23_3175_g4_marketeer;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import androidx.appcompat.widget.SearchView;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,8 +57,15 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
         products = db.getProducts(StoredDataHelper.get(this, "username"));
 
         if (products.size() == 0){
+            searchView.setVisibility(View.GONE);
             txtViewNoProduct.setText(R.string.txtNoProductFound);
+            txtViewNoProduct.setVisibility(View.VISIBLE);
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) txtViewNoProduct.getLayoutParams();
+            params.setMargins(0,500,0,0);
+            txtViewNoProduct.setLayoutParams(params);
         } else {
+            searchView.setVisibility(View.VISIBLE);
+            txtViewNoProduct.setVisibility(View.GONE);
             recyclerViewProduct = findViewById(R.id.recyclerViewItems);
             myAdapter = new ProductRecyclerViewAdapter(products, this);
             recyclerViewProduct.setAdapter(myAdapter);
