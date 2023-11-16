@@ -12,40 +12,45 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
-import com.firebase.client.Firebase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 public class UserListActivity extends DrawerActivity {
+    ActivityUsersBinding usersBinding;
+
     ListView usersList;
     ActivityUsersBinding usersBinding;
     TextView noUsersText;
-    ArrayList<String> al = new ArrayList<>();
+    List<String> al = new ArrayList<>();
     int totalUsers = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         usersBinding = ActivityUsersBinding.inflate(getLayoutInflater());
         setContentView(usersBinding.getRoot());
-        allocateActivityTitle("Contacts");
+        allocateActivityTitle("Messages");
+
         usersList = findViewById(R.id.usersList);
         noUsersText = findViewById(R.id.noUsersText);
 
         String url = "https://chat-b11e1.firebaseio.com/users.json";
         StringRequest request = new StringRequest(Request.Method.GET, url,
-                response -> doOnSuccess(response), error -> System.out.println("" + error));
+                this::doOnSuccess, error -> System.out.println("" + error));
         RequestQueue queue = Volley.newRequestQueue(UserListActivity.this);
         queue.add(request);
         usersList.setOnItemClickListener((adapterView, view, i, l) -> {
-            User.receiver = al.get(i);
-            startActivity(new Intent(UserListActivity.this, ChatActivity.class));
+            Bundle bundle = new Bundle();
+            bundle.putString("SELLER", al.get(i));
+            Intent intent = new Intent(UserListActivity.this, ChatActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
     }
 
@@ -53,12 +58,17 @@ public class UserListActivity extends DrawerActivity {
         String username = StoredDataHelper.get(this, "username");
         try {
             JSONObject obj = new JSONObject(response);
-            Iterator i = obj.keys();
-            String key = "";
+            Iterator<String> i = obj.keys();
+            String key;
             while (i.hasNext()) {
-                key = i.next().toString();
-                if (!key.equals(username)) {
-                    al.add(key);
+                key = i.next();
+                if (key.equals(username)) {
+                    JSONObject userObj = new JSONObject(obj.get(key).toString());
+                    i = userObj.keys();
+                    while (i.hasNext()) {
+                        key = i.next();
+                        al.add(key);
+                    }
                 }
                 totalUsers++;
             }
@@ -71,7 +81,7 @@ public class UserListActivity extends DrawerActivity {
         } else {
             noUsersText.setVisibility(View.GONE);
             usersList.setVisibility(View.VISIBLE);
-            usersList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, al));
+            usersList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, al));
         }
     }
 }

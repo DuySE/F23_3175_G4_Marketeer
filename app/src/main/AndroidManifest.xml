@@ -23,6 +23,15 @@
         android:theme="@style/Theme.F23_3175_G4_Marketeer"
         tools:targetApi="31">
         <activity
+            android:name=".ProductInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomepageActivity"
             android:exported="false" />
         <activity

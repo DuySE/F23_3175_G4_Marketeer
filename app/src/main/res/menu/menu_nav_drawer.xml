@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:id="@+id/menuGroup"
+    tools:showIn="navigation_view">
+    <group
+        android:id="@+id/menuGroup"
         android:checkableBehavior="single">
         <item
             android:id="@+id/menuMainActivity"
@@ -17,11 +18,27 @@
             android:id="@+id/menuNewProductActivity"
             android:icon="@drawable/baseline_new_label_24"
             android:title="@string/menuNewProductActivity" />
+        <item
+            android:id="@+id/menuManageProductActivity"
+            android:icon="@drawable/baseline_label_off_24"
+            android:title="@string/menuManageProductActivity" />
+        <item
+            android:id="@+id/menuTransactionHistoryActivity"
+            android:icon="@drawable/baseline_history_24"
+            android:title="@string/menuTransactionHistoryActivity" />
     </group>
     <group>
         <item
             android:id="@+id/menuChatActivity"
             android:icon="@drawable/baseline_message_24"
             android:title="@string/menuChatActivity" />
+    </group>
+    <group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <item
+            android:id="@+id/menuLogout"
+            android:icon="@drawable/baseline_logout_24"
+            android:title="@string/menuLogout" />
     </group>
 </menu>
