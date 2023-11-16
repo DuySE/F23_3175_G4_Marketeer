@@ -31,7 +31,6 @@ public class ChatActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         String seller = bundle.get("SELLER").toString();
-//        String seller = "jack";
         chatBinding = LayoutChatBinding.inflate(getLayoutInflater());
         setContentView(chatBinding.getRoot());
         allocateActivityTitle(seller);

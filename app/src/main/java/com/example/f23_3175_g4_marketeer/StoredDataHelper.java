@@ -17,13 +17,13 @@ public class StoredDataHelper {
     static String get(Context context, String key) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("application", Context.MODE_PRIVATE);
         String value = sharedPreferences.getString(key, "");
-        return value;
+        return value.toLowerCase();
     }
 
     static void clear(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("application", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 }
