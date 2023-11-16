@@ -17,11 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.example.f23_3175_g4_marketeer.databinding.ActivityMyProfileEditBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyProfileEditActivity extends AppCompatActivity {
+public class MyProfileEditActivity extends DrawerActivity {
     EditText editTxtUsername;
     EditText editTxtHomeNumber;
     EditText editTxtStreetName;
@@ -59,7 +59,10 @@ public class MyProfileEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile_edit);
+        ActivityMyProfileEditBinding myProfileEditBinding = ActivityMyProfileEditBinding.inflate(getLayoutInflater());
+        setContentView(myProfileEditBinding.getRoot());
+        allocateActivityTitle("Edit Profile");
+
         editTxtUsername = findViewById(R.id.editTxtUsername);
         editTxtNewPassword = findViewById(R.id.editTxtPassword);
         editTxtHomeNumber = findViewById(R.id.editTxtHomeNumber);

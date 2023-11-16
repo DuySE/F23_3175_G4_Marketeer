@@ -17,15 +17,14 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-
+import com.example.f23_3175_g4_marketeer.databinding.ActivityEditProductBinding;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -36,7 +35,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EditProductActivity extends AppCompatActivity {
+public class EditProductActivity extends DrawerActivity {
     final int CAMERA_PERMISSION_CODE = 1;
     final int CAMERA_REQUEST_CODE = 2;
     final int GALLERY_REQUEST_CODE = 3;
@@ -57,7 +56,10 @@ public class EditProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_product);
+        ActivityEditProductBinding editProductBinding = ActivityEditProductBinding.inflate(getLayoutInflater());
+        setContentView(editProductBinding.getRoot());
+        allocateActivityTitle("Edit Product");
+
         imgView = findViewById(R.id.imgViewEditProduct);
         editTxtProdName = findViewById(R.id.editTxtProductNameEdit);
         editTxtPrice = findViewById(R.id.editTxtPriceEdit);

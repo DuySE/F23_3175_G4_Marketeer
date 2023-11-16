@@ -8,9 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMyProfileBinding;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -110,7 +108,7 @@ public class MyProfileActivity extends DrawerActivity {
             };
 
             Timer timer = new Timer();
-            timer.schedule(timerTask,1000);
+            timer.schedule(timerTask,1500);
         } catch (Exception e) {
             e.printStackTrace();
         }
