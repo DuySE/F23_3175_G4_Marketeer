@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -75,8 +76,17 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             startActivity(new Intent(this, TransactionActivity.class));
             overridePendingTransition(0, 0);
         } else if (item.getItemId() == R.id.menuLogout) {
-            StoredDataHelper.clear(this);
-            startActivity(new Intent(this, LoginActivity.class));
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.drawable.ic_launcher_foreground);
+            builder.setTitle(R.string.app_name);
+            builder.setMessage("Are you sure to logout?");
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                StoredDataHelper.clear(this);
+                startActivity(new Intent(DrawerActivity.this, LoginActivity.class));
+            });
+            builder.setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel());
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
         return false;
     }
