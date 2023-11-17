@@ -22,6 +22,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        String username = StoredDataHelper.get(this, "username");
+        if (!username.isEmpty()) startActivity(new Intent(this, HomepageActivity.class));
         textViewLogin = findViewById(R.id.textViewLoginTitle);
         editTextUsername = findViewById(R.id.editTextUsernameLogin);
         editTextPassword = findViewById(R.id.editTextPasswordLogin);
@@ -42,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
                 editTextPassword.setError("Please type your password.");
             } else if (databaseHelper.login(username, password)) {
                 StoredDataHelper.save(this, "username", username);
-                StoredDataHelper.save(this, "password", password);
                 startActivity(intentHome);
             } else {
                 Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
