@@ -1,12 +1,8 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,12 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
-import com.example.f23_3175_g4_marketeer.databinding.ActivityUsersBinding;
+import androidx.core.app.NotificationCompat;
+
 import com.example.f23_3175_g4_marketeer.databinding.LayoutChatBinding;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -71,7 +63,7 @@ public class ChatActivity extends DrawerActivity {
                 usersList.child(storedUsername).child(seller).setValue("");
                 usersList.child(seller).child(storedUsername).setValue("");
             }
-            addNotification();
+            if (!hasWindowFocus()) addNotification(seller);
             messageArea.setText("");
         });
         reference1.addChildEventListener(new ChildEventListener() {
@@ -124,7 +116,7 @@ public class ChatActivity extends DrawerActivity {
         scrollView.fullScroll(View.FOCUS_DOWN);
     }
 
-    private void addNotification() {
+    private void addNotification(String seller) {
         String id = getString(R.string.channel_id);
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -138,7 +130,7 @@ public class ChatActivity extends DrawerActivity {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, id)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Marketeer")
-                .setContentText("New message from " + User.receiver)
+                .setContentText("New message from " + seller)
                 .setAutoCancel(true);
         Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,

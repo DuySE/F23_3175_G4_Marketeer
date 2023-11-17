@@ -24,7 +24,6 @@ public class UserListActivity extends DrawerActivity {
     ActivityUsersBinding usersBinding;
 
     ListView usersList;
-    ActivityUsersBinding usersBinding;
     TextView noUsersText;
     List<String> al = new ArrayList<>();
     int totalUsers = 0;
