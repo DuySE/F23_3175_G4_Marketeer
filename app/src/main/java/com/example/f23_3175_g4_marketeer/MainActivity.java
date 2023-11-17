@@ -57,7 +57,9 @@ public class MainActivity extends DrawerActivity {
 
         SetUpSearchView();
         SetUpProductView();
-        SetUpDistanceFilter();
+        if (productList.size() != 0) {
+            SetUpDistanceFilter();
+        }
         AskLocationPermission();
     }
 
