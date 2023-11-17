@@ -1,6 +1,7 @@
 package com.example.f23_3175_g4_marketeer;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +11,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.MyViewHolder> {
     Context context;
-    List<ItemModel> itemModels;
-    public ItemRecyclerViewAdapter(Context context, ArrayList<ItemModel> itemModels){
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
+    List<Product> productList;
+    public ItemRecyclerViewAdapter(Context context, List<Product> productList){
         this.context = context;
-        this.itemModels = itemModels;
+        this.productList = productList;
     }
-    public void setFilteredList(List<ItemModel> filteredList){
-        this.itemModels = filteredList;
+    public void setFilteredList(List<Product> filteredList){
+        this.productList = filteredList;
         notifyDataSetChanged();
     }
     @NonNull
@@ -33,23 +40,31 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
     @Override
     public void onBindViewHolder(@NonNull ItemRecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.textViewName.setText(itemModels.get(position).getName());
-        holder.textViewPrice.setText(itemModels.get(position).getPrice());
-        holder.imageView.setImageResource(itemModels.get(position).getImage());
+        holder.textViewName.setText(productList.get(position).getName());
+        holder.textViewPrice.setText(productList.get(position).getPrice());
+        holder.textViewSeller.setText(productList.get(position).getSeller());
+        StorageReference img = storageReference.child("ProductImg/" + productList.get(position).getImgName());
+        img.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(holder.imageView);
+            }
+        });
     }
     @Override
     public int getItemCount() {
-        return itemModels.size();
+        return productList.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView imageView;
-        TextView textViewName, textViewPrice;
+        TextView textViewName, textViewPrice, textViewSeller;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imgViewRecyclerImg);
             textViewName = itemView.findViewById(R.id.txtViewRecyclerName);
             textViewPrice = itemView.findViewById(R.id.txtViewRecyclerPrice);
+            textViewSeller = itemView.findViewById(R.id.txtViewRecyclerSeller);
         }
     }
 }

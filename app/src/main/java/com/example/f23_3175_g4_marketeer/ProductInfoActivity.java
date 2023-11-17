@@ -1,23 +1,16 @@
 package com.example.f23_3175_g4_marketeer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.f23_3175_g4_marketeer.databinding.ActivityNewProductBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityProductInfoBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 public class ProductInfoActivity extends DrawerActivity {
 
@@ -55,6 +48,7 @@ public class ProductInfoActivity extends DrawerActivity {
             Bundle bundle = new Bundle();
             bundle.putString("SELLER",product.getSeller());
             Intent intent = new Intent(ProductInfoActivity.this, ChatActivity.class);
+            intent.putExtras(bundle);
             startActivity(intent);
         });
     }

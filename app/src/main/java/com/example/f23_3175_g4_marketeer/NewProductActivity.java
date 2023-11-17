@@ -22,7 +22,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityNewProductBinding;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -90,8 +89,10 @@ public class NewProductActivity extends DrawerActivity {
                     Toast.makeText(NewProductActivity.this, "Please select an image for your product", Toast.LENGTH_SHORT).show();
                 } else {
                     UploadNewProduct(imgName, imgUri);
+
                     Toast.makeText(NewProductActivity.this, "Your product has been added", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(NewProductActivity.this, ManageProductActivity.class));
+
                 }
             }
         }));

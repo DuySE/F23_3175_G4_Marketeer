@@ -1,14 +1,17 @@
 package com.example.f23_3175_g4_marketeer;
 
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
@@ -20,12 +23,10 @@ import java.util.List;
 public class MainActivity extends DrawerActivity {
     //Binding used for navigation drawer
     ActivityMainBinding mainBinding;
-    ArrayList<ItemModel> itemModels = new ArrayList<>();
+    List<Product> productList = new ArrayList<>();
     ItemRecyclerViewAdapter itemAdapter;
-    int[] itemImages = {R.drawable.baseline_sentiment_very_satisfied_24,
-            R.drawable.baseline_sentiment_satisfied_alt_24,
-            R.drawable.baseline_sentiment_very_dissatisfied_24,
-            R.drawable.baseline_sentiment_neutral_24};
+    TextView txtViewNoProduct;
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,38 +36,21 @@ public class MainActivity extends DrawerActivity {
         allocateActivityTitle("Main");
 
         SetUpSearchView();
-        SetUpItemModel();
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewItems);
-        Spinner distanceFilter = findViewById(R.id.spinnerDistanceFilter);
-
-        itemAdapter = new ItemRecyclerViewAdapter(this, itemModels);
-        recyclerView.setAdapter(itemAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        distanceFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position==0) {
-                    itemAdapter.setFilteredList(itemModels);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        SetUpProductView();
     }
-    private void SetUpItemModel() {
-        String[] itemNames = getResources().getStringArray(R.array.items_name);
-        String[] itemPrices = getResources().getStringArray(R.array.items_price);
+    private void SetUpProductView() {
+        // refactored some code from ManageProductActivity
+        DatabaseHelper db = new DatabaseHelper(this);
+        productList = db.getProducts();
 
-        for (int i = 0; i < itemNames.length; i++) {
-            itemModels.add(new ItemModel(
-                    itemNames[i],
-                    itemPrices[i],
-                    itemImages[i]));
+        txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
+        if (productList.size() == 0){
+            txtViewNoProduct.setText(R.string.txtNoProductFound);
+        } else {
+            recyclerView = findViewById(R.id.recyclerViewItems);
+            itemAdapter = new ItemRecyclerViewAdapter(this, productList);
+            recyclerView.setAdapter(itemAdapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         }
     }
     private void SetUpSearchView() {
@@ -85,10 +69,10 @@ public class MainActivity extends DrawerActivity {
         });
     }
     private void filterList(String text) {
-        List<ItemModel> filteredList = new ArrayList<>();
-        for (ItemModel item : itemModels) {
-            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
-                filteredList.add(item);
+        List<Product> filteredList = new ArrayList<>();
+        for (Product product : productList) {
+            if (product.getName().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(product);
             }
         }
         if (filteredList.isEmpty()) {

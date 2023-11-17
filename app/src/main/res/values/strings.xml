@@ -16,14 +16,6 @@
         <item>$150</item>
     </string-array>
 
-    <string-array name="items_distance">
-        <item>All Products</item>
-        <item>Within 2km</item>
-        <item>Within 5km</item>
-        <item>Within 10km</item>
-        <item>Within 20km</item>
-    </string-array>
-
     <string name="txtAddProduct">Add a new product</string>
     <string name="txtAddAnImage">Add an image</string>
     <string name="txtNewImg">New Image</string>
@@ -89,6 +81,7 @@
     <string name="menuChatActivity">Messages</string>
     <string name="menuNewProductActivity">New Product</string>
     <string name="menuPreviousActivity">Back</string>
+    <string name="menuLogout">Logout</string>
     <string name="textHomeWelcome">Welcome to Marketeer! \nPlease open the drawer and select your destination</string>
     <string name="txtNotAdded">Not added</string>
     <string name="editTxtNewPassword">New Password</string>
@@ -98,5 +91,5 @@
     <string name="txtNoProductFound">No Product Found</string>
     <string name="menuManageProductActivity">Manage Products</string>
     <string name="menuTransactionHistoryActivity">Transaction History</string>
-    <string name="txtSelectProducts">Select Products</string>
+    <string name="txtAlreadyHaveAccount">Already have an account? Login!</string>
 </resources>

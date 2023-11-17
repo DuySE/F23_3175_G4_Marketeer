@@ -17,14 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.example.f23_3175_g4_marketeer.databinding.ActivityMyProfileBinding;
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMyProfileEditBinding;
-import com.example.f23_3175_g4_marketeer.databinding.ActivityNewProductBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
