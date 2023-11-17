@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
@@ -36,10 +38,25 @@ public class MainActivity extends DrawerActivity {
         SetUpItemModel();
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewItems);
+        Spinner distanceFilter = findViewById(R.id.spinnerDistanceFilter);
 
         itemAdapter = new ItemRecyclerViewAdapter(this, itemModels);
         recyclerView.setAdapter(itemAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        distanceFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position==0) {
+                    itemAdapter.setFilteredList(itemModels);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
     private void SetUpItemModel() {
         String[] itemNames = getResources().getStringArray(R.array.items_name);

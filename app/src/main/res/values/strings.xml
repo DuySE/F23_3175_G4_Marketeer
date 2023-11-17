@@ -16,6 +16,14 @@
         <item>$150</item>
     </string-array>
 
+    <string-array name="items_distance">
+        <item>All Products</item>
+        <item>Within 2km</item>
+        <item>Within 5km</item>
+        <item>Within 10km</item>
+        <item>Within 20km</item>
+    </string-array>
+
     <string name="txtAddProduct">Add a new product</string>
     <string name="txtAddAnImage">Add an image</string>
     <string name="txtNewImg">New Image</string>
@@ -90,4 +98,5 @@
     <string name="txtNoProductFound">No Product Found</string>
     <string name="menuManageProductActivity">Manage Products</string>
     <string name="menuTransactionHistoryActivity">Transaction History</string>
+    <string name="txtSelectProducts">Select Products</string>
 </resources>
