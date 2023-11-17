@@ -153,6 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_STATUS, "Available");
         contentValues.put(COLUMN_IMG_NAME, imgName);
         db.insert(TABLE_PRODUCTS, null, contentValues);
+
     }
 
     public void updateProduct(int id, String name, String price, String seller, String status, String imgName) {
@@ -189,7 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return product;
     }
-
+    //for getProducts from only current logged in user
     public List<Product> getProducts(String seller) {
         List<Product> products = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -218,7 +219,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return products;
     }
+    //for getProducts from the entire table
+    public List<Product> getProducts() {
+        List<Product> products = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = new String[]{COLUMN_PRODUCT_ID, COLUMN_NAME, COLUMN_PRICE, COLUMN_SELLER, COLUMN_STATUS, COLUMN_IMG_NAME};
+        Cursor cursor = db.query(TABLE_PRODUCTS, columns, null, null, null, null, null);
+        int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
+        int colName = cursor.getColumnIndex(COLUMN_NAME);
+        int colPrice = cursor.getColumnIndex(COLUMN_PRICE);
+        int colSeller = cursor.getColumnIndex(COLUMN_SELLER);
+        int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
+        int colImg = cursor.getColumnIndex(COLUMN_IMG_NAME);
 
+        Product product = null;
+        if (cursor.moveToFirst()) {
+            product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
+                    cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
+            products.add(product);
+            while (cursor.moveToNext()) {
+                product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
+                        cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
+                products.add(product);
+            }
+        }
+        return products;
+    }
     // Table Transactions methods
     public void addTransaction(Transaction transaction) {
         SQLiteDatabase db = this.getWritableDatabase();
