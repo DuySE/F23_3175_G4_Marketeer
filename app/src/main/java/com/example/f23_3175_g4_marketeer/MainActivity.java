@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,13 +27,14 @@ import android.widget.Toast;
 
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //Drawer activity must be extended to function with nav drawer
-public class MainActivity extends DrawerActivity {
+public class MainActivity extends DrawerActivity implements LocationListener {
     //Binding used for navigation drawer
     ActivityMainBinding mainBinding;
     List<Product> productList = new ArrayList<>();
@@ -75,6 +75,21 @@ public class MainActivity extends DrawerActivity {
                     LOCATION_REQUEST_CODE);
         } else {
             //get current location
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, (float) 0, (android.location.LocationListener) this);
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            userLocation.setLatitude(location.getLatitude());
+                            userLocation.setLongitude(location.getLongitude());
+                            Log.d("ABC", location.getLatitude() + " " + location.getLongitude());
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("ERR", "Error trying to get last GPS location");
+                        e.printStackTrace();
+                    });
         }
     }
     @Override
@@ -161,5 +176,11 @@ public class MainActivity extends DrawerActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        userLocation.setLatitude(location.getLatitude());
+        userLocation.setLongitude(location.getLongitude());
     }
 }
