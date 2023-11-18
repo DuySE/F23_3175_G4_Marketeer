@@ -7,7 +7,7 @@ public class Product {
     private String seller;
     private String status;
     private int id;
-    private float distanceToUser;
+    private float distanceToUser = -1;
 
     public Product(String name, String price, String imgPath, String seller, String status, int id) {
         this.name = name;

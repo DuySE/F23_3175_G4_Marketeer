@@ -3,7 +3,10 @@ package com.example.f23_3175_g4_marketeer;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,11 +30,14 @@ import android.widget.Toast;
 
 import com.example.f23_3175_g4_marketeer.databinding.ActivityMainBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 //Drawer activity must be extended to function with nav drawer
 public class MainActivity extends DrawerActivity implements LocationListener {
@@ -45,6 +51,10 @@ public class MainActivity extends DrawerActivity implements LocationListener {
     final int LOCATION_REQUEST_CODE = 1;
     private LocationManager locationManager;
     private FusedLocationProviderClient fusedLocationClient;
+    private Geocoder geocoder;
+    float maxDistance;
+    Spinner distanceFilter;
+    Toast currToast = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +64,14 @@ public class MainActivity extends DrawerActivity implements LocationListener {
         allocateActivityTitle("Main");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        userLocation = new Location(LocationManager.GPS_PROVIDER);
+        geocoder = new Geocoder(this, Locale.getDefault());
 
         SetUpSearchView();
         SetUpProductView();
         if (productList.size() != 0) {
             SetUpDistanceFilter();
+            CalculateDistance();
         }
         AskLocationPermission();
     }
@@ -142,19 +155,23 @@ public class MainActivity extends DrawerActivity implements LocationListener {
             }
         }
         if (filteredList.isEmpty()) {
-            Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show();
+            if (currToast != null){
+                currToast.cancel();
+            }
+            currToast = Toast.makeText(MainActivity.this,"Not Found",Toast.LENGTH_SHORT);
+            currToast.show();
         } else {
             itemAdapter.setFilteredList(filteredList);
         }
     }
 
     private void SetUpDistanceFilter() {
-        Spinner distanceFilter = findViewById(R.id.spinnerDistanceFilter);
+        distanceFilter = findViewById(R.id.spinnerDistanceFilter);
         distanceFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 List<Product> filteredList = new ArrayList<>();
-                float maxDistance = 0;
+                maxDistance = 0;
                 if (position == 0) {
                     itemAdapter.setFilteredList(productList);
                 } else if (position == 1) {
@@ -167,13 +184,53 @@ public class MainActivity extends DrawerActivity implements LocationListener {
                     maxDistance = 20;
                 }
                 if (position != 0) {
-                    //loop and compare the products.getDistanceToUser with maxDistance, adding to filteredList if met condition
+                    for (int i = 0; i < productList.size(); i++) {
+                        if (productList.get(i).getDistanceToUser() > 0 &&
+                                (productList.get(i).getDistanceToUser() / 1000) < maxDistance) {
+                            filteredList.add(productList.get(i));
+                        }
+                        Log.d("DISTANCE", productList.get(i).getDistanceToUser() + "");
+                    }
+                    itemAdapter.setFilteredList(filteredList);
+                    if (filteredList.size() == 0) {
+                        if (currToast != null){
+                            currToast.cancel();
+                        }
+                        currToast = Toast.makeText(MainActivity.this,"Not Found",Toast.LENGTH_SHORT);
+                        currToast.show();
+                    }
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+    }
+
+    private void CalculateDistance() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            DatabaseHelper db = new DatabaseHelper(this);
+
+            for (int i=0; i<productList.size(); i++) {
+                User user = db.getUser(productList.get(i).getSeller());
+                if (user.getAddress() != null) {
+                    try {
+                        List<Address> addressList = geocoder.getFromLocationName(user.getAddress(), 1);
+                        double endLatitude = addressList.get(0).getLatitude();
+                        double endLongitude = addressList.get(0).getLongitude();
+                        float[] results = new float[1];
+                        Location.distanceBetween(userLocation.getLatitude(), userLocation.getLongitude(),
+                                endLatitude, endLongitude, results);
+                        Log.d("DISTANCE", results[0] + "");
+                        Log.d("SELLER_COORDINATE", endLatitude + ", " + endLongitude);
+                        productList.get(i).setDistanceToUser(results[0]);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }
