@@ -13,6 +13,7 @@ import com.example.f23_3175_g4_marketeer.databinding.ActivityTransactionBinding;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -69,19 +70,22 @@ public class TransactionActivity extends DrawerActivity {
         List<Transaction> transactionData =
                 databaseHelper.getTransactionsChart(username);
         for (int i = 0; i < transactionData.size(); i++) {
+            // only display month and year
+            xAxisValues.add(transactionData.get(i).getDate());
             entries.add(new Entry(i, transactionData.get(i).getAmount()));
         }
 
         chart.getXAxis().setValueFormatter(
                 new com.github.mikephil.charting.formatter.IndexAxisValueFormatter(xAxisValues));
 
-        List<LineDataSet> lines = new ArrayList<>();
         LineDataSet set = new LineDataSet(entries, "Quantity");
         YAxis leftYAxis = chart.getAxisLeft();
         YAxis rightYAxis = chart.getAxisRight();
         // avoid duplicate value when zooming
         leftYAxis.setGranularity(1f);
         rightYAxis.setGranularity(1f);
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setGranularity(1f);
         // cast Y-axis values to integer
         leftYAxis.setValueFormatter(new ValueFormatter() {
             @Override
@@ -96,10 +100,9 @@ public class TransactionActivity extends DrawerActivity {
             }
         });
         set.setDrawFilled(true);
-        set.setFillColor(Color.WHITE);
+        set.setFillColor(Color.RED);
         set.setColor(Color.RED);
         set.setCircleColor(Color.DKGRAY);
-        lines.add(set);
 
         List<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set);
