@@ -220,32 +220,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return products;
     }
 //used to show all available products not sold by current user
- public List<Product> getProductsNotSeller(String seller) {
-     List<Product> products = new ArrayList<>();
-     SQLiteDatabase db = this.getReadableDatabase();
-     String sql = "SELECT * FROM Products WHERE Status = 'Available' AND Seller NOT LIKE '%' || ? || '%' ";
-     Cursor cursor = db.rawQuery(sql, new String[]{"%"+seller+"%"});
-     int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
-     int colName = cursor.getColumnIndex(COLUMN_NAME);
-     int colPrice = cursor.getColumnIndex(COLUMN_PRICE);
-     int colSeller = cursor.getColumnIndex(COLUMN_SELLER);
-     int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
-     int colImg = cursor.getColumnIndex(COLUMN_IMG_NAME);
+    public List<Product> getProductsNotSeller(String seller) {
+        List<Product> products = new ArrayList<>();
+         SQLiteDatabase db = this.getReadableDatabase();
+         String sql = "SELECT * FROM Products WHERE Status = 'Available' AND Seller NOT LIKE '%' || ? || '%' ";
+         Cursor cursor = db.rawQuery(sql, new String[]{"%"+seller+"%"});
+         int colId = cursor.getColumnIndex(COLUMN_PRODUCT_ID);
+         int colName = cursor.getColumnIndex(COLUMN_NAME);
+         int colPrice = cursor.getColumnIndex(COLUMN_PRICE);
+         int colSeller = cursor.getColumnIndex(COLUMN_SELLER);
+         int colStatus = cursor.getColumnIndex(COLUMN_STATUS);
+         int colImg = cursor.getColumnIndex(COLUMN_IMG_NAME);
 
-     Product product;
-     if (cursor.moveToFirst()) {
-         product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
-                 cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
-         products.add(product);
-         while (cursor.moveToNext()) {
-             product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
-                     cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
-             products.add(product);
+         Product product;
+         if (cursor.moveToFirst()) {
+            product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
+                   cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
+            products.add(product);
+            while (cursor.moveToNext()) {
+                 product = new Product(cursor.getString(colName), cursor.getString(colPrice), cursor.getString(colImg),
+                         cursor.getString(colSeller), cursor.getString(colStatus), cursor.getInt(colId));
+                 products.add(product);
+            }
          }
-     }
-     cursor.close();
-     return products;
- }
+         cursor.close();
+         return products;
+    }
     //for getProducts from the entire table
     public List<Product> getProducts() {
         List<Product> products = new ArrayList<>();
