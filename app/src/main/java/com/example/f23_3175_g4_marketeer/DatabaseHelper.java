@@ -153,6 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_STATUS, "Available");
         contentValues.put(COLUMN_IMG_NAME, imgName);
         db.insert(TABLE_PRODUCTS, null, contentValues);
+
     }
 
     public void updateProduct(int id, String name, String price, String seller, String status, String imgName) {
@@ -271,7 +272,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return products;
     }
-
     // Table Transactions methods
     public void addTransaction(Transaction transaction) {
         SQLiteDatabase db = this.getWritableDatabase();

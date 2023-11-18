@@ -90,8 +90,7 @@ public class NewProductActivity extends DrawerActivity {
                 } else {
                     UploadNewProduct(imgName, imgUri);
                     Toast.makeText(NewProductActivity.this, "Your product has been added", Toast.LENGTH_SHORT).show();
-                    Intent mainIntent = new Intent(NewProductActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
+                    startActivity(new Intent(NewProductActivity.this, ManageProductActivity.class));
                 }
             }
         }));
