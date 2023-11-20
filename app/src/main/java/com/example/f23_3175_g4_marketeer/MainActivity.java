@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -69,11 +71,21 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
 
         SetUpSearchView();
         SetUpProductView();
-        if (productList.size() != 0) {
-            SetUpDistanceFilter();
-            CalculateDistance();
-        }
-        AskLocationPermission();
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(() -> {
+                    AskLocationPermission();
+                    if (productList.size() != 0) {
+                        SetUpDistanceFilter();
+                        CalculateDistance();
+                    }
+                });
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 2000);
     }
 
     private void AskLocationPermission() {
