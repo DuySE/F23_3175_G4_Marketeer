@@ -28,7 +28,8 @@ public class ProductInfoActivity extends DrawerActivity {
         ImageView imgViewChat = findViewById(R.id.imgViewChatWithSeller);
 
         DatabaseHelper db = new DatabaseHelper(ProductInfoActivity.this);
-        Product product = db.getProduct(6); //will be the id passed from MainActivity
+        Bundle bundleIn = getIntent().getExtras();
+        Product product = db.getProduct(bundleIn.getInt("ID")); //will be the id passed from MainActivity
         txtViewName.setText(product.getName());
         txtViewPrice.setText(product.getPrice());
         txtViewSeller.setText("Sold by: " + product.getSeller());
@@ -45,10 +46,10 @@ public class ProductInfoActivity extends DrawerActivity {
 
         imgViewChat.setOnClickListener(v -> {
             //start chatActivity with the seller of this product
-            Bundle bundle = new Bundle();
-            bundle.putString("SELLER",product.getSeller());
+            Bundle bundleOut = new Bundle();
+            bundleOut.putString("SELLER",product.getSeller());
             Intent intent = new Intent(ProductInfoActivity.this, ChatActivity.class);
-            intent.putExtras(bundle);
+            intent.putExtras(bundleOut);
             startActivity(intent);
         });
     }

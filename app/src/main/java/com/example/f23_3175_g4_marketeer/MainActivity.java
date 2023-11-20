@@ -40,7 +40,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 //Drawer activity must be extended to function with nav drawer
-public class MainActivity extends DrawerActivity implements LocationListener {
+public class MainActivity extends DrawerActivity implements LocationListener, ItemRecyclerViewAdapter.OnItemClickListener {
     //Binding used for navigation drawer
     ActivityMainBinding mainBinding;
     List<Product> productList = new ArrayList<>();
@@ -127,7 +127,7 @@ public class MainActivity extends DrawerActivity implements LocationListener {
             txtViewNoProduct.setText(R.string.txtNoProductFound);
         } else {
             recyclerView = findViewById(R.id.recyclerViewItems);
-            itemAdapter = new ItemRecyclerViewAdapter(this, productList);
+            itemAdapter = new ItemRecyclerViewAdapter(this, productList, this);
             recyclerView.setAdapter(itemAdapter);
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         }
@@ -239,5 +239,14 @@ public class MainActivity extends DrawerActivity implements LocationListener {
     public void onLocationChanged(@NonNull Location location) {
         userLocation.setLatitude(location.getLatitude());
         userLocation.setLongitude(location.getLongitude());
+    }
+
+    @Override
+    public void onItemClick(int i) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("ID", productList.get(i).getId());
+        Intent intent = new Intent(MainActivity.this, ProductInfoActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
