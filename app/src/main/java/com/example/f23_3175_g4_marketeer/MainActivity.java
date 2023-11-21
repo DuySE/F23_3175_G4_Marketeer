@@ -132,7 +132,7 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
     private void SetUpProductView() {
         // refactored some code from ManageProductActivity
         DatabaseHelper db = new DatabaseHelper(this);
-        productList = db.getProducts();
+        productList = db.getProductsNotSeller(StoredDataHelper.get(this, "username"));
 
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
         if (productList.size() == 0){
