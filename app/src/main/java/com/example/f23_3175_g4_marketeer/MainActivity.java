@@ -1,16 +1,10 @@
 package com.example.f23_3175_g4_marketeer;
 
-import android.os.Bundle;
-import android.widget.Toast;
-
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +35,7 @@ public class MainActivity extends DrawerActivity {
     private void SetUpProductView() {
         // refactored some code from ManageProductActivity
         DatabaseHelper db = new DatabaseHelper(this);
-        productList = db.getProducts();
+        productList = db.getProductsNotSeller(StoredDataHelper.get(this, "username"));
 
         txtViewNoProduct = findViewById(R.id.textViewNoProductFound);
         if (productList.size() == 0){
