@@ -23,9 +23,11 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
     List<Product> productList;
-    public ItemRecyclerViewAdapter(Context context, List<Product> productList){
+    OnItemClickListener onItemClickListener;
+    public ItemRecyclerViewAdapter(Context context, List<Product> productList, OnItemClickListener onItemClickListener){
         this.context = context;
         this.productList = productList;
+        this.onItemClickListener = onItemClickListener;
     }
     public void setFilteredList(List<Product> filteredList){
         this.productList = filteredList;
@@ -56,7 +58,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         return productList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView imageView;
         TextView textViewName, textViewPrice, textViewSeller;
         public MyViewHolder(@NonNull View itemView) {
@@ -65,6 +67,11 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             textViewName = itemView.findViewById(R.id.txtViewRecyclerName);
             textViewPrice = itemView.findViewById(R.id.txtViewRecyclerPrice);
             textViewSeller = itemView.findViewById(R.id.txtViewRecyclerSeller);
+            itemView.setOnClickListener(v -> onItemClickListener.onItemClick(getAdapterPosition()));
         }
+    }
+
+    public interface OnItemClickListener {
+        public void onItemClick(int i);
     }
 }

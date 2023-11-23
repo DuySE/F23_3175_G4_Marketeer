@@ -7,6 +7,7 @@ public class Product {
     private String seller;
     private String status;
     private int id;
+    private float distanceToUser = -1;
 
     public Product(String name, String price, String imgPath, String seller, String status, int id) {
         this.name = name;
@@ -59,5 +60,13 @@ public class Product {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public float getDistanceToUser() {
+        return distanceToUser;
+    }
+
+    public void setDistanceToUser(float distanceToUser) {
+        this.distanceToUser = distanceToUser;
     }
 }
