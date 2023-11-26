@@ -6,17 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MyProfileActivity">
 
-    <TextView
-        android:id="@+id/txtViewTitleMyProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/txtTitleMyProfile"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/btnEditProfile"
         android:layout_width="wrap_content"
@@ -32,9 +21,9 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewTitleMyProfile"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/defaultpfp" />
 
     <TextView
@@ -42,11 +31,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="96dp"
         android:text="@string/txtViewUsername"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/imgViewPfp"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewTitleMyProfile" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtViewAdd"

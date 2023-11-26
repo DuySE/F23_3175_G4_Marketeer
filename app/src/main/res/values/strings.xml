@@ -93,7 +93,7 @@
     <string name="textHomeWelcome">Welcome to Marketeer! \nPlease open the drawer and select your destination</string>
     <string name="txtNotAdded">Not added</string>
     <string name="editTxtNewPassword">New Password</string>
-    <string name="txtCurrentPassword">Enter current password to confirm edit*</string>
+    <string name="txtCurrentPassword">Enter current password*</string>
     <string name="txtAsteriskField">(All the fields with * must be entered)</string>
     <string name="txtEmptyString" />
     <string name="txtNoProductFound">No Product Found</string>

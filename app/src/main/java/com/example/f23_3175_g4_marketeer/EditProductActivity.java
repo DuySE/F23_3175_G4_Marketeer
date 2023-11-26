@@ -58,7 +58,7 @@ public class EditProductActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         ActivityEditProductBinding editProductBinding = ActivityEditProductBinding.inflate(getLayoutInflater());
         setContentView(editProductBinding.getRoot());
-        allocateActivityTitle("Edit Product");
+        allocateActivityTitle("Edit Your Product");
 
         imgView = findViewById(R.id.imgViewEditProduct);
         editTxtProdName = findViewById(R.id.editTxtProductNameEdit);

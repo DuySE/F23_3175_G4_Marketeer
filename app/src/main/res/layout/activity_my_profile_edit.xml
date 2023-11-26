@@ -6,33 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".MyProfileEditActivity">
 
-    <TextView
-        android:id="@+id/txtViewEditProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/txtEditProfile"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/imgViewEditPfp"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewEditProfile" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnSaveChanges"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/txtSaveChanges"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtViewNoteEditProfile" />
@@ -42,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/txtAddress"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,10 +41,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/txtNewPfp"
         app:layout_constraintStart_toEndOf="@+id/imgViewEditPfp"
-        app:layout_constraintTop_toBottomOf="@+id/txtViewEditProfile" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnGallery"
@@ -73,7 +61,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:hint="@string/editTxtUsername"
         app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +78,7 @@
         android:id="@+id/txtFieldPassword"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/editTxtNewPassword"
         app:hintTextColor="@color/m3_textfield_label_color"
@@ -149,7 +137,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:hint="@string/txtCity"
         app:hintTextColor="@color/m3_textfield_label_color"
         app:layout_constraintStart_toStartOf="parent"
@@ -167,7 +155,7 @@
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/txtProvinceSample"
         app:layout_constraintEnd_toEndOf="parent"
@@ -187,7 +175,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/textPhone"
         app:hintTextColor="@color/m3_textfield_label_color"
