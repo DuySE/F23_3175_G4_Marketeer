@@ -12,6 +12,7 @@
         android:id="@+id/navLogo"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
+        android:background="#fafafa"
         android:contentDescription="@string/navLogoDesc"
         app:srcCompat="@drawable/marketeerlogo" />
 
