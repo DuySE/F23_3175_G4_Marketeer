@@ -63,7 +63,7 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
 
         mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
-        allocateActivityTitle("Main");
+        allocateActivityTitle("Market");
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         userLocation = new Location(LocationManager.GPS_PROVIDER);

@@ -10,10 +10,11 @@
 
     <ImageView
         android:id="@+id/navLogo"
-        android:layout_width="wrap_content"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
+        android:background="#fafafa"
         android:contentDescription="@string/navLogoDesc"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/marketeerlogo" />
 
     <TextView
         android:id="@+id/navTextTitle"

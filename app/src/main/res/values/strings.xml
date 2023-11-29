@@ -79,7 +79,7 @@
     <string name="txtEditProduct">Confirm Edit</string>
     <string name="txtEditProdImg">Image retrieved from firebase using file name</string>
     <string name="productImage">Product Image</string>
-    <string name="menuMainActivity">Main</string>
+    <string name="menuMainActivity">Market</string>
     <string name="menuMyProfileActivity">My Profile</string>
     <string name="menuEditProductActivity">Manage Products</string>
     <string name="textNavTitle">Marketeer</string>

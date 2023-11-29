@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
-    TextView textViewLogin;
     EditText editTextUsername;
     EditText editTextPassword;
     Button btnLogin, btnRegister;
@@ -24,7 +23,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         String username = StoredDataHelper.get(this, "username");
         if (!username.isEmpty()) startActivity(new Intent(this, HomepageActivity.class));
-        textViewLogin = findViewById(R.id.textViewLoginTitle);
         editTextUsername = findViewById(R.id.editTextUsernameLogin);
         editTextPassword = findViewById(R.id.editTextPasswordLogin);
         btnLogin = findViewById(R.id.btnLogin);
