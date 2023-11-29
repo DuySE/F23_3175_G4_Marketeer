@@ -57,7 +57,7 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
     float maxDistance;
     Spinner distanceFilter;
     Toast currToast = null;
-    List<Product> filteredList;
+    List<Product> filteredList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

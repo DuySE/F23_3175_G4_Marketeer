@@ -22,7 +22,7 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
     ProductRecyclerViewAdapter myAdapter;
     SearchView searchView;
     TextView txtViewNoProduct;
-    List<Product> filteredList;
+    List<Product> filteredList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
