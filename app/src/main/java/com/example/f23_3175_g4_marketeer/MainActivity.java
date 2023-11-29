@@ -57,6 +57,7 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
     float maxDistance;
     Spinner distanceFilter;
     Toast currToast = null;
+    List<Product> filteredList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,7 +161,7 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
         });
     }
     private void filterList(String text) {
-        List<Product> filteredList = new ArrayList<>();
+        filteredList = new ArrayList<>();
         for (Product product : productList) {
             if (product.getName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(product);
@@ -182,7 +183,7 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
         distanceFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                List<Product> filteredList = new ArrayList<>();
+                filteredList = new ArrayList<>();
                 maxDistance = 0;
                 if (position == 0) {
                     itemAdapter.setFilteredList(productList);
@@ -256,7 +257,11 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
     @Override
     public void onItemClick(int i) {
         Bundle bundle = new Bundle();
-        bundle.putInt("ID", productList.get(i).getId());
+        if (filteredList.size() != 0) {
+            bundle.putInt("ID", filteredList.get(i).getId());
+        } else {
+            bundle.putInt("ID", productList.get(i).getId());
+        }
         Intent intent = new Intent(MainActivity.this, ProductInfoActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);

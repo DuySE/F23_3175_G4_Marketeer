@@ -22,6 +22,7 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
     ProductRecyclerViewAdapter myAdapter;
     SearchView searchView;
     TextView txtViewNoProduct;
+    List<Product> filteredList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
     }
 
     private void filterProduct(String newText, List<Product> products) {
-        List<Product> filteredList = new ArrayList<>();
+        filteredList = new ArrayList<>();
         if (products != null) {
             for (int i = 0; i < products.size(); i++) {
                 if (products.get(i).getName().toLowerCase().contains(newText.toLowerCase())) {
@@ -83,7 +84,11 @@ public class ManageProductActivity extends DrawerActivity implements ProductRecy
     @Override
     public void onItemClick(int i) {
         Bundle bundle = new Bundle();
-        bundle.putInt("ID", products.get(i).getId());
+        if (filteredList.size() != 0) {
+            bundle.putInt("ID", filteredList.get(i).getId());
+        } else {
+            bundle.putInt("ID", products.get(i).getId());
+        }
         Intent intent = new Intent(ManageProductActivity.this, EditProductActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
