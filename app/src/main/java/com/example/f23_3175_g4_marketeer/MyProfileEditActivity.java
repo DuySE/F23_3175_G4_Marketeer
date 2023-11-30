@@ -112,6 +112,7 @@ public class MyProfileEditActivity extends DrawerActivity {
         });
 
         btnSave.setOnClickListener(view -> {
+            User user = databaseHelper.getUser(editTxtUsername.getText().toString());
             if (editTxtUsername.getText().toString().isEmpty() ||
                     editTxtCurrentPassword.getText().toString().isEmpty() ||
                     editTxtHomeNumber.getText().toString().isEmpty() ||
@@ -122,6 +123,8 @@ public class MyProfileEditActivity extends DrawerActivity {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter all the required fields", Toast.LENGTH_SHORT).show();
             } else if (editTxtPhone.getText().toString().length() != 10) {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
+            } else if (user != null){
+                Toast.makeText(this, "That username is taken. Try another.", Toast.LENGTH_SHORT).show();
             } else {
                 String address = editTxtHomeNumber.getText().toString() + " " +
                         editTxtStreetName.getText().toString() + ", " +
@@ -133,8 +136,8 @@ public class MyProfileEditActivity extends DrawerActivity {
                     UploadEditedProfile(imgName,imgUri);
                 }
                 String storedUsername = StoredDataHelper.get(this, "username");
-                User user = databaseHelper.getUser(storedUsername);
-                
+                user = databaseHelper.getUser(storedUsername);
+
                 if (!BCrypt.checkpw(editTxtCurrentPassword.getText().toString(), user.getPassword())){
                     Toast.makeText(this, "Current password is incorrect", Toast.LENGTH_SHORT).show();
                 } else {
@@ -148,9 +151,8 @@ public class MyProfileEditActivity extends DrawerActivity {
                         user.setPhone(editTxtPhone.getText().toString());
                         user.setProfileImg(imgName);
 
-                    StoredDataHelper.save(MyProfileEditActivity.this, "username",
-                            username);
-                    databaseHelper.updateUser(user);
+                    databaseHelper.updateUser(user, this);
+                    StoredDataHelper.save(this, "username", username);
                     startActivity(new Intent(MyProfileEditActivity.this, MyProfileActivity.class));
                 }
             }

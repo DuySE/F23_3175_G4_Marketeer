@@ -127,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    public void updateUser(User user) {
+    public void updateUser(User user, Context context) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (user != null) {
             ContentValues contentValues = new ContentValues();
@@ -137,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put(COLUMN_PHONE, user.getPhone());
             contentValues.put(COLUMN_PROFILE_IMG, user.getProfileImg());
             String where = COLUMN_USERNAME + " = ?";
-            String[] whereArgs = new String[]{user.getUsername()};
+            String[] whereArgs = new String[]{StoredDataHelper.get(context,"username")};
             db.update(TABLE_USERS, contentValues, where, whereArgs);
             db.close();
         }
