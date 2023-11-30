@@ -27,7 +27,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void Register() {
-        // For now this is very basic registration that will only work one time
         intentLogin = new Intent(this, LoginActivity.class);
         btnCreateAccount.setOnClickListener((View view) -> {
             User user = databaseHelper.getUser(editTextUsername.getText().toString());
