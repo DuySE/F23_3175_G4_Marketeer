@@ -157,7 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateProduct(int id, String name, String price, String seller, String status, String imgName) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.COLUMN_NAME, name);
         contentValues.put(DatabaseHelper.COLUMN_PRICE, price);
@@ -166,6 +166,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COLUMN_IMG_NAME, imgName);
         String where = COLUMN_PRODUCT_ID + " = ?";
         String[] whereArgs = new String[]{Integer.toString(id)};
+        db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
+    }
+
+    public void updateProduct(Context context, String seller) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.COLUMN_SELLER, seller);
+        String where = COLUMN_SELLER + " = ?";
+        String[] whereArgs = new String[]{StoredDataHelper.get(context, "username")};
         db.update(TABLE_PRODUCTS, contentValues, where, whereArgs);
     }
 
@@ -342,5 +351,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return transactions;
+    }
+
+    public void updateTransactions(Context context, String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.COLUMN_USERNAME, username);
+        String where = COLUMN_USERNAME + " = ?";
+        String[] whereArgs = new String[]{StoredDataHelper.get(context, "username")};
+        db.update(TABLE_TRANSACTIONS, contentValues, where, whereArgs);
     }
 }

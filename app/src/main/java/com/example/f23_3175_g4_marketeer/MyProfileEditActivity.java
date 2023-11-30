@@ -152,6 +152,8 @@ public class MyProfileEditActivity extends DrawerActivity {
                         user.setProfileImg(imgName);
 
                     databaseHelper.updateUser(user, this);
+                    databaseHelper.updateProduct(this, username);
+                    databaseHelper.updateTransactions(this, username);
                     StoredDataHelper.save(this, "username", username);
                     startActivity(new Intent(MyProfileEditActivity.this, MyProfileActivity.class));
                 }
