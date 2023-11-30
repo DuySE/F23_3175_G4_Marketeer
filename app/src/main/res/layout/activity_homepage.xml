@@ -26,6 +26,27 @@
         android:gravity="center"
         android:text="@string/textHomeWelcome"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.28"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgViewLogo3" />
+
+    <TextView
+        android:id="@+id/textHomeUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toEndOf="@+id/textHomeWelcome"
+        app:layout_constraintTop_toBottomOf="@+id/imgViewLogo3" />
+
+    <TextView
+        android:id="@+id/textHomeWelcome2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/textHomeWelcome2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textHomeWelcome" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,19 +2,6 @@
     <string name="app_name">F23_3175_G4_Marketeer</string>
     <string name="txtViewNoUsers">No users found!</string>
     <!--Will update with database items in the future!-->
-    <string-array name="items_name">
-        <item>Very Happy</item>
-        <item>Happy</item>
-        <item>Sad</item>
-        <item>Neutral</item>
-    </string-array>
-
-    <string-array name="items_price">
-        <item>$50</item>
-        <item>$75</item>
-        <item>$100</item>
-        <item>$150</item>
-    </string-array>
 
     <string-array name="items_distance">
         <item>All Products</item>
@@ -90,7 +77,8 @@
     <string name="menuNewProductActivity">New Product</string>
     <string name="menuPreviousActivity">Back</string>
     <string name="menuLogout">Logout</string>
-    <string name="textHomeWelcome">Welcome to Marketeer! \nPlease open the drawer and select your destination</string>
+    <string name="textHomeWelcome">Welcome to Marketeer </string>
+    <string name="textHomeWelcome2">Open the navigation drawer to begin using!</string>
     <string name="txtNotAdded">Not added</string>
     <string name="editTxtNewPassword">New Password</string>
     <string name="txtCurrentPassword">Enter current password*</string>
