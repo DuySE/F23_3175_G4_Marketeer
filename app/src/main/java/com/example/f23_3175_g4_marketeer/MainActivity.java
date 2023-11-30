@@ -229,7 +229,7 @@ public class MainActivity extends DrawerActivity implements LocationListener, It
 
             for (int i=0; i<productList.size(); i++) {
                 User user = db.getUser(productList.get(i).getSeller());
-                if (user.getAddress() != null) {
+                if (user != null && user.getAddress() != null) {
                     try {
                         List<Address> addressList = geocoder.getFromLocationName(user.getAddress(), 1);
                         double endLatitude = addressList.get(0).getLatitude();
