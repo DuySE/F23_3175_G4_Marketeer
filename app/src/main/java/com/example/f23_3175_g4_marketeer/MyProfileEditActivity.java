@@ -123,7 +123,7 @@ public class MyProfileEditActivity extends DrawerActivity {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter all the required fields", Toast.LENGTH_SHORT).show();
             } else if (editTxtPhone.getText().toString().length() != 10) {
                 Toast.makeText(MyProfileEditActivity.this, "Please enter a 10-digit phone number", Toast.LENGTH_SHORT).show();
-            } else if (user != null){
+            } else if (user != null && !(user.getUsername().equals(StoredDataHelper.get(this, "username")))){
                 Toast.makeText(this, "That username is taken. Try another.", Toast.LENGTH_SHORT).show();
             } else {
                 String address = editTxtHomeNumber.getText().toString() + " " +
